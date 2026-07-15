@@ -1,0 +1,48 @@
+<div>
+  <div>
+    <% if @profile.picture_url.present? %>
+      <img src="<%= @profile.picture_url %> alt="Profile pic">
+    <% else %>
+      <div>?</div>
+    <% end %>
+
+    <div>
+      <h1><%= current_user.name.presence || current_user.email %></h1>
+      <p><%= @profile.information %></p>
+      <%= link_to "Edit Profile Settings", edit_profile_path %>
+    </div>
+  </div>
+
+  <div>
+    <h3>Publish a New Update</h3>
+    <%= form_with model: @new_post, local: true do |f| %>
+      <% if @new_post.errors.any? %>
+        <div class="errors">
+          <% @new_post.errors.full_messages.each do |msg| %>
+            <div><%= msg %></div>
+          <% end %>
+        </div>
+      <% end %>
+      
+      <%= f.text_area :content, placeholder: "What is on your mind?" %>
+      <div>
+        <%= f.submit "Post Update" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <h3>You Activity History</h3>
+    <% if @posts.any? %>
+      <%= @posts.each do |post| %>
+        <% next if post.new_record? %>
+        <div>
+          <p><%= post.content %></p>
+          <span><%= time_ago_in_words(post.created_at) %> ago</span>
+        </div>
+      <% end %>
+    <% else %>
+      <p>You haven't written any updates yet.</p>
+    <% end %>
+  </div>
+</div>

@@ -1,13 +1,19 @@
 Rails.application.routes.draw do
-  devise_for :users
+  resources :posts
+  resources :profiles
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+
+  # root "devise/sessions#new"
 
   authenticated :user do
-    root to: "dashboard#index", as: :authenticated_root
+    resource :profile, only: [ :show, :edit, :update ]
+    resources :posts, only: [ :create ]
+    root to: "profiles#show", as: :authenticated_root
   end
 
   unauthenticated do
     devise_scope :user do
-      root to: "devise/registrations#new", as: :unauthenticated_root
+      root to: "devise/sessions#new", as: :unauthenticated_root
     end
   end
 

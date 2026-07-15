@@ -1,0 +1,25 @@
+<header>
+  <div class="logo">
+    <% if user_signed_in? %>
+      <%= link_to "My Application", authenticated_root_path %>
+    <% else %>
+      <%= link_to "My Application", unauthenticated_root_path %>
+    <% end %>
+  </div>
+
+  <nav>
+    <% if user_signed_in? %>
+      <span>
+        Welcome, <%= current_user.name.presence || current_user.email %>
+      </span>
+
+      <%= link_to edit_user_registration_path do %>
+        <%= user_avatar(current_user, size: 40) %>
+      <% end %>
+
+      <%= button_to "Sign Out", destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "Sign In", new_user_session_path %>
+    <% end %>
+  </nav>
+</header>

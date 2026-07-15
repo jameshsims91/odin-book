@@ -23,4 +23,9 @@
   </div>
 <% end %>
 
+<div class="omniauth links">
+  <%= button_to "Log in with WordPress/Gravatar", user_wordpress_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn-sso" %>
+  <%= button_to "Log in with Github", user_github_omniauth_authorize_path, method: :post, data: { turbo: false }, class:"btn-sso" %>
+</div>
+
 <%= render "devise/shared/links" %>
