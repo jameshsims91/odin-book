@@ -1,5 +1,5 @@
 class Users:: OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token, only: :wordpress
+  skip_before_action :verify_authenticity_token, only: [ :wordpress, :github, :failure ]
 
   def wordpress
     handle_auth("Gravatar")
@@ -10,7 +10,7 @@ class Users:: OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def failure
-    redirect_to root_path, alert: "Authentication failed. Please try again."
+    redirect_to unauthenticated_root_path, alert: "Authentication failed. Please try again."
   end
 
   private

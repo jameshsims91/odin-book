@@ -314,7 +314,14 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
   Devise.setup do |config|
-    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"], scope: "auth"
-    config.omniauth :github, ENV["GITHUB_CLIENT_ID"], ENV["GITHUB_CLIENT_SECRET"], scope: "user:email"
+    OmniAuth.config.allowed_request_methods = [ :post ]
+    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"], scope: "auth", provider_ignores_state: true
+    config.omniauth :github, ENV["GITHUB_CLIENT_ID"], ENV["GITHUB_CLIENT_SECRET"], scope: "user:email", provider_ignores_statue: true
+
+    config.omniauth_path_prefix = "/users/auth"
+
+    ActiveSupport.on_load(:devise_controller) do
+      skip_before_action :verify_authenticity_token, only: [ :passthru ] if respond_to?(:skip_before_action)
+    end
   end
 end

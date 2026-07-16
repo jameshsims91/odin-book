@@ -28,7 +28,11 @@
 
     <main>
       <%= flash.each do |type, message| %>
-        <div class=" <%= type %>">
+        <% if message.is_a?(Hash) %>
+          <%= message = message["alert"] || message[:alert] %>
+        <% end %>
+
+        <div class="<%= type.to_s == 'alert'%>">
           <%= message %>
         </div>
       <% end %>
