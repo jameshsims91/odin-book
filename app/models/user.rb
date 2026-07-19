@@ -32,13 +32,20 @@ class User < ApplicationRecord
     user = User.find_by(email: email) if email.present?
 
     if user.nil?
+      name_fallback = auth.info.name.presence || auth.info.nickname.presence || email.split("@").first
+      raw_username = auth.info.nickname.presence || email.split("@").first
+      clean_username = raw_username.downcase.gsub(/[^a-z0-9_]/, "_")
+      clean_username = "user_#{SecureRandom.hex(4)}" if clean_username.blank?
+
       user = User.new(
         email: email,
-        password: Devise.friendly_token[0, 20]
+        password: Devise.friendly_token[0, 20],
+        name: name_fallback,
+        username: clean_username,
+        avatar_url: auth.info.image
       )
       user.save!
     end
-
     user.identities.create!(provider: auth.provider, uid: auth.uid)
     user
   end

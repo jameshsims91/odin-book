@@ -1,0 +1,36 @@
+<div>
+  <div>
+    <h2>Edit Profile Settings</h2>
+    <%= link_to "Back to Dashboard", authenticated_root_path %>
+  </div>
+
+  <%= form_with model: @profile, url: profile_path, method: :patch, local: true do |f| %>
+
+    <% if @profile.errors.any? %>
+      <div class="errors">
+        <h4>Please correct the following errors:</h4>
+        <ul class="error-list">
+          <% @profile.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="profile-pic">
+      <%= f.label :picture_url, "Profile Image URL" %>
+      <%= f.text_field :picture_url, placeholder: "https://example.com" %>
+      <p class="text">Paste a web link to a profile avatar picture image.</p>
+    </div>
+
+    <div class="info">
+      <%= f.label :information, "About You / Bio" %>
+      <%= f.text_area :information, placeholder: "Tell us a bit about yourself...", row: 5 %>
+    </div>
+
+    <div class="submit-btn">
+      <%= link_to "Cancel", authenticated_root_path %>
+      <%= f.submit "Save Changes" %>
+    </div>
+  <% end %>
+</div>

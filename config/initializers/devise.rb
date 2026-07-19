@@ -315,13 +315,16 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   Devise.setup do |config|
     OmniAuth.config.allowed_request_methods = [ :post ]
-    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"], scope: "auth", provider_ignores_state: true
-    config.omniauth :github, ENV["GITHUB_CLIENT_ID"], ENV["GITHUB_CLIENT_SECRET"], scope: "user:email", provider_ignores_statue: true
-
-    config.omniauth_path_prefix = "/users/auth"
-
-    ActiveSupport.on_load(:devise_controller) do
-      skip_before_action :verify_authenticity_token, only: [ :passthru ] if respond_to?(:skip_before_action)
-    end
+    OmniAuth.config.request_validation_phase = nil
+    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"],
+    ENV["WORDPRESS_CLIENT_SECRET"],
+    scope: "auth", provider_ignores_state: true,
+    client_options: {
+      redirect_uri: "http://localhost:3000/users/auth/wordpress/callback"
+    }
+    config.omniauth :github, ENV["GITHUB_CLIENT_ID"],
+    ENV["GITHUB_CLIENT_SECRET"],
+    scope: "user:email",
+    provider_ignores_statue: true
   end
 end

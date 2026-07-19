@@ -9,7 +9,7 @@
     <div>
       <h1><%= current_user.name.presence || current_user.email %></h1>
       <p><%= @profile.information %></p>
-      <%= link_to "Edit Profile Settings", edit_profile_path %>
+      <%= link_to "Edit Profile Settings", edit_profile_path(@profile) %>
     </div>
   </div>
 
@@ -34,7 +34,7 @@
   <div>
     <h3>You Activity History</h3>
     <% if @posts.any? %>
-      <%= @posts.each do |post| %>
+      <% @posts.each do |post| %>
         <% next if post.new_record? %>
         <div>
           <p><%= post.content %></p>
