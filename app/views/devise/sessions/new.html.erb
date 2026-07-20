@@ -1,31 +1,61 @@
-<h2>Log in</h2>
+<div style="max-width: 400px; margin: 60px auto; padding: 30px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif;">
+  
+  <h2 style="margin: 0 0 24px 0; text-align: center; color: #111827; font-size: 24px; font-weight: 700;">Log in to OdinBook</h2>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password %></p>
-    <p><%= f.password_field :password, autocomplete: "current-password" %></p>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <p><%= f.check_box :remember_me %></p>
-      <p><%= f.label :remember_me %></p>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { style: "display: flex; flex-direction: column; gap: 16px;" }) do |f| %>
+    
+    <!-- Email Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :email, style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
     </div>
+
+    <!-- Password Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :password, style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.password_field :password, autocomplete: "current-password", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+    </div>
+
+    <!-- Remember Me Checkbox -->
+    <% if devise_mapping.rememberable? %>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+        <%= f.check_box :remember_me, style: "width: 16px; height: 16px; border-radius: 4px; border: 1px solid #d1d5db; cursor: pointer;" %>
+        <%= f.label :remember_me, style: "font-size: 13px; color: #4b5563; cursor: pointer; user-select: none;" %>
+      </div>
+    <% end %>
+
+    <!-- Submit Login Form Button -->
+    <div style="margin-top: 8px;">
+      <%= f.submit "Log in", style: "width: 100%; background-color: #2563eb; color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s;" %>
+    </div>
+
   <% end %>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
+  <!-- Decorative Divider Line -->
+  <div style="display: flex; align-items: center; text-align: center; margin: 24px 0; color: #9ca3af; font-size: 12px;">
+    <div style="flex-grow: 1; border-bottom: 1px solid #e5e7eb;"></div>
+    <span style="padding: 0 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Or continue with</span>
+    <div style="flex-grow: 1; border-bottom: 1px solid #e5e7eb;"></div>
   </div>
-<% end %>
 
-<div class="omniauth links">
-  <%= button_to "Log in with WordPress/Gravatar", user_wordpress_omniauth_authorize_path, method: :post, data: { turbo: false }, class: "btn-sso" %>
-  <%= button_to "Log in with Github", user_github_omniauth_authorize_path, method: :post, data: { turbo: false }, class:"btn-sso" %>
+  <!-- Third Party OmniAuth Integrations SSO Section -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    
+    <!-- WordPress / Gravatar Single Sign-On Button -->
+    <%= button_to user_wordpress_omniauth_authorize_path, method: :post, data: { turbo: false }, style: "width: 100%; background-color: white; color: #111827; border: 1px solid #d1d5db; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" do %>
+      <span>🔵</span> Sign in with Gravatar
+    <% end %>
+
+    <!-- GitHub Single Sign-On Button -->
+    <%= button_to user_github_omniauth_authorize_path, method: :post, data: { turbo: false }, style: "width: 100%; background-color: #24292e; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" do %>
+      <span>🐈‍⬛</span> Sign in with GitHub
+    <% end %>
+
+  </div>
+
+  <!-- Footnote Registration Context Link Links -->
+  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 16px;">
+    <%= render "devise/shared/links" %>
+  </div>
+
 </div>
-
-<%= render "devise/shared/links" %>

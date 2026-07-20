@@ -6,6 +6,8 @@ class ProfilesController < ApplicationController
     @profile = current_user.profile
     @posts = current_user.posts.select(&:persisted?)
     @new_post = current_user.posts.new
+    @followers = current_user.inverse_friends.includes(:profile)
+    @pending_requests = current_user.inverse_friendships.where(status: "pending").includes(:user)
   end
 
   def edit

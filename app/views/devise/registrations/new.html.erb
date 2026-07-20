@@ -1,39 +1,58 @@
-<h2>Sign up</h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <p><%= f.label :name %></p>
-    <p><%= f.text_field :name, autofocus: true, placeholder: "John Doe" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :username %></p>
-    <p><%= f.text_field :username, autofocus: true, placeholder: "johndoe" %></p>
-  </div>
+<div style="max-width: 420px; margin: 50px auto; padding: 30px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif; box-sizing: border-box;">
   
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
+  <h2 style="margin: 0 0 24px 0; text-align: center; color: #111827; font-size: 24px; font-weight: 700;">Create your Account</h2>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { style: "display: flex; flex-direction: column; gap: 16px;" }) do |f| %>
+    
+    <%# Render default Devise inline validation alerts if fields are incorrect %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <!-- Real Name Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :name, "Full Name", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.text_field :name, autofocus: true, placeholder: "John Doe", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+    </div>
+
+    <!-- Custom Username Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :username, "Username", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.text_field :username, placeholder: "johndoe", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+      <p style="margin: 0; font-size: 11px; color: #9ca3af;">Letters, numbers, and underscores only.</p>
+    </div>
+
+    <!-- Email Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :email, style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.email_field :email, autocomplete: "email", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+    </div>
+
+    <!-- Password Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <%= f.label :password, style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+        <% if @minimum_password_length %>
+          <span style="font-size: 11px; color: #9ca3af;"><%= @minimum_password_length %> chars min</span>
+        <% end %>
+      </div>
+      <%= f.password_field :password, autocomplete: "new-password", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+    </div>
+
+    <!-- Password Confirmation Entry Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :password_confirmation, "Confirm Password", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+    </div>
+
+    <!-- Action Submission Trigger Button -->
+    <div style="margin-top: 8px;">
+      <%= f.submit "Sign up", style: "width: 100%; background-color: #16a34a; color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s;" %>
+    </div>
+
+  <% end %>
+
+  <!-- Footnote Alternative Action Link Block Links -->
+  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 16px;">
+    <%= render "devise/shared/links" %>
   </div>
 
-  <div class="field">
-    <p><%= f.label :password %></p>
-    <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
-    <% end %>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

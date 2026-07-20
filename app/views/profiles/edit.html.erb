@@ -1,15 +1,18 @@
-<div>
-  <div>
-    <h2>Edit Profile Settings</h2>
-    <%= link_to "Back to Dashboard", authenticated_root_path %>
+<div style="max-width: 500px; margin: 40px auto; padding: 30px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box;">
+  
+  <!-- Header with Back Arrow on Left -->
+  <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #eaeaea; padding-bottom: 14px; margin-bottom: 24px;">
+    <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 13px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %>
+    <h2 style="margin: 0; color: #111827; font-size: 20px; font-weight: 700;">Edit Profile Settings</h2>
   </div>
 
-  <%= form_with model: @profile, url: profile_path, method: :patch, local: true do |f| %>
-
+  <%= form_with model: @profile, url: profile_path, method: :patch, local: true, html: { style: "display: flex; flex-direction: column; gap: 20px;" } do |f| %>
+    
+    <%# Render Validation Errors if any exist %>
     <% if @profile.errors.any? %>
-      <div class="errors">
-        <h4>Please correct the following errors:</h4>
-        <ul class="error-list">
+      <div style="background-color: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 14px; border-radius: 8px; font-size: 14px;">
+        <h4 style="margin: 0 0 6px 0; font-weight: 600;">Please correct the following errors:</h4>
+        <ul style="margin: 0; padding-left: 20px; line-height: 1.5;">
           <% @profile.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
           <% end %>
@@ -17,20 +20,25 @@
       </div>
     <% end %>
 
-    <div class="profile-pic">
-      <%= f.label :picture_url, "Profile Image URL" %>
-      <%= f.text_field :picture_url, placeholder: "https://example.com" %>
-      <p class="text">Paste a web link to a profile avatar picture image.</p>
+    <!-- Profile Picture URL Field -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :picture_url, "Profile Image URL", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.text_field :picture_url, placeholder: "https://example.com", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+      <p style="margin: 0; font-size: 11px; color: #9ca3af; line-height: 1.4;">Paste a web link to a profile avatar picture image.</p>
     </div>
 
-    <div class="info">
-      <%= f.label :information, "About You / Bio" %>
-      <%= f.text_area :information, placeholder: "Tell us a bit about yourself...", row: 5 %>
+    <!-- Information / Bio Text Area -->
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <%= f.label :information, "About You / Bio", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%# FIXED: Changed single 'row: 5' parameter to plural 'rows: 5' to match standard Rails view helpers %>
+      <%= f.text_area :information, placeholder: "Tell us a bit about yourself...", rows: 5, style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box; resize: vertical; line-height: 1.5;" %>
     </div>
 
-    <div class="submit-btn">
-      <%= link_to "Cancel", authenticated_root_path %>
-      <%= f.submit "Save Changes" %>
+    <!-- Action Submission Buttons -->
+    <div style="display: flex; items-center: center; justify-content: flex-end; gap: 12px; border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 8px;">
+      <%= link_to "Cancel", authenticated_root_path, style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; border: 1px solid #d1d5db; text-align: center;" %>
+      <%= f.submit "Save Changes", style: "background-color: #2563eb; color: white; font-weight: 600; padding: 8px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; shadow-sm: 0 1px 2px rgba(0,0,0,0.05);" %>
     </div>
+
   <% end %>
 </div>

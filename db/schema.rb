@@ -10,9 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_012901) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_20_203253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "comment_likes", force: :cascade do |t|
+    t.bigint "comment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["comment_id"], name: "index_comment_likes_on_comment_id"
+    t.index ["user_id", "comment_id"], name: "index_comment_likes_on_user_id_and_comment_id", unique: true
+    t.index ["user_id"], name: "index_comment_likes_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.bigint "post_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "friend_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id", "friend_id"], name: "index_friendships_on_user_id_and_friend_id", unique: true
+    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
 
   create_table "identities", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -22,6 +53,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_012901) do
     t.bigint "user_id", null: false
     t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "post_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["post_id"], name: "index_likes_on_post_id"
+    t.index ["user_id", "post_id"], name: "index_likes_on_user_id_and_post_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -59,7 +100,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_012901) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "comment_likes", "comments"
+  add_foreign_key "comment_likes", "users"
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "identities", "users"
+  add_foreign_key "likes", "posts"
+  add_foreign_key "likes", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "profiles", "users"
 end

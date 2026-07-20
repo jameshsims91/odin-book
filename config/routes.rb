@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get "comment_likes/create"
+  get "comment_likes/destroy"
+  get "c_omment_likes/create"
+  get "c_omment_likes/destroy"
+  get "comments/create"
+  get "likes/create"
+  get "likes/destroy"
+  get "users/index"
   resources :posts
   resources :profiles
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
@@ -7,7 +15,12 @@ Rails.application.routes.draw do
 
   authenticated :user do
     resource :profile, only: [ :show, :edit, :update ]
-    resources :posts, only: [ :create ]
+    resources :posts, only: [ :index, :create, :destroy ] do
+      resources :likes, only: [ :create, :destroy ]
+      resources :comments, only: [ :create, :destroy ]
+    end
+    resources :friendships, only: [ :create, :update, :destroy ]
+    resources :users, only: [ :index, :show ]
     root to: "profiles#show", as: :authenticated_root
   end
 

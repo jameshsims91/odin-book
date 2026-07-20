@@ -1,0 +1,80 @@
+<div style="max-width: 850px; margin: 0 auto; padding: 20px; font-family: sans-serif; display: flex; flex-direction: column; gap: 20px;">
+  
+  <!-- Header Bar -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eaeaea; padding-bottom: 10px;">
+    <h2 style="margin: 0; color: #111827;">Discover People</h2>
+    <%= link_to "Back to Dashboard", authenticated_root_path, style: "font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500;" %>
+  </div>
+
+  <!-- Search Filter Form Box -->
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <%= form_with url: users_path, method: :get, local: true, style: "display: flex; gap: 10px; width: 100%;" do |f| %>
+      <div style="flex-grow: 1;">
+        <%= f.text_field :query, 
+                         value: params[:query], 
+                         placeholder: "Search profiles by name, username, or keywords...", 
+                         style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; font-size: 14px; outline: none; box-sizing: border-box;" %>
+      </div>
+      <%= f.submit "Search", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; white-space: nowrap;" %>
+      <% if params[:query].present? %>
+        <%= link_to "Clear", users_path, style: "background-color: #f3f4f6; color: #4b5563; font-weight: 500; padding: 8px 14px; border-radius: 8px; font-size: 14px; text-decoration: none; display: flex; align-items: center;" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Users Grid Directory Container -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px;">
+    <% if @users.any? %>
+      <% @users.each do |user| %>
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; gap: 15px;">
+          
+          <!-- Profile Card Meta Data info -->
+          <div style="display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0;">
+            <%= link_to user_path(user), style: "display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0; text-decoration: none;" do %>
+              <% if user.profile&.picture_url.present? %>
+                <img src="<%= user.profile.picture_url %>" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb; flex-shrink: 0;" alt="User Avatar">
+              <% else %>
+                <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; font-size: 16px; flex-shrink: 0;">
+                  <%= (user.name.presence || user.email).to_s.first.upcase %>
+                </div>
+              <% end %>
+              
+              <div style="min-width: 0;">
+                <h4 style="margin: 0; font-size: 15px; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= user.name.presence || user.email %></h4>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: #6b7280; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;"><%= user.profile&.information.presence || "No bio summary provided." %></p>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Connection Management Follow Actions Block -->
+          <div style="flex-shrink: 0;">
+            <% case current_user.friendship_status_with(user) %>
+            <% when :none %>
+              <%= button_to "Send Follow Request", friendships_path(friend_id: user.id), method: :post, style: "font-size: 12px; background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 500;" %>
+            
+            <% when :pending %>
+              <span style="font-size: 12px; color: #6b7280; font-style: italic; background: #f3f4f6; padding: 6px 12px; border-radius: 6px; font-weight: 500;">Request Pending</span>
+            
+            <% when :incoming_pending %>
+              <% match = current_user.inverse_friendships.find_by(user_id: user.id) %>
+              <div style="display: flex; gap: 4px;">
+                <%= button_to "Accept", friendship_path(match), method: :patch, style: "font-size: 12px; background: #16a34a; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 500; cursor: pointer;" %>
+                <%= button_to "Decline", friendship_path(match), method: :delete, style: "font-size: 12px; background: white; color: #4b5563; border: 1px solid #d1d5db; padding: 6px 10px; border-radius: 6px; font-weight: 500; cursor: pointer;" %>
+              </div>
+            
+            <% when :accepted %>
+              <% match = current_user.friendships.find_by(friend_id: user.id) || current_user.inverse_friendships.find_by(user_id: user.id) %>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; color: #16a34a; font-weight: bold; background: #f0fdf4; padding: 4px 8px; border-radius: 4px; border: 1px solid #bbf7d0; white-space: nowrap;">✓ Following</span>
+                <%= button_to "Unfollow", friendship_path(match), method: :delete, data: { confirm: "Stop following this user?" }, style: "font-size: 12px; color: #9ca3af; text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" %>
+              </div>
+            <% end %>
+          </div>
+
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: #6b7280; font-style: italic; text-align: center; grid-column: 1 / -1; padding: 40px 0;">No profiles found matching your criteria.</p>
+    <% end %>
+  </div>
+</div>

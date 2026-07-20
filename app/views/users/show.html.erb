@@ -1,0 +1,106 @@
+<div style="max-width: 700px; margin: 30px auto; padding: 20px; font-family: sans-serif; display: flex; flex-direction: column; gap: 24px;">
+
+  <!-- Dynamic Nav Breadcrumb -->
+  <div style="display: flex; gap: 10px; font-size: 13px;">
+    <%= link_to "← Discover People", users_path, style: "color: #6b7280; text-decoration: none;" %>
+    <span style="color: #d1d5db;">/</span>
+    <span style="color: #9ca3af; font-weight: 500;"><%= @user.name.presence || @user.email %></span>
+  </div>
+
+  <!-- Profile Card Container Box -->
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+    
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <% if @profile&.picture_url.present? %>
+        <img src="<%= @profile.picture_url %>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb;" alt="User Avatar">
+      <% else %>
+        <div style="width: 80px; height: 80px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #2563eb; text-transform: uppercase;">
+          <%= (@user.name.presence || @user.email).to_s.first %>
+        </div>
+      <% end %>
+      
+      <div>
+        <h2 style="margin: 0; font-size: 20px; color: #111827;"><%= @user.name.presence || @user.email %></h2>
+        <p style="margin: 2px 0 0 0; font-size: 13px; color: #9ca3af;">@<%= @user.username.presence || "user" %></p>
+        <p style="color: #4b5563; font-size: 14px; margin: 10px 0 0 0; line-height: 1.4;"><%= @profile&.information.presence || "No bio summary shared yet." %></p>
+      </div>
+    </div>
+
+    <!-- Interactive Follow Actions Column Component Module -->
+    <div>
+      <% case current_user.friendship_status_with(@user) %>
+      <% when :none %>
+        <%= button_to "Follow User", friendships_path(friend_id: @user.id), method: :post, style: "font-size: 13px; background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;" %>
+      <% when :pending %>
+        <span style="font-size: 13px; color: #6b7280; font-style: italic; background: #f3f4f6; padding: 8px 16px; border-radius: 6px; font-weight: 500;">Request Sent</span>
+      <% when :incoming_pending %>
+        <% match = current_user.inverse_friendships.find_by(user_id: @user.id) %>
+        <div style="display: flex; gap: 6px;">
+          <%= button_to "Accept", friendship_path(match), method: :patch, style: "font-size: 12px; background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;" %>
+          <%= button_to "Decline", friendship_path(match), method: :delete, style: "font-size: 12px; background: white; color: #4b5563; border: 1px solid #d1d5db; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;" %>
+        </div>
+      <% when :accepted %>
+        <% match = current_user.friendships.find_by(friend_id: @user.id) || current_user.inverse_friendships.find_by(user_id: @user.id) %>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+          <span style="font-size: 12px; color: #16a34a; font-weight: bold; background: #f0fdf4; padding: 6px 12px; border-radius: 6px; border: 1px solid #bbf7d0;">✓ Friends</span>
+          <%= button_to "Unfollow", friendship_path(match), method: :delete, data: { confirm: "Unfollow this person?" }, style: "font-size: 11px; color: #9ca3af; text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+
+  <!-- User's Historical Updates Activity Stream Feed -->
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <h3 style="margin: 0; font-size: 16px; color: #111827; font-weight: 700;"><%= @user.name.presence || @user.email %>'s Updates</h3>
+    
+    <% if @posts.any? %>
+      <% @posts.each do |post| %>
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p>
+          
+          <!-- Interaction Action Line Toolbar Row Container Component -->
+          <div style="display: flex; align-items: center; gap: 20px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <% if current_user.liked?(post) %>
+                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>❤️ Unlike<% end %>
+              <% else %>
+                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>🤍 Like<% end %>
+              <% end %>
+              <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span>
+            </div>
+            <span style="font-size: 12px; color: #9ca3af; margin-left: auto;"><%= time_ago_in_words(post.created_at) %> ago</span>
+          </div>
+
+          <!-- Native HTML Details Drawer Dropdown Comments Block -->
+          <details style="margin-top: 12px; font-size: 13px;">
+            <summary style="color: #2563eb; font-weight: 600; cursor: pointer; outline: none; padding: 4px 0;">
+              💬 Reply (<%= post.comments.count %>)
+            </summary>
+            <div style="margin-top: 8px; padding: 12px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
+              <% if post.comments.any? %>
+                <div style="margin-bottom: 8px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+                  <% post.comments.each do |comment| %>
+                    <div style="background: white; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                      <span style="font-weight: bold; color: #111827;"><%= comment.user.name.presence || comment.user.email %>:</span>
+                      <span style="color: #374151;"><%= comment.content %></span>
+                      <span style="font-size: 10px; color: #9ca3af; display: block; margin-top: 2px;"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %>
+                <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %>
+                <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %>
+              <% end %>
+            </div>
+          </details>
+
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: #6b7280; font-style: italic; text-align: center; padding: 30px 0; font-size: 14px; background: white; border: 1px dashed #d1d5db; border-radius: 12px;">This user has not published any updates yet.</p>
+    <% end %>
+  </div>
+
+</div>

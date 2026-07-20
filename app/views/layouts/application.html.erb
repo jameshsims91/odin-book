@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "Odinbook" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Odinbook">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title><%= content_for(:title) || "Odinbook" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Odinbook">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= yield :head %>
 
-    <%= yield :head %>
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+<body style="margin: 0; padding: 0; background-color: #f9fafb; font-family: sans-serif; color: #111827;">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+  <!-- Global Application Navigation Header Bar -->
+  <%= render "layouts/header" %>
 
-  <body>
-    <%= render "layouts/header" %>
-
-    <main>
-      <%= flash.each do |type, message| %>
-        <% if message.is_a?(Hash) %>
-          <%= message = message["alert"] || message[:alert] %>
-        <% end %>
-
-        <div class="<%= type.to_s == 'alert'%>">
-          <%= message %>
-        </div>
+  <!-- Main Workspace View Container -->
+  <main style="max-width: 1050px; margin: 0 auto; padding: 20px; box-sizing: border-box;">
+    
+    <% flash.each do |type, message| %>
+      <% if message.is_a?(Hash) %>
+        <%# Flatten deep OmniAuth structured exceptions data %>
+        <% message = message["alert"] || message[:alert] || message.values.first.to_s %>
       <% end %>
-      
-      <%= yield %>
-    </main>
-  </body>
+
+      <% is_alert = (type.to_s == 'alert' || type.to_s == 'danger') %>
+      <div style="padding: 14px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid <%= is_alert ? '#fecaca' : '#bbf7d0' %>; background-color: <%= is_alert ? '#fef2f2' : '#f0fdf4' %>; color: <%= is_alert ? '#dc2626' : '#16a34a' %>;">
+        <%= message %>
+      </div>
+    <% end %>
+
+    <%# Inject individual child controller view templates here %>
+    <%= yield %>
+    
+  </main>
+
+</body>
 </html>
