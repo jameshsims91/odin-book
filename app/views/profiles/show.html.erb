@@ -1,205 +1,286 @@
-<div style="max-width: 1050px; margin: 0 auto; padding: 20px; font-family: sans-serif; display: flex; flex-wrap: wrap; gap: 30px;">
-  
-  <!-- LEFT COLUMN: Profile Header, Post Form, and Activity History Feed -->
-  <div style="flex: 2; min-width: 320px; display: flex; flex-direction: column; gap: 25px;">
+<div style="max-width: 1050px; margin: 0 auto; padding: 20px; font-family: sans-serif; display: flex; flex-wrap: wrap; gap: 30px;"> 
+  <!-- LEFT COLUMN: Profile Header, Post Form, and Activity History Feed --> 
+  <div style="flex: 2; min-width: 320px; display: flex; flex-direction: column; gap: 25px;"> 
     
-    <!-- Profile Header Card Section -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 24px;">
-      
-      <%# UPDATED: Using our global user_avatar helper to pull your live uploaded photo immediately %>
-      <%= user_avatar(current_user, size: 96) %>
-      
-      <div style="flex-grow: 1;">
-        <h1 style="margin: 0; font-size: 24px; color: #111827;"><%= current_user.name.presence || current_user.email %></h1>
-        <p style="color: #4b5563; font-size: 15px; margin: 6px 0 12px 0; line-height: 1.5;"><%= @profile.information.presence || "No bio information provided yet." %></p>
-        
-        <!-- Profile Statistics Metrics Counter Flex Row -->
-        <div style="display: flex; gap: 20px; margin-bottom: 12px; font-family: sans-serif;">
-          <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= current_user.total_posts_count %></strong> Posts</div>
-          <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= current_user.total_following_count %></strong> Following</div>
-          <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= current_user.total_likes_received_count %></strong> Likes</div>
-        </div>
+    <%# Define our profile owner target right at the top %>
+    <% profile_owner = @profile&.user %>
 
-        <%= link_to "Edit Profile Settings", edit_profile_path(@profile), style: "font-size: 14px; color: #2563eb; text-decoration: none; display: block; font-weight: 500;" %>
-      </div>
-    </div>
-
-    <!-- Create a Post Form Box -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-      <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #111827; font-weight: 600;">Publish a New Update</h3>
-      
-      <%= form_with model: @new_post, local: true, html: { multipart: true } do |f| %>
-        <%= f.text_area :content, placeholder: "What is on your mind?", style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; box-sizing: border-box; resize: vertical;", rows: 3 %>
-        <div style="margin-top: 12px; font-family: sans-serif;">
-          
-          <%# Hiding the real input, linking it dynamically via the label container %>
-          <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #4b5563; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;" 
-                onmouseover="this.style.backgroundColor='#f3f4f6'" 
-                onmouseout="this.style.backgroundColor='#f9fafb'">
-            
-            <!-- Click Target Visual Anchor -->
-            <span style="font-size: 16px;">📸</span> 
-            <span>Attach Photo</span>
-            
-            <%= f.file_field :image, 
-                            accept: 'image/png, image/jpeg, image/jpg, image/webp', 
-                            style: "display: none;",
-                            onchange: "document.getElementById('file-chosen-indicator').innerText = '✓ ' + this.files[0].name; document.getElementById('file-chosen-indicator').style.display = 'inline-block';" %>
-          </label>
-
-          <!-- Dynamic File Selection Text Indicator Status Alert -->
-          <span id="file-chosen-indicator" style="display: none; margin-left: 10px; font-size: 12px; color: #16a34a; font-weight: 600; font-style: italic; background-color: #f0fdf4; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;"></span>
-        </div>
-
-        <div style="text-align: right; margin-top: 12px;">
-          <%= f.submit "Post Update", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %>
-        </div>
+    <!-- Profile Header Card Section --> 
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 24px;"> 
+      <%# UPDATED: Pulls the avatar of the profile being viewed, not current_user %>
+      <% if profile_owner %>
+        <%= user_avatar(profile_owner, size: 96) %> 
       <% end %>
-    </div>
 
-    <!-- User's Historical Post Feed Stream -->
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <h3 style="margin: 0; font-size: 18px; color: #111827; font-weight: 700;">Your Activity History</h3>
-      <% if @posts.any? %>
-        <% @posts.each do |post| %>
-          <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-            <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p>
+      <div style="flex-grow: 1;"> 
+        <%# UPDATED: Displays the name/email of the profile owner %>
+        <h1 style="margin: 0; font-size: 24px; color: #111827;">
+          <%= profile_owner&.name.presence || profile_owner&.email %>
+        </h1> 
+        <p style="color: #4b5563; font-size: 15px; margin: 6px 0 12px 0; line-height: 1.5;">
+          <%= @profile&.information.presence || "No bio information provided yet." %>
+        </p> 
+
+        <!-- Profile Statistics Metrics Counter Flex Row --> 
+        <div style="display: flex; gap: 20px; margin-bottom: 12px; font-family: sans-serif;"> 
+          <% if profile_owner %> 
+            <div style="font-size: 13px; color: #4b5563;"> 
+              <strong style="color: #111827; font-size: 15px;"><%= profile_owner.posts.count %></strong> Posts 
+            </div> 
+            <div style="font-size: 13px; color: #4b5563;"> 
+              <strong style="color: #111827; font-size: 15px;"><%= profile_owner.all_friends.count %></strong> Friends 
+            </div> 
+          <% else %> 
+            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;">0</strong> Posts</div> 
+            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;">0</strong> Friends</div> 
+          <% end %> 
+        </div> 
+
+        <% if @profile && current_user == profile_owner %> 
+          <%= link_to "Edit Profile Settings", edit_profile_path(@profile), style: "font-size: 14px; color: #2563eb; text-decoration: none; display: block; font-weight: 500;" %> 
+        <% end %> 
+      </div> 
+    </div> 
+
+    <!-- Create a Post Form Box (UPDATED: Only show this form if current_user owns this profile) --> 
+    <% if current_user == profile_owner %>
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"> 
+        <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #111827; font-weight: 600;">Publish a New Update</h3> 
+        <%= form_with model: @new_post, local: true, html: { multipart: true } do |f| %> 
+          <%= f.text_area :content, placeholder: "What is on your mind?", style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; box-sizing: border-box; resize: vertical;", rows: 3 %> 
+          <div style="margin-top: 12px; font-family: sans-serif;"> 
+            <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #4b5563; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'"> 
+              <span style="font-size: 16px;">📸</span> <span>Attach Photo</span> 
+              <%= f.file_field :image, accept: 'image/png, image/jpeg, image/jpg, image/webp', style: "display: none;", onchange: "document.getElementById('file-chosen-indicator').innerText = '✓ ' + this.files[0].name; document.getElementById('file-chosen-indicator').style.display = 'inline-block';" %> 
+            </label> 
+            <span id="file-chosen-indicator" style="display: none; margin-left: 10px; font-size: 12px; color: #16a34a; font-weight: 600; font-style: italic; background-color: #f0fdf4; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;"></span> 
+          </div> 
+          <div style="text-align: right; margin-top: 12px;"> 
+            <%= f.submit "Post Update", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %> 
+          </div> 
+        <% end %> 
+      </div> 
+    <% end %>
+
+    <!-- User's Historical Post Feed Stream --> 
+    <div style="display: flex; flex-direction: column; gap: 16px;"> 
+      
+      <%# Context-aware feed header heading %>
+      <h3 style="margin: 0; font-size: 18px; color: #111827; font-weight: 700;">
+        <%= current_user == profile_owner ? "Your Activity History" : "#{profile_owner&.name.presence || 'User'}'s Activity History" %>
+      </h3> 
+      
+      <% if @posts.any? %> 
+        <% @posts.each do |post| %> 
+          <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"> 
+            <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p> 
             
-            <!-- Likes Counter Action Section -->
-            <div style="display: flex; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;">
-              <% if current_user.liked?(post) %>
-                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>❤️ Unlike<% end %>
-              <% else %>
-                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>🤍 Like<% end %>
+            <!-- Likes Counter Action Section --> 
+            <div style="display: flex; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;"> 
+              <% if current_user.liked?(post) %> 
+                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>❤️ Unlike<% end %> 
+              <% else %> 
+                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>🤍 Like<% end %> 
+              <% end %> 
+              <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span> 
+            </div> 
+
+            <!-- Post Modification Options Toolbar --> 
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f3f4f6;"> 
+              <span style="font-size: 12px; color: #9ca3af;"><%= time_ago_in_words(post.created_at) %> ago</span> 
+              
+              <%# Allows the post author OR the profile page owner to delete a post %>
+              <% if post.user == current_user || profile_owner == current_user %>
+                <%= button_to "Delete", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, style: "font-size: 12px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" %> 
               <% end %>
-              <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span>
-            </div>
+            </div> 
 
-            <!-- Post Modification Options Toolbar -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f3f4f6;">
-              <span style="font-size: 12px; color: #9ca3af;"><%= time_ago_in_words(post.created_at) %> ago</span>
-              <%= button_to "Delete", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, style: "font-size: 12px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" %>
-            </div>
-
-            <!-- NATIVE HTML DISCLOSURE ELEMENT FOR TOGGLEABLE COMMENT DRAWER -->
-            <details style="margin-top: 12px; font-size: 13px;">
-              <summary style="color: #2563eb; font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 4px 0;">
-                💬 Reply (<%= post.comments.count %>)
-              </summary>
-
-              <div style="margin-top: 8px; padding: 12px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <!-- NATIVE HTML DISCLOSURE ELEMENT FOR TOGGLEABLE COMMENT DRAWER --> 
+            <details style="margin-top: 12px; font-size: 13px;"> 
+              <summary style="color: #2563eb; font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 4px 0;"> 
+                💬 Reply (<%= post.comments.count %>) 
+              </summary> 
+              <div style="margin-top: 8px; padding: 12px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;"> 
                 
-                <!-- Render Existing Comments Stream -->
-                <% if post.comments.any? %>
-                  <div style="margin-bottom: 8px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
-                    <% post.comments.each do |comment| %>
-                      <div style="background: white; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px;">
-                        <div style="flex-grow: 1;">
-                          <%= link_to (comment.user.name.presence || comment.user.email), user_path(comment.user), style: "font-weight: bold; color: #2563eb; text-decoration: none;" %>:
-                          <span style="color: #374151;"><%= comment.content %></span>
+                <!-- Render Existing Comments Stream --> 
+                <% if post.comments.any? %> 
+                  <div style="margin-bottom: 8px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"> 
+                    <% post.comments.each do |comment| %> 
+                      <div style="background: white; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px;"> 
+                        <div style="flex-grow: 1;"> 
+                          <%= link_to (comment.user.name.presence || comment.user.email), user_path(comment.user), style: "font-weight: bold; color: #2563eb; text-decoration: none;" %>: 
+                          <span style="color: #374151;"><%= comment.content %></span> 
                           
-                          <!-- Inline Comment Likes Interaction Toolbar -->
-                          <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px; font-size: 11px;">
-                            <span style="color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span>
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                              <% if current_user.liked_comment?(comment) %>
-                                <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>❤️ Unlike<% end %>
-                              <% else %>
-                                <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>🤍 Like<% end %>
-                              <% end %>
-                              <span style="background: #f3f4f6; color: #6b7280; font-weight: bold; padding: 1px 4px; border-radius: 3px;"><%= comment.comment_likes.count %></span>
-                            </div>
-                          </div>
-                        </div>
+                          <!-- Inline Comment Likes Interaction Toolbar --> 
+                          <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px; font-size: 11px;"> 
+                            <span style="color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span> 
+                            <div style="display: flex; align-items: center; gap: 4px;"> 
+                              <% if current_user.liked_comment?(comment) %> 
+                                <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>❤️ Unlike<% end %> 
+                              <% else %> 
+                                <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>❤️ Like<% end %> 
+                              <% end %> 
+                              <span style="background: #f3f4f6; color: #6b7280; font-weight: bold; padding: 1px 4px; border-radius: 3px;"><%= comment.comment_likes.count %></span> 
+                            </div> 
+                          </div> 
+                        </div> 
+                        
+                        <%# Allows the comment author OR the post owner to delete a comment %>
+                        <% if comment.user == current_user || post.user == current_user %> 
+                          <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %> 
+                        <% end %> 
+                      </div> 
+                    <% end %> 
+                  </div> 
+                <% end %> 
 
-                        <% if comment.user == current_user || post.user == current_user %>
-                          <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                <% end %>
-
-                <!-- Inline Comment Input Box Form -->
-                <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %>
-                  <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %>
-                  <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %>
-                <% end %>
-              </div>
-            </details>
-
-          </div>
-        <% end %>
-      <% else %>
-        <p style="color: #6b7280; font-style: italic; text-align: center; padding: 30px 0; font-size: 14px;">You haven't written any updates yet.</p>
-      <% end %>
-    </div>
-
+                <!-- Inline Comment Input Box Form --> 
+                <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %> 
+                  <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %> 
+                  <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %> 
+                <% end %> 
+              </div> 
+            </details> 
+          </div> 
+        <% end %> 
+      <% else %> 
+        <p style="color: #6b7280; font-style: italic; text-align: center; padding: 30px 0; font-size: 14px;">No status updates have been published here yet.</p> 
+      <% end %> 
+    </div> 
   </div>
 
-  <!-- RIGHT COLUMN: Follow Requests Inbox & Followers Sidebar Widget -->
-<div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 20px; font-family: sans-serif;">
+  <!-- RIGHT COLUMN: Dynamic Action Engine, Incoming Friend Requests & Confirmed Friends Sidebar Widget --> 
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); width: 320px; font-family: sans-serif; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;">
+    
+    <% profile_owner = @profile&.user %>
+    <% active_friends = profile_owner&.all_friends || [] %>
 
-  <!-- COMPONENT 1: PENDING FOLLOW REQUESTS INBOX CARD -->
-  <% if @pending_requests.any? %>
-    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dbeafe; padding-bottom: 8px; margin-bottom: 12px;">
-        <h3 style="margin: 0; font-size: 14px; color: #1e3a8a; font-weight: 700;">🔔 Follow Requests</h3>
-        <span style="background: #2563eb; color: white; font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 10px;"><%= @pending_requests.count %></span>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto;">
-        <% @pending_requests.each do |friend_request| %>
-          <div style="background: white; border: 1px solid #dbeafe; border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
-            <%= link_to user_path(friend_request.user), style: "display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; min-width: 0; flex-grow: 1;" do %>
-              
-              <%# Dynamically renders the requester's uploaded photo %>
-              <%= user_avatar(friend_request.user, size: 32) %>
-              
-              <div style="min-width: 0;">
-                <h5 style="margin: 0; font-size: 12px; color: #111827; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><%= friend_request.user.name.presence || friend_request.user.email %></h5>
-                <p style="margin: 2px 0 0 0; font-size: 10px; color: #6b7280;">wants to follow you</p>
+    <!-- DYNAMIC ACTION ENGINE SECTION: Only visible when viewing someone else's profile -->
+    <% if current_user && current_user != profile_owner %>
+      <div style="padding-bottom: 5px; border-bottom: 1px solid #f3f4f6;">
+        <% current_status = current_user.friendship_status_with(profile_owner) %>
+
+        <% case current_status %>
+        <% when :none %>
+          <%# No relationship exists: show Add Friend button %>
+          <%= form_with url: friendships_path, method: :post, local: true do |f| %>
+            <%= f.hidden_field :friend_id, value: @profile.user_id %>
+            <%= f.submit "Add Friend", style: "width: 100%; text-align: center; background-color: #10b981; color: white; font-weight: 600; padding: 10px 0; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s;", onmouseover: "this.style.backgroundColor='#059669'", onmouseout: "this.style.backgroundColor='#10b981'" %>
+          <% end %>
+
+        <% when :pending %>
+          <%# Outbound request sent: show unclickable Pending badge %>
+          <button disabled style="width: 100%; background-color: #9ca3af; color: white; font-weight: 600; padding: 10px 0; border: none; border-radius: 8px; font-size: 14px; cursor: not-allowed; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>✉️</span> Friend Request Sent
+          </button>
+
+        <% when :incoming_pending %>
+          <%# They sent you a request: accept or decline it right here %>
+          <% incoming_request = current_user.inverse_friendships.find_by(user_id: @profile.user_id, status: "pending") %>
+          <% if incoming_request %>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="font-size: 13px; color: #4b5563; font-weight: 600; text-align: center;">This user sent you a friend request:</span>
+              <div style="display: flex; gap: 8px;">
+                <%= button_to "Accept", friendship_path(incoming_request), method: :patch, style: "flex: 1; background-color: #2563eb; color: white; font-weight: 600; padding: 8px 0; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;" %>
+                <%= button_to "Decline", friendship_path(incoming_request), method: :delete, style: "flex: 1; background-color: #ef4444; color: white; font-weight: 600; padding: 8px 0; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;" %>
               </div>
-            <% end %>
-            <div style="display: flex; gap: 4px;">
-              <%= button_to "Accept", friendship_path(friend_request), method: :patch, style: "font-size: 10px; background: #16a34a; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-weight: bold; cursor: pointer;" %>
-              <%= button_to "Decline", friendship_path(friend_request), method: :delete, style: "font-size: 10px; background: white; color: #4b5563; border: 1px solid #d1d5db; padding: 4px 8px; border-radius: 4px; font-weight: bold; cursor: pointer;" %>
             </div>
+          <% end %>
+
+        <% when :accepted %>
+          <%# Already mutual friends: show Friends badge and Unfriend option %>
+          <% existing_friendship = Friendship.find_by(user_id: [current_user.id, @profile.user_id], friend_id: [current_user.id, @profile.user_id], status: "accepted") %>
+          <div style="display: flex; align-items: center; justify-content: space-between; background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 8px;">
+            <span style="color: #16a34a; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span>✓</span> Friends
+            </span>
+            <% if existing_friendship %>
+              <%= link_to "Unfriend", friendship_path(existing_friendship), method: :delete, data: { confirm: "Are you sure you want to remove this friend?" }, style: "font-size: 12px; color: #ef4444; text-decoration: none; font-weight: 600;" %>
+            <% end %>
           </div>
         <% end %>
       </div>
-    </div>
-  <% end %>
+    <% end %>
 
-  <!-- COMPONENT 2: ACTIVE FOLLOWERS LIST CARD -->
-  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px; margin-bottom: 12px;">
-      <h3 style="margin: 0; font-size: 14px; color: #111827; font-weight: 700;">Your Followers</h3>
-      <span style="background: #e0f2fe; color: #0369a1; font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 10px;"><%= @followers.count %></span>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto;">
-      <% if @followers.any? %>
-        <% @followers.each do |follower| %>
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 4px 0;">
-            <%= link_to user_path(follower), style: "display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; min-width: 0; flex-grow: 1;" do %>
-              
-              <%# Dynamically renders your active follower's custom uploaded picture %>
-              <%= user_avatar(follower, size: 32) %>
-              
-              <div style="min-width: 0;">
-                <h5 style="margin: 0; font-size: 13px; color: #111827; font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><%= follower.name.presence || follower.email %></h5>
-                <p style="margin: 2px 0 0 0; font-size: 11px; color: #9ca3af;">Following you</p>
+    <!-- SECTION 1: INCOMING REQUESTS (Only visible to the logged-in user on their own profile) -->
+    <% if current_user && current_user == profile_owner && current_user.pending_incoming_requests.any? %>
+      <div>
+        <h4 style="margin: 0 0 12px 0; font-size: 13px; color: #b45309; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Incoming Requests</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <% current_user.pending_incoming_requests.each do |request| %>
+            <div style="display: flex; align-items: center; justify-content: space-between; background-color: #fffbeb; padding: 10px; border: 1px solid #fde68a; border-radius: 8px;">
+              <div style="font-size: 13px; font-weight: 600; color: #78350f;">
+                <%= request.user.name.presence || request.user.email %>
               </div>
-            <% end %>
-            <% match = current_user.inverse_friendships.find_by(user_id: follower.id) %>
-            <%= button_to "Remove", friendship_path(match), method: :delete, data: { confirm: "Remove this user from your followers?" }, style: "font-size: 11px; color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;" %>
-          </div>
-        <% end %>
-      <% else %>
-        <div style="text-align: center; padding: 20px 0; color: #9ca3af; font-size: 12px; font-style: italic;">No one is following you yet.</div>
-        <%= link_to "Find people to follow", users_path, style: "display: block; text-align: center; font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; padding-top: 8px;" %>
-      <% end %>
+              <div style="display: flex; gap: 6px;">
+                <%= button_to "Accept", friendship_path(request), method: :patch, style: "background-color: #10b981; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;" %>
+                <%= button_to "Decline", friendship_path(request), method: :delete, style: "background-color: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #f3f4f6; margin: 0;">
+    <% end %>
+
+    <!-- SECTION 2: CONFIRMED FRIENDS LIST -->
+    <div>
+      <!-- Card Header Row --> 
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"> 
+        <h3 style="margin: 0; font-size: 16px; color: #111827; font-weight: 600;">Friends</h3> 
+        <span style="background-color: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 9999px;"> 
+          <%= active_friends.count %> 
+        </span> 
+      </div>
+
+      <!-- Dynamic Friends List Loop --> 
+      <div style="display: flex; flex-direction: column; gap: 12px;"> 
+        <% if active_friends.any? %> 
+          <% active_friends.each do |friend| %> 
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6;"> 
+              
+              <%# PREVENT NIL ERRORS: Safely targets the profile route, or defaults back to their user route %>
+              <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
+
+              <%= link_to target_path, style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; display: inline-flex; width: calc(100% - 70px);" do %>
+                
+                <%# Avatar Render Block %> 
+                <% if respond_to?(:user_avatar) %> 
+                  <%= user_avatar(friend, size: 36) %> 
+                <% else %> 
+                  <div style="width: 36px; height: 36px; background-color: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: #4b5563; flex-shrink: 0;"> 
+                    <%= (friend.name.presence || friend.email)[0].upcase %> 
+                  </div> 
+                <% end %> 
+                
+                <%# Username & Status Block Labels %> 
+                <div style="min-width: 0; flex-grow: 1;"> 
+                  <div class="friend-link-title" style="font-size: 14px; font-weight: 600; color: #111827; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"> 
+                    <%= friend.name.presence || friend.email %> 
+                  </div> 
+                  <div style="font-size: 12px; color: #6b7280;">Mutual Friend</div> 
+                </div>
+
+              <% end %>
+
+              <%# Unfriend Core Action Button Interaction Target %> 
+              <% rel_record = Friendship.find_by(user_id: [profile_owner.id, friend.id], friend_id: [profile_owner.id, friend.id]) %>
+              <% if rel_record %>
+                <div style="flex-shrink: 0;">
+                  <%= link_to "Unfriend", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to remove this friend?" }, style: "font-size: 12px; color: #ef4444; text-decoration: none; font-weight: 500;" %> 
+                </div>
+              <% end %>
+
+            </div> 
+          <% end %> 
+        <% else %> 
+          <!-- Zero Friends Fallback Placeholder State --> 
+          <div style="text-align: center; padding: 20px 0; color: #6b7280; font-size: 14px;"> 
+            <span style="font-size: 24px; display: block; margin-bottom: 6px;">👥</span> No friends added yet. 
+          </div> 
+        <% end %> 
+      </div>
     </div>
   </div>
-
 </div>
+   

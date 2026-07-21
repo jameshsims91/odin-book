@@ -26,14 +26,48 @@
           <p style="color: #4b5563; font-size: 14px; margin: 8px 0 12px 0; line-height: 1.4;"><%= @profile&.information.presence || "No bio summary shared yet." %></p>
           
           <!-- INSERTED: Public Profile Statistics Metrics Counter Flex Row -->
-          <div style="display: flex; gap: 20px; font-family: sans-serif;">
-            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= @user.total_posts_count %></strong> Posts</div>
-            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= @user.total_following_count %></strong> Following</div>
-            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= @user.total_likes_received_count %></strong> Likes</div>
+          <div style="display: flex; gap: 20px; font-family: sans-serif;"> 
+            <!-- Counts posts live -->
+            <div style="font-size: 13px; color: #4b5563;">
+              <strong style="color: #111827; font-size: 15px;"><%= @user.posts.count %></strong> Posts
+            </div> 
+            
+            <!-- Counts mutual friends live -->
+            <div style="font-size: 13px; color: #4b5563;">
+              <strong style="color: #111827; font-size: 15px;"><%= @user.friends_count %></strong> Friends
+            </div> 
+            
+            <!-- Counts likes received live -->
+            <div style="font-size: 13px; color: #4b5563;">
+              <strong style="color: #111827; font-size: 15px;"><%= @user.total_likes_received_count %></strong> Likes
+            </div> 
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Friend Button -->
+    <% if current_user && current_user != @profile.user %>
+      <div style="margin-top: 15px;">
+
+        <%# Check if a friendship record already exists between these two users %>
+        <% already_friends = current_user.friendships.exists?(friend_id: @profile.user_id) %>
+
+        <% if already_friends %>
+          <%# Visual status indicator if a request or friendship is active %>
+          <button disabled style="background-color: #9ca3af; color: white; font-weight: 600; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: not-allowed; display: inline-flex; align-items: center; gap: 6px;">
+            <span>👥</span> Pending or Friends
+          </button>
+        <% else %>
+          <%# Form button that sends a POST request to your FriendshipsController %>
+          <%= form_with url: friendships_path, method: :post, local: true do |f| %>
+            <%= f.hidden_field :friend_id, value: @profile.user_id %>
+            <%= f.submit "Add Friend", style: "background-color: #10b981; color: white; font-weight: 600; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center;", onmouseover: "this.style.backgroundColor='#059669'", onmouseout: "this.style.backgroundColor='#10b981'" %>
+          <% end %>
+        <% end %>
+
+      </div>
+    <% end %>
 
     <!-- Follow Handshake Action Button Group -->
     <div>
@@ -140,7 +174,7 @@
           
           <%# Avatar thumbnail picture element %>
           <% if mutual_friend.profile&.picture_url.present? %>
-            <img src="<%= mutual_friend.profile.picture_url %>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb; flex-shrink: 0;" alt="Avatar">
+            <%= user_avatar(mutual_friend, size: 32) %>
           <% else %>
             <div style="width: 32px; height: 32px; background-color: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #4b5563; font-size: 11px; flex-shrink: 0;">
               <%= (mutual_friend.name.presence || mutual_friend.email).to_s.first.upcase %>

@@ -1,13 +1,17 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_profile, only: [ :show, :edit, :update ]
+  before_action :set_profile, only: [ :edit, :update ]
 
   def show
-    @profile = current_user.profile
-    @posts = current_user.posts.select(&:persisted?)
+    if params[:id]
+      @profile = Profile.find(params[:id])
+    else
+      @profile = current_user.profile
+    end
+
+    @user = @profile.user
+    @posts = @user.posts.order(created_at: :desc)
     @new_post = current_user.posts.new
-    @followers = current_user.inverse_friends.includes(:profile)
-    @pending_requests = current_user.inverse_friendships.where(status: "pending").includes(:user)
   end
 
   def edit
@@ -18,8 +22,8 @@ class ProfilesController < ApplicationController
       current_user.avatar.attach(params[:profile][:avatar])
     end
 
-    if  @profile.update(profile_params)
-      redirect_to authenticated_root_path, notice: "Profile settings updated successfully!"
+    if @profile.update(profile_params)
+      redirect_to profile_path(@profile), notice: "Profile settings updated successfully!"
     else
       render :edit, status: :unprocessable_entity
     end

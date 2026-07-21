@@ -13,13 +13,14 @@
           <!-- Author Metadata Header and Follow Actions Row -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <%= link_to user_path(post.user), style: "display: flex; align-items: center; gap: 12px; text-decoration: none;" do %>
-              <% if post.user.profile&.picture_url.present? %>
+              <% if post.user.avatar.attached? || post.user.profile&.picture_url.present? %>
                 <%= user_avatar(post.user, size: 40) %>
               <% else %>
-                <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; font-size: 14px;">
+                <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; font-size: 14px; flex-shrink: 0;">
                   <%= (post.user.name.presence || post.user.email).to_s.first.upcase %>
                 </div>
               <% end %>
+
               <div>
                 <h4 style="margin: 0; font-size: 14px; color: #111827; font-weight: 600;"><%= post.user.name.presence || post.user.email %></h4>
                 <span style="font-size: 12px; color: #9ca3af;"><%= time_ago_in_words(post.created_at) %> ago</span>

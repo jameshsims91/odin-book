@@ -2,12 +2,13 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @users = User.where.not(id: current_user.id).includes(:profile)
+    @users = User.where.not(id: current_user.id).includes(:profile, { avatar_attachment: :blob })
+
     if params[:query].present?
       search_term = "%#{params[:query].downcase}%"
-      @users = @users.joins(:profile).where(
+      @users = @users.left_outer_joins(:profile).where(
         "LOWER(users.name) LIKE :search OR LOWER(users.username) LIKE :search OR LOWER(profiles.information) LIKE :search",
-        search_term: search_term
+        search: search_term
       )
     end
   end

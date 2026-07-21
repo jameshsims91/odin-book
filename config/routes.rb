@@ -24,7 +24,11 @@ Rails.application.routes.draw do
     end
     resources :friendships, only: [ :create, :update, :destroy ]
     resources :users, only: [ :index, :show ]
-    resources :notifications, only: [ :index ]
+    resources :notifications, only: [ :index ] do
+      collection do
+        delete :clear_all
+      end
+    end
     root to: "profiles#show", as: :authenticated_root
   end
 
