@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [ :wordpress, :github ]
 
   has_one :profile, dependent: :destroy
+  has_one_attached :avatar
   has_many :identities, dependent: :destroy
   has_many :posts, dependent: :destroy
 
@@ -21,7 +22,10 @@ class User < ApplicationRecord
   has_many :comment_likes, dependent: :destroy
   has_many :liked_comments, through: :comment_likes, source: :comment
 
+  has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+
   after_create :create_default_profile
+  after_create :send_welcome_email
 
   USERNAME_REGEX = /\A[a-zA-Z0-9_]{3,23}\z/
 
@@ -87,9 +91,30 @@ class User < ApplicationRecord
     liked_comments.include?(comment)
   end
 
+  def mutual_friends_with(other_user)
+    return [] if self == other_user
+    self.all_friends & other_user.all_friends
+  end
+
+  def total_posts_count
+    posts.count
+  end
+
+  def total_following_count
+    friendships.where(status: "accepted").count
+  end
+
+  def total_likes_received_count
+    posts.joins(:likes).count
+  end
+
   private
 
   def create_default_profile
     create_profile(information: "Welcome to my profile!", picture_url: avatar_url)
+  end
+
+  def send_welcome_email
+    UserMailer.welcome_email(self).deliver_now
   end
 end

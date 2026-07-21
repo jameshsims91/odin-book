@@ -32,7 +32,7 @@
           <div style="display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0;">
             <%= link_to user_path(user), style: "display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0; text-decoration: none;" do %>
               <% if user.profile&.picture_url.present? %>
-                <img src="<%= user.profile.picture_url %>" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb; flex-shrink: 0;" alt="User Avatar">
+                <%= user_avatar(user, size: 48) %>
               <% else %>
                 <div style="width: 48px; height: 48px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; font-size: 16px; flex-shrink: 0;">
                   <%= (user.name.presence || user.email).to_s.first.upcase %>

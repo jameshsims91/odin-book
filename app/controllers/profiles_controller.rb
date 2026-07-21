@@ -14,6 +14,10 @@ class ProfilesController < ApplicationController
   end
 
   def update
+    if params[:profile][:avatar].present?
+      current_user.avatar.attach(params[:profile][:avatar])
+    end
+
     if  @profile.update(profile_params)
       redirect_to authenticated_root_path, notice: "Profile settings updated successfully!"
     else
@@ -28,6 +32,6 @@ class ProfilesController < ApplicationController
   end
 
   def profile_params
-    params.expect(profile: [ :information, :picture_url ])
+    params.expect(profile: [ :information ])
   end
 end

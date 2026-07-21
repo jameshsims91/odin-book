@@ -14,7 +14,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <%= link_to user_path(post.user), style: "display: flex; align-items: center; gap: 12px; text-decoration: none;" do %>
               <% if post.user.profile&.picture_url.present? %>
-                <img src="<%= post.user.profile.picture_url %>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #d1d5db;" alt="User Pic">
+                <%= user_avatar(post.user, size: 40) %>
               <% else %>
                 <div style="width: 40px; height: 40px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; font-size: 14px;">
                   <%= (post.user.name.presence || post.user.email).to_s.first.upcase %>
@@ -80,7 +80,7 @@
                     <!-- REWRITTEN LOOP: Comment Box displaying with upvote modules attached -->
                     <div style="background: white; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
                       <div style="flex-grow: 1;">
-                        <span style="font-weight: bold; color: #111827;"><%= comment.user.name.presence || comment.user.email %>:</span>
+                        <%= link_to (comment.user.name.presence || comment.user.email), user_path(comment.user), style: "font-weight: bold; color: #2563eb; text-decoration: none;" %>:
                         <span style="color: #374151;"><%= comment.content %></span>
                         
                         <!-- Inline Comment Likes Interaction Toolbar -->

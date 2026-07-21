@@ -6,7 +6,7 @@
     <h2 style="margin: 0; color: #111827; font-size: 20px; font-weight: 700;">Edit Profile Settings</h2>
   </div>
 
-  <%= form_with model: @profile, url: profile_path, method: :patch, local: true, html: { style: "display: flex; flex-direction: column; gap: 20px;" } do |f| %>
+  <%= form_with model: @profile, url: profile_path, method: :patch, local: true, html: { multipart: true, style: "display: flex; flex-direction: column; gap: 20px;" } do |f| %>
     
     <%# Render Validation Errors if any exist %>
     <% if @profile.errors.any? %>
@@ -20,17 +20,16 @@
       </div>
     <% end %>
 
-    <!-- Profile Picture URL Field -->
+    <!-- Profile Picture Upload Field -->
     <div style="display: flex; flex-direction: column; gap: 6px;">
-      <%= f.label :picture_url, "Profile Image URL", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
-      <%= f.text_field :picture_url, placeholder: "https://example.com", style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
-      <p style="margin: 0; font-size: 11px; color: #9ca3af; line-height: 1.4;">Paste a web link to a profile avatar picture image.</p>
+      <%= f.label :avatar, "Upload Profile Picture", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
+      <%= f.file_field :avatar, accept: 'image/png, image/jpeg, image/jpg, image/webp', style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box;" %>
+      <p style="margin: 0; font-size: 11px; color: #9ca3af; line-height: 1.4;">Select a JPG, PNG, or WEBP file from your device folder.</p>
     </div>
 
     <!-- Information / Bio Text Area -->
     <div style="display: flex; flex-direction: column; gap: 6px;">
       <%= f.label :information, "About You / Bio", style: "font-size: 13px; font-weight: 600; color: #374151;" %>
-      <%# FIXED: Changed single 'row: 5' parameter to plural 'rows: 5' to match standard Rails view helpers %>
       <%= f.text_area :information, placeholder: "Tell us a bit about yourself...", rows: 5, style: "border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; width: 100%; box-sizing: border-box; resize: vertical; line-height: 1.5;" %>
     </div>
 

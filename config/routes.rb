@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "notifications/index"
   get "comment_likes/create"
   get "comment_likes/destroy"
   get "c_omment_likes/create"
@@ -17,10 +18,13 @@ Rails.application.routes.draw do
     resource :profile, only: [ :show, :edit, :update ]
     resources :posts, only: [ :index, :create, :destroy ] do
       resources :likes, only: [ :create, :destroy ]
-      resources :comments, only: [ :create, :destroy ]
+      resources :comments, only: [ :create, :destroy ] do
+        resources :comment_likes, only: [ :create, :destroy ]
+      end
     end
     resources :friendships, only: [ :create, :update, :destroy ]
     resources :users, only: [ :index, :show ]
+    resources :notifications, only: [ :index ]
     root to: "profiles#show", as: :authenticated_root
   end
 

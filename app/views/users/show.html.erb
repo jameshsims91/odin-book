@@ -1,32 +1,41 @@
-<div style="max-width: 700px; margin: 30px auto; padding: 20px; font-family: sans-serif; display: flex; flex-direction: column; gap: 24px;">
+<div style="max-width: 1050px; margin: 0 auto; padding: 20px; font-family: sans-serif; display: flex; flex-wrap: wrap; gap: 30px;">
 
-  <!-- Dynamic Nav Breadcrumb -->
-  <div style="display: flex; gap: 10px; font-size: 13px;">
-    <%= link_to "← Discover People", users_path, style: "color: #6b7280; text-decoration: none;" %>
-    <span style="color: #d1d5db;">/</span>
-    <span style="color: #9ca3af; font-weight: 500;"><%= @user.name.presence || @user.email %></span>
-  </div>
+  <!-- LEFT COLUMN: Public Profile Header & Their Updates Feed (Spans 2/3 width) -->
+  <div style="flex: 2; min-width: 320px; display: flex; flex-direction: column; gap: 24px;">
 
-  <!-- Profile Card Container Box -->
-  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-    
-    <div style="display: flex; align-items: center; gap: 20px;">
-      <% if @profile&.picture_url.present? %>
-        <img src="<%= @profile.picture_url %>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb;" alt="User Avatar">
-      <% else %>
-        <div style="width: 80px; height: 80px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #2563eb; text-transform: uppercase;">
-          <%= (@user.name.presence || @user.email).to_s.first %>
+    <!-- Navigation Header Block with Back Arrow on Left -->
+    <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #eaeaea; padding-bottom: 14px; margin-bottom: 4px;">
+      <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %>
+      <h2 style="margin: 0; color: #111827; font-size: 20px; font-weight: 700;">Public Profile</h2>
+    </div>
+
+    <!-- Profile Header Details Card Section -->
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <% if @profile&.picture_url.present? %>
+          <%= user_avatar(@user, size: 80) %>
+        <% else %>
+          <div style="width: 80px; height: 80px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #2563eb; text-transform: uppercase;">
+            <%= (@user.name.presence || @user.email).to_s.first %>
+          </div>
+        <% end %>
+        
+        <div>
+          <h2 style="margin: 0; font-size: 20px; color: #111827;"><%= @user.name.presence || @user.email %></h2>
+          <p style="margin: 2px 0 0 0; font-size: 13px; color: #9ca3af;">@<%= @user.username.presence || "user" %></p>
+          <p style="color: #4b5563; font-size: 14px; margin: 8px 0 12px 0; line-height: 1.4;"><%= @profile&.information.presence || "No bio summary shared yet." %></p>
+          
+          <!-- INSERTED: Public Profile Statistics Metrics Counter Flex Row -->
+          <div style="display: flex; gap: 20px; font-family: sans-serif;">
+            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= @user.total_posts_count %></strong> Posts</div>
+            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= @user.total_following_count %></strong> Following</div>
+            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;"><%= @user.total_likes_received_count %></strong> Likes</div>
+          </div>
         </div>
-      <% end %>
-      
-      <div>
-        <h2 style="margin: 0; font-size: 20px; color: #111827;"><%= @user.name.presence || @user.email %></h2>
-        <p style="margin: 2px 0 0 0; font-size: 13px; color: #9ca3af;">@<%= @user.username.presence || "user" %></p>
-        <p style="color: #4b5563; font-size: 14px; margin: 10px 0 0 0; line-height: 1.4;"><%= @profile&.information.presence || "No bio summary shared yet." %></p>
       </div>
     </div>
 
-    <!-- Interactive Follow Actions Column Component Module -->
+    <!-- Follow Handshake Action Button Group -->
     <div>
       <% case current_user.friendship_status_with(@user) %>
       <% when :none %>
@@ -47,19 +56,15 @@
         </div>
       <% end %>
     </div>
-
   </div>
 
   <!-- User's Historical Updates Activity Stream Feed -->
   <div style="display: flex; flex-direction: column; gap: 16px;">
     <h3 style="margin: 0; font-size: 16px; color: #111827; font-weight: 700;"><%= @user.name.presence || @user.email %>'s Updates</h3>
-    
     <% if @posts.any? %>
       <% @posts.each do |post| %>
         <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
           <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p>
-          
-          <!-- Interaction Action Line Toolbar Row Container Component -->
           <div style="display: flex; align-items: center; gap: 20px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;">
             <div style="display: flex; align-items: center; gap: 6px;">
               <% if current_user.liked?(post) %>
@@ -72,19 +77,32 @@
             <span style="font-size: 12px; color: #9ca3af; margin-left: auto;"><%= time_ago_in_words(post.created_at) %> ago</span>
           </div>
 
-          <!-- Native HTML Details Drawer Dropdown Comments Block -->
+          <!-- Native Details Comments Box Drawer Section -->
           <details style="margin-top: 12px; font-size: 13px;">
-            <summary style="color: #2563eb; font-weight: 600; cursor: pointer; outline: none; padding: 4px 0;">
-              💬 Reply (<%= post.comments.count %>)
-            </summary>
+            <summary style="color: #2563eb; font-weight: 600; cursor: pointer; outline: none; padding: 4px 0;">💬 Reply (<%= post.comments.count %>)</summary>
             <div style="margin-top: 8px; padding: 12px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
               <% if post.comments.any? %>
                 <div style="margin-bottom: 8px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
                   <% post.comments.each do |comment| %>
-                    <div style="background: white; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px;">
-                      <span style="font-weight: bold; color: #111827;"><%= comment.user.name.presence || comment.user.email %>:</span>
-                      <span style="color: #374151;"><%= comment.content %></span>
-                      <span style="font-size: 10px; color: #9ca3af; display: block; margin-top: 2px;"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                    <div style="background: white; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 4px;">
+                      <div style="flex-grow: 1;">
+                        <%= link_to (comment.user.name.presence || comment.user.email), user_path(comment.user), style: "font-weight: bold; color: #2563eb; text-decoration: none;" %>:
+                        <span style="color: #374151;"><%= comment.content %></span>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px; font-size: 11px;">
+                          <span style="color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                          <div style="display: flex; align-items: center; gap: 4px;">
+                            <% if current_user.liked_comment?(comment) %>
+                              <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>❤️ Unlike<% end %>
+                            <% else %>
+                              <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>🤍 Like<% end %>
+                            <% end %>
+                            <span style="background: #f3f4f6; color: #6b7280; font-weight: bold; padding: 1px 5px; border-radius: 4px;"><%= comment.comment_likes.count %></span>
+                          </div>
+                        </div>
+                      </div>
+                      <% if comment.user == current_user || post.user == current_user %>
+                        <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %>
+                      <% end %>
                     </div>
                   <% end %>
                 </div>
@@ -95,12 +113,56 @@
               <% end %>
             </div>
           </details>
-
         </div>
       <% end %>
     <% else %>
       <p style="color: #6b7280; font-style: italic; text-align: center; padding: 30px 0; font-size: 14px; background: white; border: 1px dashed #d1d5db; border-radius: 12px;">This user has not published any updates yet.</p>
     <% end %>
   </div>
+</div>
 
+<!-- RIGHT COLUMN: Mutual Friends Comparison Sidebar Card (Spans 1/3 width) -->
+<div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 20px; font-family: sans-serif;">
+  
+  <!-- Sidebar Header Panel -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px; margin-bottom: 12px;">
+    <h3 style="margin: 0; font-size: 14px; color: #111827; font-weight: 700;">Mutual Friends</h3>
+    <span style="background: #f3f4f6; color: #4b5563; font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 10px;"><%= @mutual_friends.count %></span>
+  </div>
+
+  <!-- Scrollable Mutual Friends Row Directory Collection -->
+  <div style="display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto;">
+    <% if @mutual_friends.any? %>
+      <% @mutual_friends.each do |mutual_friend| %>
+        
+        <%# Clickable Row routing back to the specific mutual friend's timeline %>
+        <%= link_to user_path(mutual_friend), style: "display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; padding: 4px 0;" do %>
+          
+          <%# Avatar thumbnail picture element %>
+          <% if mutual_friend.profile&.picture_url.present? %>
+            <img src="<%= mutual_friend.profile.picture_url %>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #e5e7eb; flex-shrink: 0;" alt="Avatar">
+          <% else %>
+            <div style="width: 32px; height: 32px; background-color: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #4b5563; font-size: 11px; flex-shrink: 0;">
+              <%= (mutual_friend.name.presence || mutual_friend.email).to_s.first.upcase %>
+            </div>
+          <% end %>
+          
+          
+          <div style="min-width: 0;">
+            <h5 style="margin: 0; font-size: 13px; color: #111827; font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+              <%= mutual_friend.name.presence || mutual_friend.email %>
+            </h5>
+            <p style="margin: 2px 0 0 0; font-size: 11px; color: #9ca3af;">
+              @<%= mutual_friend.username.presence || "user" %>
+            </p>
+          </div>
+          
+        <% end %>
+        
+      <% end %>
+    <% else %>
+      <!-- Fallback Placeholder when count is zero -->
+      <div style="text-align: center; padding: 20px 0; color: #9ca3af; font-size: 12px; font-style: italic;">No mutual connections.</div>
+    <% end %>
+  </div>
 </div>

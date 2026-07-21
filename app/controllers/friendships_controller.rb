@@ -14,7 +14,7 @@ class FriendshipsController < ApplicationController
 
   def update
     @friendship = Friendship.find(params[:id])
-    if @friendship.friend == current_user && friendship.update(status: "accepted")
+    if @friendship.friend == current_user && @friendship.update(status: "accepted")
       redirect_back fallback_location: authenticated_root_path, notice: "Friend request accepted!"
     else
       redirect_back fallback_location: authenticated_root_path, alert: "Action unauthorized."

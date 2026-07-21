@@ -17,5 +17,6 @@ class UsersController < ApplicationController
     redirect_to authenticated_root_path if @user == current_user
     @profile = @user.profile
     @posts = @user.posts.select(&:persisted?)
+    @mutual_friends = current_user.mutual_friends_with(@user)
   end
 end

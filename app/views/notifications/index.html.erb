@@ -1,0 +1,46 @@
+<div style="max-width: 650px; margin: 0 auto; padding: 20px; font-family: sans-serif;">
+  
+  <!-- Header Bar -->
+  <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #eaeaea; padding-bottom: 14px; margin-bottom: 20px;">
+    <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %>
+    <h2 style="margin: 0; color: #111827; font-size: 22px; font-weight: 700;">Notifications</h2>
+  </div>
+
+  <!-- Activity Stream Feed -->
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <% if @notifications.any? %>
+      <% @notifications.each do |notification| %>
+        <%# Determine indicator icon and messaging copy based on action strings %>
+        <% icon, message_suffix = case notification.action %>
+        <% when 'liked_post' then ["❤️", "liked your update post."] %>
+        <% when 'commented_on_post' then ["💬", "commented on your update post."] %>
+        <% when 'follow_request' then ["🔔", "sent you a follow request invitation."] %>
+        <% else ["✨", "interacted with your profile."] %>
+        <% end %>
+
+        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: space-between; gap: 12px; <%= 'border-left: 4px solid #2563eb;' if notification.read_at_was.nil? %>">
+          <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex-grow: 1;">
+            <span style="font-size: 18px; flex-shrink: 0;"><%= icon %></span>
+            
+            <div style="font-size: 14px; color: #374151; min-width: 0; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">
+              <%= link_to (notification.actor.name.presence || notification.actor.email), user_path(notification.actor), style: "font-weight: bold; color: #2563eb; text-decoration: none;" %>
+              
+              <span style="color: #4b5563;"><%= message_suffix %></span>
+              <span style="font-size: 11px; color: #9ca3af; display: block; margin-top: 4px;"><%= time_ago_in_words(notification.created_at) %> ago</span>
+            </div>
+          </div>
+          
+          <%# Provide contextual routing links based on item contexts %>
+          <% if %w[liked_post commented_on_post].include?(notification.action) %>
+            <%= link_to "View Post →", authenticated_root_path, style: "font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; white-space: nowrap;" %>
+          <% else %>
+            <%= link_to "View Request →", authenticated_root_path, style: "font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; white-space: nowrap;" %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: #6b7280; font-style: italic; text-align: center; padding: 40px 0; background: white; border: 1px dashed #d1d5db; border-radius: 12px; font-size: 14px;">Your notification inbox stream is empty.</p>
+    <% end %>
+  </div>
+
+</div>
