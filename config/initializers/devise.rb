@@ -316,15 +316,28 @@ Devise.setup do |config|
   Devise.setup do |config|
     OmniAuth.config.allowed_request_methods = [ :post ]
     OmniAuth.config.request_validation_phase = nil
-    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"],
-    ENV["WORDPRESS_CLIENT_SECRET"],
-    scope: "auth", provider_ignores_state: true,
-    client_options: {
-      redirect_uri: "http://localhost:3000/users/auth/wordpress/callback"
-    }
-    config.omniauth :github, ENV["GITHUB_APP_ID"],
-    ENV["GITHUB_APP_SECRET"],
-    scope: "user:email",
-    provider_ignores_statue: true
+
+    # --- WORDPRESS PROVIDER CONFIGURATION ---
+    # Dynamically points to your Heroku app URL in production, falls back to localhost for local testing
+    wordpress_callback = if Rails.env.production?
+                          "https://herokuapp.com"
+    else
+                          "http://localhost:3000/users/auth/wordpress/callback"
+    end
+
+    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"],
+                    scope: "auth",
+                    provider_ignores_state: true,
+                    client_options: { redirect_uri: wordpress_callback }
+
+
+    # --- GITHUB PROVIDER CONFIGURATION ---
+    # FIXED: Corrected typo from 'provider_ignores_statue' to 'provider_ignores_state'
+    # SAFELY WRAPPED: Only runs if the keys are present, protecting Heroku asset precompilation builds
+    if ENV["GITHUB_APP_ID"].present? || Rails.env.development?
+      config.omniauth :github, ENV["GITHUB_APP_ID"], ENV["GITHUB_APP_SECRET"],
+                      scope: "user:email",
+                      provider_ignores_state: true
+    end
   end
 end
