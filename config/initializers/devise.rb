@@ -313,31 +313,29 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
-  Devise.setup do |config|
-    OmniAuth.config.allowed_request_methods = [ :post ]
-    OmniAuth.config.request_validation_phase = nil
 
-    # --- WORDPRESS PROVIDER CONFIGURATION ---
-    # Dynamically points to your Heroku app URL in production, falls back to localhost for local testing
+  OmniAuth.config.allowed_request_methods = [ :post ]
+  OmniAuth.config.request_validation_phase = nil
+
+  # --- WORDPRESS PROVIDER CONFIGURATION ---
+  # SAFELY WRAPPED: Prevents asset precompilation compilation failure if keys are unset
+  if ENV["WORDPRESS_CLIENT_ID"].present? || Rails.env.development?
     wordpress_callback = if Rails.env.production?
-                          "https://herokuapp.com"
+                           "https://herokuapp.com"
     else
-                          "http://localhost:3000/users/auth/wordpress/callback"
+                           "http://localhost:3000/users/auth/wordpress/callback"
     end
 
     config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"],
                     scope: "auth",
                     provider_ignores_state: true,
                     client_options: { redirect_uri: wordpress_callback }
+  end
 
-
-    # --- GITHUB PROVIDER CONFIGURATION ---
-    # FIXED: Corrected typo from 'provider_ignores_statue' to 'provider_ignores_state'
-    # SAFELY WRAPPED: Only runs if the keys are present, protecting Heroku asset precompilation builds
-    if ENV["GITHUB_APP_ID"].present? || Rails.env.development?
-      config.omniauth :github, ENV["GITHUB_APP_ID"], ENV["GITHUB_APP_SECRET"],
-                      scope: "user:email",
-                      provider_ignores_state: true
-    end
+  # --- GITHUB PROVIDER CONFIGURATION ---
+  if ENV["GITHUB_APP_ID"].present? || Rails.env.development?
+    config.omniauth :github, ENV["GITHUB_APP_ID"], ENV["GITHUB_APP_SECRET"],
+                    scope: "user:email",
+                    provider_ignores_state: true
   end
 end
