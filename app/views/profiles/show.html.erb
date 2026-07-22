@@ -88,9 +88,9 @@
             <!-- Likes Counter Action Section --> 
             <div style="display: flex; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;"> 
               <% if current_user.liked?(post) %> 
-                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&#10084;&#65039; Unlike<% end %> 
+                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %> 
               <% else %> 
-                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&#129293; Like<% end %> 
+                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>♡ Like<% end %> 
               <% end %> 
               <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span> 
             </div> 
@@ -126,9 +126,9 @@
                             <span style="color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span> 
                             <div style="display: flex; align-items: center; gap: 4px;"> 
                               <% if current_user.liked_comment?(comment) %> 
-                                <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&#10084;&#65039; Unlike<% end %> 
+                                <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %> 
                               <% else %> 
-                                <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>&#129293; Like<% end %> 
+                                <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>♡ Like<% end %> 
                               <% end %> 
                               <span style="background: #f3f4f6; color: #6b7280; font-weight: bold; padding: 1px 4px; border-radius: 3px;"><%= comment.comment_likes.count %></span> 
                             </div> 
