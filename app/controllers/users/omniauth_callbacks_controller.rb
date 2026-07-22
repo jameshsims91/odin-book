@@ -10,7 +10,8 @@ class Users:: OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     if @user.persisted?
       flash[:notice] = I18n.t "devise.omniauth_callbacks.success", kind: "GitHub"
-      sign_in_and_redirect @user, event: :authentication
+      sign_in @user, event: :authentication
+      redirect_to authenticated_root_path, allow_other_host: true
     else
       session["devise.github_data"] = request.env["omniauth.auth"].except(:extra)
       redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
@@ -18,7 +19,7 @@ class Users:: OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def failure
-    redirect_to new_user_session_path, alert: "Authentication failed, please try again."
+    redirect_to new_user_session_path, alert: "Authentication failed, please try again.", allow_other_host: true
   end
 
   private
