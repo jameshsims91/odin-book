@@ -71,23 +71,41 @@
       </h3> 
       
       <% if @posts.any? %> 
-        <% @posts.each do |post| %> 
+        <%# STEP 2 OPTIMIZATION: Loops with index to target the main LCP element %>
+        <% @posts.each_with_index do |post, index| %> 
           <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"> 
-            <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p>
-
+            <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p> 
+            
             <!-- DYNAMIC IMAGE DISPLAY: Renders the attached S3 photo if present -->
             <% if post.image.attached? %>
               <div style="margin-bottom: 12px; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb;">
-                <%= image_tag post.image, style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+                
+                <% if index == 0 %>
+                  <%# PRIORITY INJECTION: Tells the browser this is your main LCP element. Loads instantly. %>
+                  <%= image_tag post.image.variant(resize_to_limit:, format: :webp), 
+                                loading: "eager", 
+                                fetchpriority: "high",
+                                style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+                <% else %>
+                  <%# LAZY LOADING: Delays rendering below-the-fold images until the user scrolls, saving network bandwidth. %>
+                  <%= image_tag post.image.variant(resize_to_limit:, format: :webp), 
+                                loading: "lazy", 
+                                style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+                <% end %>
+                
               </div>
             <% end %>
-            
-            <!-- Likes Counter Action Section --> 
+
+            <!-- Likes Counter Action Section (PRESERVED LATEST HEART GLYPHS) --> 
             <div style="display: flex; align-items: center; gap: 6px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;"> 
               <% if current_user.liked?(post) %> 
-                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %> 
+                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>
+                  &hearts; Unlike
+                <% end %> 
               <% else %> 
-                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>♡ Like<% end %> 
+                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>
+                  ♡ Like
+                <% end %> 
               <% end %> 
               <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span> 
             </div> 
