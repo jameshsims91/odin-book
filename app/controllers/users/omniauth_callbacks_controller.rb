@@ -2,8 +2,18 @@ class Users:: OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [ :wordpress, :github, :failure ]
 
   def wordpress
-    handle_auth("Gravatar")
+    @user = User.from_omniauth(request.env["omniauth.auth"])
+    if @user.persisted?
+      flash[:notice] = I18n.t "devise.omniauth_callbacks.success", kind: "WordPress"
+      sign_in @user, event: :authentication
+      redirect_to authenticated_root_path, allow_other_host: true
+    else
+      session["devise.wordpress_data"] = request.env["omniauth.auth"].except(:extra)
+      redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
+    end
   end
+
+  alias_method :gravatar, :wordpress
 
   def github
     @user = User.from_omniauth(request.env["omniauth.auth"])
