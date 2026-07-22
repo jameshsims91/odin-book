@@ -94,4 +94,7 @@ production:
   queue:
     <<: *default
     url: <%= ENV['SOLID_QUEUE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
+  cache:
+    <<: *default
+    url: <%= ENV['SOLID_CACHE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
 
