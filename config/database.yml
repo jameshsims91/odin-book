@@ -85,6 +85,10 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  # FORCES RAILS TO SECURELY STREAM VIA HEROKU'S NETWORK CONTEXT
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+  cable:
+    <<: *default
+    url: <%= ENV['SOLID_CABLE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
+
