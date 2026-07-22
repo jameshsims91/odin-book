@@ -322,8 +322,8 @@ Devise.setup do |config|
     client_options: {
       redirect_uri: "http://localhost:3000/users/auth/wordpress/callback"
     }
-    config.omniauth :github, ENV["GITHUB_CLIENT_ID"],
-    ENV["GITHUB_CLIENT_SECRET"],
+    config.omniauth :github, ENV["GITHUB_APP_ID"],
+    ENV["GITHUB_APP_SECRET"],
     scope: "user:email",
     provider_ignores_statue: true
   end

@@ -98,3 +98,4 @@ production:
     <<: *default
     url: <%= ENV['SOLID_CACHE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
 
+heroku
