@@ -122,18 +122,17 @@
                   <% end %>
                 </div>
               <% end %>
-
-              <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %>
-                <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %>
-                <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %>
-              <% end %>
-            </div>
-          </details>
-
-        </div>
-      <% end %>
-    <% else %>
-      <p style="color: #6b7280; font-style: italic; text-align: center; padding: 40px 0;">No posts have been published yet.</p>
-    <% end %>
-  </div>
+              
+              <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %> 
+                <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %> 
+                <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %> 
+              <% end %> 
+            </div> 
+          </details> 
+        </div> 
+      <% end %> <%# FIXED: This cleanly closes the .each_with_index loop %>
+    <% else %> 
+      <p style="color: #6b7280; font-style: italic; text-align: center; padding: 40px 0;">No posts have been published yet.</p> 
+    <% end %> 
+  </div> 
 </div>
