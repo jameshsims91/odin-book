@@ -329,6 +329,7 @@ Devise.setup do |config|
     config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"],
                     scope: "auth",
                     provider_ignores_state: true,
+                    redirect_uri: wordpress_callback,
                     client_options: { redirect_uri: wordpress_callback }
   end
 
