@@ -7,7 +7,7 @@
 
   <div style="display: flex; flex-direction: column; gap: 20px;">
     <% if @posts.any? %>
-      <% @posts.each do |post| %>
+      <% @posts.each_with_index do |post, index| %>
         <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
           
           <!-- Author Metadata Header and Follow Actions Row -->
@@ -54,10 +54,20 @@
 
           <!-- DYNAMIC IMAGE DISPLAY: Renders the attached S3 photo if present -->
           <% if post.image.attached? %>
-            <div style="margin-bottom: 12px; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb;">
-              <%= image_tag post.image, style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+            <div style="margin-bottom: 15px; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb;">
+              <% if index == 0 %>
+                <%# PRIORITY INJECTION: Instructs the browser to prioritize loading this image to optimize LCP speed %>
+                <%= image_tag post.image.variant(resize_to_limit:, format: :webp), 
+                              loading: "eager", 
+                              fetchpriority: "high",
+                              style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+              <% else %>
+                <%# LAZY LOADING: Prevents below-the-fold feed image downloads from clogging up network queues %>
+                <%= image_tag post.image.variant(resize_to_limit:, format: :webp), 
+                              loading: "lazy", 
+                              style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+              <% end %>
             </div>
-          <% end %>
 
           <!-- Interaction Actions Toolbar Line -->
           <div style="display: flex; align-items: center; gap: 20px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;">
