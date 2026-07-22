@@ -75,9 +75,6 @@
           <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"> 
             <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p>
 
-            <!-- Post Content Text Body -->
-            <p style="font-size: 14px; color: #374151; white-space: pre-wrap; margin: 0 0 12px 0; line-height: 1.5;"><%= post.content %></p>
-
             <!-- DYNAMIC IMAGE DISPLAY: Renders the attached S3 photo if present -->
             <% if post.image.attached? %>
               <div style="margin-bottom: 12px; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb;">
