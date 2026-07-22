@@ -113,6 +113,8 @@ class User < ApplicationRecord
   end
 
   def send_welcome_email
-    UserMailer.welcome_email(self).deliver_now
+    if Rails.env.development?
+      UserMailer.welcome_email(self).deliver_now
+    end
   end
 end
