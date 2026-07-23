@@ -39,4 +39,5 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+  get "/google161cda089d7aa7bb.html", to: proc { [ 200, {}, [ "google-site-verification: google161cda089d7aa7bb.html" ] ] }
 end
