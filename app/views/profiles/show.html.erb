@@ -42,7 +42,7 @@
     <% if current_user == profile_owner %> 
       <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"> 
         <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #111827; font-weight: 600;">Publish a New Update</h3> 
-        <div id="new-post-mentions-wrapper" style=>"position: relative; width: 100%;">
+        <div id="new-post-mentions-wrapper" style="position: relative; width: 100%;">
           <%= form_with model: @new_post, local: true, html: { multipart: true } do |f| %> 
             <%= f.text_area :content, placeholder: "What is on your mind?", autocomplete: "off", id: "new-post-input", style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; box-sizing: border-box; resize: vertical;", rows: 3 %> 
             <div style="margin-top: 12px; font-family: sans-serif;"> 
