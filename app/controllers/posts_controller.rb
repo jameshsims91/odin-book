@@ -16,6 +16,7 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
+      extract_mentions(@post)
       redirect_to authenticated_root_path, notice: "Your update was published!"
     else
       @profile = current_user.profile
@@ -51,5 +52,11 @@ class PostsController < ApplicationController
 
   def post_params
     params.expect(post: [ :content, :image ])
+  end
+
+  def extract_mentions(post)
+    usernames = post.body.scan(/@(\w+)/).flatten.uniq
+    users = User.where(username: usernames)
+    post.mentioned_users = users
   end
 end

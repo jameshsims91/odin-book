@@ -5,6 +5,8 @@ class Post < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liking_users, through: :likes, source: :user
   has_many :comments, dependent: :destroy
+  has_many :mentions, dependent: :destroy
+  has_many :mentioned_users, through: :mentions, source: :user
   validates :content, presence: true, length: { maximum: 560 }, unless: -> { image.attached? }
   default_scope -> { order(created_at: :desc) }
 end

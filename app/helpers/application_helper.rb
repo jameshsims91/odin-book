@@ -18,4 +18,12 @@ module ApplicationHelper
       image_tag post.image, style: "width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid #e5e7eb;", alt: "Post Attachment File"
     end
   end
+
+  def render_post_body(body)
+    body.gsub(/@(\w+)/) do |match|
+      username = $1
+      user = User.find_by(username: username)
+      user ? link_to("@#{username}", user_path(user)) : match
+    end.html_safe
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_21_151953) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_27_151352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,6 +93,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_151953) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "mentions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "post_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["post_id"], name: "index_mentions_on_post_id"
+    t.index ["user_id"], name: "index_mentions_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.string "action", null: false
     t.bigint "actor_id", null: false
@@ -108,8 +117,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_151953) do
   end
 
   create_table "posts", force: :cascade do |t|
+    t.integer "comments_count"
     t.text "content"
     t.datetime "created_at", null: false
+    t.integer "likes_count"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -153,6 +164,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_151953) do
   add_foreign_key "identities", "users"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
+  add_foreign_key "mentions", "posts"
+  add_foreign_key "mentions", "users"
   add_foreign_key "notifications", "users", column: "actor_id"
   add_foreign_key "notifications", "users", column: "recipient_id"
   add_foreign_key "posts", "users"

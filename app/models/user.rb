@@ -21,6 +21,8 @@ class User < ApplicationRecord
   has_many :liked_comments, through: :comment_likes, source: :comment
 
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+  has_many :mentions
+  has_many :mentioned_in_posts, through: :mentions, source: :post
 
   after_create :create_default_profile
   after_create :send_welcome_email
