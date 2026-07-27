@@ -1,0 +1,54 @@
+<div style="max-width: 650px; margin: 0 auto; padding: 20px; font-family: sans-serif;">
+  
+  <!-- Navigation Header Row -->
+  <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #eaeaea; padding-bottom: 14px; margin-bottom: 20px;">
+    <%= link_to "← Cancel", post_path(@post), style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %>
+    <h2 style="margin: 0; color: #111827; font-size: 22px; font-weight: 700;">Edit Post</h2>
+  </div>
+
+  <!-- Form Wrapper Card -->
+  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    
+    <%= form_with model: @post, local: true, style: "display: flex; flex-direction: column; gap: 16px;" do |f| %>
+      
+      <!-- Error Message Banner Block -->
+      <% if @post.errors.any? %>
+        <div style="background-color: #fef2f2; border: 1px solid #fee2e2; border-radius: 8px; padding: 14px; font-size: 14px; color: #991b1b;">
+          <h4 style="margin: 0 0 6px 0; font-weight: 600;"><%= pluralize(@post.errors.count, "error") %> blocked this update:</h4>
+          <ul style="margin: 0; padding-left: 20px; line-height: 1.4;">
+            <% @post.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <!-- Text Inputs Body Field Box -->
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <%= f.label :content, "Post Content", style: "font-size: 14px; font-weight: 600; color: #374151;" %>
+        <%= f.text_area :content, rows: 5, placeholder: "What's on your mind?", required: true, style: "width: 100%; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 15px; font-family: inherit; line-height: 1.5; outline: none; background: white;" %>
+      </div>
+
+      <!-- Optional File Attachment Field -->
+      <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 0;">
+        <%= f.label :image, "Update Attached Photo (Optional)", style: "font-size: 14px; font-weight: 600; color: #374151;" %>
+        <%= f.file_field :image, accept: 'image/*', style: "font-size: 13px; color: #4b5563;" %>
+        
+        <% if @post.image.attached? %>
+          <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; color: #6b7280; font-style: italic;">Current asset:</span>
+            <%= image_tag @post.image.variant(resize_to_limit: [100, 100]), style: "border-radius: 4px; border: 1px solid #e5e7eb;" %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Submission Command Actions Buttons Line Row -->
+      <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; border-top: 1px solid #f3f4f6; padding-top: 16px; margin-top: 8px;">
+        <%= link_to "Discard Changes", post_path(@post), style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500;" %>
+        <%= f.submit "Save Changes", style: "background-color: #2563eb; color: white; font-weight: 600; font-size: 14px; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>

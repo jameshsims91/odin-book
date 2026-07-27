@@ -25,6 +25,22 @@ class PostsController < ApplicationController
     end
   end
 
+  def show
+    @post = Post.find(params[:id])
+  end
+
+  def update
+    @post = Post.find(params[:id])
+    if @post.update(post_params)
+      respond_to do |format|
+        format.html { redirect_to post_path(@post), notice: "Post updated successfully!" }
+        format.turbo_stream { render turbo_stream: turbo_Stream.replace(@post, partial: "posts/post_card", locals: { post: @post }) }
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @post = current_user.posts.find(params[:id])
     @post.destroy
