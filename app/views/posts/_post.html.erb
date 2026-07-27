@@ -59,9 +59,9 @@
           
           <!-- Standard Feed Thumbnail Preview Image -->
           <% if local_assigns[:index] == 0 %>
-            <%= image_tag post.image.variant(resize_to_limit:, format: :webp), loading: "eager", fetchpriority: "high", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+            <%= image_tag post.image.variant(resize_to_limit: [800, 800], format: :webp), loading: "eager", fetchpriority: "high", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
           <% else %>
-            <%= image_tag post.image.variant(resize_to_limit:, format: :webp), loading: "lazy", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+            <%= image_tag post.image.variant(resize_to_limit: [800, 800], format: :webp), loading: "lazy", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
           <% end %>
         </summary>
 
