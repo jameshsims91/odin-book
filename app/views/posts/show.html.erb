@@ -54,7 +54,7 @@
           <summary style="list-style: none; outline: none; cursor: pointer; display: block;"> 
             <style> details summary::-webkit-details-marker { display: none; } </style> 
             <!-- Standard Feed Thumbnail Preview Image --> 
-            <%= image_tag @post.image.variant(resize_to_limit:, format: :webp), loading: "eager", fetchpriority: "high", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %> 
+            <%= image_tag @post.image.variant(resize_to_limit: [800, 800], format: :webp), loading: "eager", fetchpriority: "high", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %> 
           </summary> 
           
           <!-- Full-Screen Lightbox Pop-up Modal Backdrop Overlay Overlay --> 
