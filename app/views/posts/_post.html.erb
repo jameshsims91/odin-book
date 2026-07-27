@@ -41,7 +41,7 @@
   <!-- Post Content Text Body -->
   <p style="font-size: 15px; color: #374151; line-height: 1.5; white-space: pre-wrap; margin: 0 0 15px 0;">
     <%= link_to post_path(post), style: "text-decoration: none; color: inherit;" do %>
-      <%= render_post_body(post.body) %>
+      <%= render_post_body(post.content) %>
     <% end %>
   </p>
 
