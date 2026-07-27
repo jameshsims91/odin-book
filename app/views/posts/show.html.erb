@@ -51,7 +51,7 @@
     <p style="font-size: 15px; color: #374151; line-height: 1.5; white-space: pre-wrap; margin: 0 0 15px 0;"><%= @post.content %></p>
 
     <!-- DYNAMIC IMAGE DISPLAY -->
-    <% if post.image.attached? %>
+    <% if @post.image.attached? %>
       <div style="margin-bottom: 15px; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb;">
         
         <!-- Native Details element acting as a modal toggle -->
@@ -64,9 +64,9 @@
             
             <!-- Standard Feed Thumbnail Preview Image -->
             <% if local_assigns[:index] == 0 %>
-              <%= image_tag post.image.variant(resize_to_limit:, format: :webp), loading: "eager", fetchpriority: "high", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+              <%= image_tag @post.image.variant(resize_to_limit:, format: :webp), loading: "eager", fetchpriority: "high", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
             <% else %>
-              <%= image_tag post.image.variant(resize_to_limit:, format: :webp), loading: "lazy", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
+              <%= image_tag @post.image.variant(resize_to_limit:, format: :webp), loading: "lazy", style: "width: 100%; max-height: 450px; object-fit: cover; display: block;" %>
             <% end %>
           </summary>
 
@@ -79,7 +79,7 @@
             </summary>
             
             <!-- Full-Size Uncropped Image Content Asset Asset Layout Container Node Element Row -->
-            <%= image_tag post.image, style: "max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" %>
+            <%= image_tag @post.image, style: "max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" %>
             
           </div>
         </details>
