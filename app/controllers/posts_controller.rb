@@ -27,7 +27,7 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = current.user.posts.find(params[:id])
+    @post = current_user.posts.find(params[:id])
   end
 
   def show
@@ -35,7 +35,7 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = current.user.posts.find(params[:id])
+    @post = current_user.posts.find(params[:id])
     if @post.update(post_params)
       respond_to do |format|
         format.html { redirect_to post_path(@post), notice: "Post updated successfully!" }
