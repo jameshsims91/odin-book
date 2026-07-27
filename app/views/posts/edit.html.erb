@@ -2,7 +2,7 @@
   
   <!-- Navigation Header Row -->
   <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #eaeaea; padding-bottom: 14px; margin-bottom: 20px;">
-    <%= link_to "← Cancel", post_path(@post), style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %>
+    <%= link_to "← Cancel", post_path(@post || params[:id]), style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %>
     <h2 style="margin: 0; color: #111827; font-size: 22px; font-weight: 700;">Edit Post</h2>
   </div>
 

@@ -26,16 +26,20 @@ class PostsController < ApplicationController
     end
   end
 
+  def edit
+    @post = current.user.posts.find(params[:id])
+  end
+
   def show
     @post = Post.find(params[:id])
   end
 
   def update
-    @post = Post.find(params[:id])
+    @post = current.user.posts.find(params[:id])
     if @post.update(post_params)
       respond_to do |format|
         format.html { redirect_to post_path(@post), notice: "Post updated successfully!" }
-        format.turbo_stream { render turbo_stream: turbo_Stream.replace(@post, partial: "posts/post_card", locals: { post: @post }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: "posts/post_card", locals: { post: @post }) }
       end
     else
       render :edit, status: :unprocessable_entity
@@ -55,7 +59,8 @@ class PostsController < ApplicationController
   end
 
   def extract_mentions(post)
-    usernames = post.body.scan(/@(\w+)/).flatten.uniq
+    return if post.content.blank?
+    usernames = post.content.scan(/@(\w+)/).flatten.uniq
     users = User.where(username: usernames)
     post.mentioned_users = users
   end
