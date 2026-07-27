@@ -113,10 +113,145 @@
           <% end %> 
         </div> 
       <% end %> 
-      <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %> 
-        <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %> 
-        <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %> 
-      <% end %> 
+      
+      <!-- Wrapper to position the autocomplete dropdown popup -->
+      <div id="mentions-wrapper-<%= post.id %>" style="position: relative; width: 100%;">
+        
+        <!-- Inline Comment Input Box Form -->
+        <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;", html: { id: "reply-form-#{post.id}" } do |f| %>
+          <%= f.text_field :content, 
+                placeholder: "Write a reply...", 
+                required: true, 
+                autocomplete: "off",
+                id: "reply-input-#{post.id}",
+                style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %>
+          <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %>
+        <% end %>
+
+        <!-- Dropdown Autocomplete Pop-up Menu Layer -->
+        <div id="mentions-menu-<%= post.id %>" 
+            style="display: none; position: absolute; bottom: 100%; left: 0; width: 220px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; margin-bottom: 5px; max-height: 180px; overflow-y: auto; padding: 4px;">
+        </div>
+      </div>
+
+      <script>
+      (function() {
+        const postId = "<%= post.id %>";
+        const input = document.getElementById(`reply-input-${postId}`);
+        const menu = document.getElementById(`mentions-menu-${postId}`);
+        
+        if (!input || !menu) return;
+
+        let activeIndex = -1;
+        let matchStart = -1;
+
+        // Listen for user typing inside the input field
+        input.addEventListener("input", function() {
+          const value = input.value;
+          const cursor = input.selectionStart;
+          const textBeforeCursor = value.substring(0, cursor);
+          
+          // Looks for an '@' symbol followed by letters/numbers right at the cursor position
+          const match = textBeforeCursor.match(/@(\w*)$/);
+
+          if (match) {
+            const query = match[1];
+            matchStart = match.index;
+            
+            // Fetch matching friends dynamically from the Rails backend search endpoint
+            fetch(`/users/search.json?q=${query}`)
+              .then(res => res.json())
+              .then(users => {
+                renderMenu(users);
+              })
+              .catch(() => hideMenu());
+          } else {
+            hideMenu();
+          }
+        });
+
+        // Handle arrow keys, enter selection, and escape keys
+        input.addEventListener("keydown", function(e) {
+          if (menu.style.display !== "block") return;
+          const items = menu.querySelectorAll(".mention-item");
+
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            highlightItem((activeIndex + 1) % items.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            highlightItem((activeIndex - 1 + items.length) % items.length);
+          } else if (e.key === "Enter" && activeIndex >= 0) {
+            e.preventDefault();
+            insertMention(items[activeIndex].dataset.username);
+          } else if (e.key === "Escape") {
+            hideMenu();
+          }
+        });
+
+        // Render the list items visually inside the floating menu box
+        function renderMenu(users) {
+          if (users.length === 0) {
+            hideMenu();
+            return;
+          }
+
+          menu.innerHTML = users.map((user, idx) => `
+            <div class="mention-item" data-username="${user.username}" data-idx="${idx}"
+                style="padding: 8px; cursor: pointer; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; gap: 2px; background: none;">
+              <span style="font-weight: 600; color: #111827;">${user.name}</span>
+              <span style="font-size: 11px; color: #6b7280;">@${user.username}</span>
+            </div>
+          `).join("");
+
+          menu.style.display = "block";
+          highlightItem(0);
+
+          // Bind click events to each option in the list
+          menu.querySelectorAll(".mention-item").forEach(item => {
+            item.addEventListener("click", function() {
+              insertMention(this.dataset.username);
+            });
+          });
+        }
+
+        // Inject the chosen @username back into the sentence stream smoothly
+        function insertMention(username) {
+          const value = input.value;
+          const cursor = input.selectionStart;
+          const before = value.substring(0, matchStart);
+          const after = value.substring(cursor);
+
+          input.value = `${before}@${username} ${after}`;
+          hideMenu();
+          input.focus();
+        }
+
+        // Highlight active items using standard CSS background fills
+        function highlightItem(index) {
+          const items = menu.querySelectorAll(".mention-item");
+          items.forEach(i => i.style.background = "none");
+          
+          activeIndex = index;
+          if (items[index]) {
+            items[index].style.background = "#eff6ff"; // Light Blue highlight color
+          }
+        }
+
+        function hideMenu() {
+          menu.style.display = "none";
+          activeIndex = -1;
+        }
+
+        // Close the popup dropdown immediately if the user clicks anywhere else on the screen
+        document.addEventListener("click", function(e) {
+          const wrapper = document.getElementById(`mentions-wrapper-${postId}`);
+          if (wrapper && !wrapper.contains(e.target)) {
+            hideMenu();
+          }
+        });
+      })();
+      </script>
     </div>
   </details>
 </div>

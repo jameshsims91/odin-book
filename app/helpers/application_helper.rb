@@ -19,8 +19,8 @@ module ApplicationHelper
     end
   end
 
-  def render_post_body(body)
-    body.gsub(/@(\w+)/) do |match|
+  def render_post_body(content)
+    content.gsub(/@(\w+)/) do |match|
       username = $1
       user = User.find_by(username: username)
       user ? link_to("@#{username}", user_path(user)) : match

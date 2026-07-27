@@ -23,7 +23,11 @@ Rails.application.routes.draw do
       end
     end
     resources :friendships, only: [ :create, :update, :destroy ]
-    resources :users, only: [ :index, :show ]
+    resources :users, only: [ :index, :show ] do
+      collection do
+        get :search
+      end
+    end
     resources :notifications, only: [ :index ] do
       collection do
         delete :clear_all
