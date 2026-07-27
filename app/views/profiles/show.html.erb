@@ -42,20 +42,132 @@
     <% if current_user == profile_owner %> 
       <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"> 
         <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #111827; font-weight: 600;">Publish a New Update</h3> 
-        <%= form_with model: @new_post, local: true, html: { multipart: true } do |f| %> 
-          <%= f.text_area :content, placeholder: "What is on your mind?", style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; box-sizing: border-box; resize: vertical;", rows: 3 %> 
-          <div style="margin-top: 12px; font-family: sans-serif;"> 
-            <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #4b5563; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'"> 
-              <span style="font-size: 16px;">📸</span> <span>Attach Photo</span> 
-              <%= f.file_field :image, accept: 'image/png, image/jpeg, image/jpg, image/webp', style: "display: none;", onchange: "document.getElementById('file-chosen-indicator').innerText = '✓ ' + this.files[0].name; document.getElementById('file-chosen-indicator').style.display = 'inline-block';" %> 
-            </label> 
-            <span id="file-chosen-indicator" style="display: none; margin-left: 10px; font-size: 12px; color: #16a34a; font-weight: 600; font-style: italic; background-color: #f0fdf4; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;"></span> 
-          </div> 
-          <div style="text-align: right; margin-top: 12px;"> 
-            <%= f.submit "Post Update", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %> 
-          </div> 
-        <% end %> 
+        <div id="new-post-mentions-wrapper" style=>"position: relative; width: 100%;">
+          <%= form_with model: @new_post, local: true, html: { multipart: true } do |f| %> 
+            <%= f.text_area :content, placeholder: "What is on your mind?", autocomplete: "off", id: "new-post-input", style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; box-sizing: border-box; resize: vertical;", rows: 3 %> 
+            <div style="margin-top: 12px; font-family: sans-serif;"> 
+              <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #4b5563; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'"> 
+                <span style="font-size: 16px;">📸</span> <span>Attach Photo</span> 
+                <%= f.file_field :image, accept: 'image/png, image/jpeg, image/jpg, image/webp', style: "display: none;", onchange: "document.getElementById('file-chosen-indicator').innerText = '✓ ' + this.files[0].name; document.getElementById('file-chosen-indicator').style.display = 'inline-block';" %> 
+              </label> 
+              <span id="file-chosen-indicator" style="display: none; margin-left: 10px; font-size: 12px; color: #16a34a; font-weight: 600; font-style: italic; background-color: #f0fdf4; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;"></span> 
+            </div> 
+            <div style="text-align: right; margin-top: 12px;"> 
+              <%= f.submit "Post Update", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %> 
+            </div> 
+          <% end %> 
+
+          <!-- Dropdown Autocomplete Menu Popup (Postiions absolute relative to the form box) -->
+          <div id="new-post-mentions-menu" style=>"display: none; position: absolute; top: 75px; left: 0; width: 220px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-height: 180px; overflow-y: auto; padding: 4px;">
+          </div>
+        </div>
       </div> 
+
+      <!-- Autocomplete Action Listener Script Engine -->
+      <script>
+      (function() {
+        const input = document.getElementById("new-post-input");
+        const menu = document.getElementById("new-post-mentions-menu");
+        
+        if (!input || !menu) return;
+
+        let activeIndex = -1;
+        let matchStart = -1;
+
+        input.addEventListener("input", function() {
+          const value = input.value;
+          const cursor = input.selectionStart;
+          const textBeforeCursor = value.substring(0, cursor);
+          const match = textBeforeCursor.match(/@(\w*)$/);
+
+          if (match) {
+            const query = match[1];
+            matchStart = match.index;
+            
+            fetch(`/users/search.json?q=${query}`)
+              .then(res => res.json())
+              .then(users => { renderMenu(users); })
+              .catch(() => hideMenu());
+          } else {
+            hideMenu();
+          }
+        });
+
+        input.addEventListener("keydown", function(e) {
+          if (menu.style.display !== "block") return;
+          const items = menu.querySelectorAll(".mention-item");
+
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            highlightItem((activeIndex + 1) % items.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            highlightItem((activeIndex - 1 + items.length) % items.length);
+          } else if (e.key === "Enter" && activeIndex >= 0) {
+            e.preventDefault();
+            insertMention(items[activeIndex].dataset.username);
+          } else if (e.key === "Escape") {
+            hideMenu();
+          }
+        });
+
+        function renderMenu(users) {
+          if (users.length === 0) {
+            hideMenu();
+            return;
+          }
+
+          menu.innerHTML = users.map((user, idx) => `
+            <div class="mention-item" data-username="${user.username}" data-idx="${idx}"
+                style="padding: 8px; cursor: pointer; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; gap: 2px; background: none;">
+              <span style="font-weight: 600; color: #111827;">${user.name}</span>
+              <span style="font-size: 11px; color: #6b7280;">@${user.username}</span>
+            </div>
+          `).join("");
+
+          menu.style.display = "block";
+          highlightItem(0);
+
+          menu.querySelectorAll(".mention-item").forEach(item => {
+            item.addEventListener("click", function() {
+              insertMention(this.dataset.username);
+            });
+          });
+        }
+
+        function insertMention(username) {
+          const value = input.value;
+          const cursor = input.selectionStart;
+          const before = value.substring(0, matchStart);
+          const after = value.substring(cursor);
+
+          input.value = `${before}@${username} ${after}`;
+          hideMenu();
+          input.focus();
+        }
+
+        function highlightItem(index) {
+          const items = menu.querySelectorAll(".mention-item");
+          items.forEach(i => i.style.background = "none");
+          activeIndex = index;
+          if (items[index]) {
+            items[index].style.background = "#eff6ff";
+          }
+        }
+
+        function hideMenu() {
+          menu.style.display = "none";
+          activeIndex = -1;
+        }
+
+        document.addEventListener("click", function(e) {
+          const wrapper = document.getElementById("new-post-mentions-wrapper");
+          if (wrapper && !wrapper.contains(e.target)) {
+            hideMenu();
+          }
+        });
+      })();
+      </script>
     <% end %> 
 
     <!-- User's Historical Post Feed Stream --> 
