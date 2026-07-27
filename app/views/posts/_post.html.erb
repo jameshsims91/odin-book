@@ -76,7 +76,7 @@
           </span>
           
           <!-- Full-Size Uncropped Image Content Asset Asset Layout Container Node Element Row -->
-          <%= image_tag post.image, style: "max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);"
+          <%= image_tag @post.image, style: "max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);"
                       onclick: "event.stopPropagation();" %>
           
         </summary>
@@ -88,19 +88,19 @@
   <!-- Interaction Actions Toolbar Line -->
   <div style="display: flex; align-items: center; gap: 20px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;">
     <div style="display: flex; align-items: center; gap: 6px;">
-      <% if current_user.liked?(post) %>
-        <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %>
+      <% if current_user.liked?(@post) %>
+        <%= button_to post_like_path(@post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %>
       <% else %>
-        <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>♡ Like<% end %>
+        <%= button_to post_likes_path(@post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>♡ Like<% end %>
       <% end %>
-      <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span>
+      <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= @post.likes.count %></span>
     </div>
 
     <!-- Inline Actions Control Block For Post Owner -->
-    <% if post.user == current_user %>
+    <% if @post.user == current_user %>
       <div style="margin-left: auto; display: flex; align-items: center; gap: 14px;">
-        <%= link_to "Edit Post", edit_post_path(post), style: "font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 500;" %>
-        <%= button_to "Delete My Post", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, style: "font-size: 13px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" %>
+        <%= link_to "Edit Post", edit_post_path(@post), style: "font-size: 13px; color: #2563eb; text-decoration: none; font-weight: 500;" %>
+        <%= button_to "Delete My Post", post_path(@post), method: :delete, data: { confirm: "Are you sure?" }, style: "font-size: 13px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" %>
       </div>
     <% end %>
   </div>
@@ -108,13 +108,13 @@
   <!-- NATIVE HTML DISCLOSURE ELEMENT FOR TOGGLEABLE COMMENT DRAWER -->
   <details style="margin-top: 15px; font-size: 13px;">
     <summary style="color: #2563eb; font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;">
-      💬 Reply (<%= post.comments.count %>)
+      💬 Reply (<%= @post.comments.count %>)
     </summary>
     <div style="margin-top: 10px; padding: 12px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
       <!-- Render Existing Comments Stream -->
-      <% if post.comments.any? %>
+      <% if @post.comments.any? %>
         <div style="margin-bottom: 10px; max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
-          <% post.comments.each do |comment| %>
+          <% @post.comments.each do |comment| %>
             <div style="background: white; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
               <div style="flex-grow: 1;">
                 <%= link_to (comment.user.name.presence || comment.user.email), user_path(comment.user), style: "font-weight: bold; color: #2563eb; text-decoration: none;" %>: <span style="color: #374151;"><%= comment.content %></span>
@@ -123,16 +123,16 @@
                   <span style="color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span>
                   <div style="display: flex; align-items: center; gap: 4px;">
                     <% if current_user.liked_comment?(comment) %>
-                      <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %>
+                      <%= button_to post_comment_comment_like_path(@post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %>
                     <% else %>
-                      <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>♡ Like<% end %>
+                      <%= button_to post_comment_comment_likes_path(@post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>♡ Like<% end %>
                     <% end %>
                     <span style="background: #f3f4f6; color: #6b7280; font-weight: bold; padding: 1px 4px; border-radius: 3px;"><%= comment.comment_likes.count %></span>
                   </div>
                 </div>
               </div>
-              <% if comment.user == current_user || post.user == current_user %>
-                <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %>
+              <% if comment.user == current_user || @post.user == current_user %>
+                <%= button_to post_comment_path(@post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %>
               <% end %>
             </div>
           <% end %>
@@ -140,7 +140,7 @@
       <% end %>
 
       <!-- Inline Comment Input Box Form -->
-      <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %>
+      <%= form_with model: [@post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %>
         <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %>
         <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %>
       <% end %>
