@@ -119,28 +119,28 @@
           </div> 
         <% end %> 
         <!-- Wrapper to position the autocomplete dropdown popup -->
-        <div id="mentions-wrapper-<%= post.id %>" style="position: relative; width: 100%;">
+        <div id="mentions-wrapper-<%= @post.id %>" style="position: relative; width: 100%;">
           
           <!-- Inline Comment Input Box Form -->
-          <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;", html: { id: "reply-form-#{post.id}" } do |f| %>
+          <%= form_with model: [@post, Comment.new], local: true, style: "display: flex; gap: 8px;", html: { id: "reply-form-#{@post.id}" } do |f| %>
             <%= f.text_field :content, 
                   placeholder: "Write a reply...", 
                   required: true, 
                   autocomplete: "off",
-                  id: "reply-input-#{post.id}",
+                  id: "reply-input-#{@post.id}",
                   style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %>
             <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %>
           <% end %>
 
           <!-- Dropdown Autocomplete Pop-up Menu Layer -->
-          <div id="mentions-menu-<%= post.id %>" 
+          <div id="mentions-menu-<%= @post.id %>" 
               style="display: none; position: absolute; bottom: 100%; left: 0; width: 220px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; margin-bottom: 5px; max-height: 180px; overflow-y: auto; padding: 4px;">
           </div>
         </div>
 
         <script>
         (function() {
-          const postId = "<%= post.id %>";
+          const postId = "<%= @post.id %>";
           const input = document.getElementById(`reply-input-${postId}`);
           const menu = document.getElementById(`mentions-menu-${postId}`);
           
