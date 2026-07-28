@@ -15,13 +15,13 @@ class Post < ApplicationRecord
   private
 
   def create_mentions
-    extracted_username = content.scan(/@(\w+)/).flatten.uniq
+    extracted_usernames = content.to_s.scan(/@(\w+)/).flatten.uniq
     matching_users = User.where(username: extracted_usernames)
     self.mentioned_users = matching_users
     matching_users.each do |tagged_user|
       next if tagged_user == self.user
       Notification.find_or_create_by!(
-        recipient: tagged_ser,
+        recipient: tagged_user,
         actor: self.user,
         notifiable: self,
         action: "tagged"
