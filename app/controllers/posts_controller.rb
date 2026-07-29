@@ -36,13 +36,12 @@ class PostsController < ApplicationController
 
   def update
     @post = current_user.posts.find(params[:id])
-    if @post.update(post_params)
-      respond_to do |format|
-        format.html { redirect_to post_path(@post), notice: "Post updated successfully!" }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@post) }
+    respond_to do |format|
+      if @post.update(post_params)
+        format.html { redirect_back_or_to profile_path, status: :see_other, notice: "Post updated successfully!" }
+      else
+        render :edit, status: :unprocessable_entity
       end
-    else
-      render :edit, status: :unprocessable_entity
     end
   end
 
