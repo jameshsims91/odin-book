@@ -6,6 +6,12 @@
       <%= link_to "← Back", :back, style: "font-size: 13px; color: var(--text-light); text-decoration: none; font-weight: 500;" %> 
     </div> 
 
+    <div data-controller="web-push" data-web-push-public-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>" class="hidden">
+      <button data-action="click->web-push#subscribe" class="btn btn-primary">
+        🔔 Enable Desktop & Mobile Push Notifications
+      </button>
+    </div>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true, style: "display: flex; flex-direction: column; gap: 16px;" }) do |f| %> 
       <%= render "devise/shared/error_messages", resource: resource %> 
 

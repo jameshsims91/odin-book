@@ -3,12 +3,6 @@
   <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-secondary); padding-bottom: 14px; margin-bottom: 24px;"> 
     <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %> 
     <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">Edit Profile Settings</h2> 
-  </div> 
-
-  <div data-controller="web-push" data-web-push-public-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>" class="hidden">
-    <button data-action="click->web-push#subscribe" class="btn btn-primary">
-      🔔 Enable Desktop & Mobile Push Notifications
-    </button>
   </div>
 
   <%= form_with model: @profile, url: profile_path, method: :patch, local: true, html: { multipart: true, style: "display: flex; flex-direction: column; gap: 20px;" } do |f| %> 
