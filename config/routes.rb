@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   authenticated :user do
     resource :profile, only: [ :show, :edit, :update ]
+    resources :web_push_subscriptions, only: [ :create ]
     resources :posts, only: [ :index, :create, :destroy ] do
       resources :likes, only: [ :create, :destroy ]
       resources :comments, only: [ :create, :destroy ] do
