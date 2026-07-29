@@ -18,32 +18,59 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <meta name="google-site-verification" content="DQhzJbxSVPg80ql-VRJVAGOZP_CbMhHNAg4iHBjJJZo" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    function toggleDarkMode() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    document.addEventListener("turbo:load", function() {
+      const toggleBtn = document.getElementById("dark-mode-toggle");
+      if (toggleBtn) {
+        toggleBtn.removeEventListener("click", toggleDarkMode);
+        toggleBtn.addEventListener("click", toggleDarkMode);
+      }
+    });
+  </script>
 </head>
 
-<body style="margin: 0; padding: 0; background-color: #f9fafb; font-family: sans-serif; color: #111827;">
+<body style="margin: 0; padding: 0; background-color: var(--bg-color); font-family: sans-serif; color: var(--text-body); transition: background-color 0.2s, color 0.2s;"> 
+  
+  <!-- Global Application Navigation Header Bar --> 
+  <%= render "layouts/header" %> 
 
-  <!-- Global Application Navigation Header Bar -->
-  <%= render "layouts/header" %>
+  <!-- Main Workspace View Container --> 
+  <main style="max-width: 1050px; margin: 0 auto; padding: 20px; box-sizing: border-box;"> 
+    <% flash.each do |type, message| %> 
+      <% if message.is_a?(Hash) %> 
+        <%# Flatten deep OmniAuth structured exceptions data %> 
+        <% message = message["alert"] || message[:alert] || message.values.first.to_s %> 
+      <% end %> 
+      
+      <% is_alert = (type.to_s == 'alert' || type.to_s == 'danger') %> 
+      
+      <%# Transformed flash boxes to use alpha opacities for dark-mode contrast fallback safety %>
+      <div style="padding: 14px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; font-weight: 500; 
+                  border: 1px solid <%= is_alert ? '#dc2626' : '#16a34a' %>; 
+                  background-color: <%= is_alert ? 'rgba(239, 68, 68, 0.1)' : 'rgba(22, 163, 74, 0.1)' %>; 
+                  color: <%= is_alert ? '#ef4444' : '#4ade80' %>;"> 
+        <%= message %> 
+      </div> 
+    <% end %> 
 
-  <!-- Main Workspace View Container -->
-  <main style="max-width: 1050px; margin: 0 auto; padding: 20px; box-sizing: border-box;">
-    
-    <% flash.each do |type, message| %>
-      <% if message.is_a?(Hash) %>
-        <%# Flatten deep OmniAuth structured exceptions data %>
-        <% message = message["alert"] || message[:alert] || message.values.first.to_s %>
-      <% end %>
-
-      <% is_alert = (type.to_s == 'alert' || type.to_s == 'danger') %>
-      <div style="padding: 14px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid <%= is_alert ? '#fecaca' : '#bbf7d0' %>; background-color: <%= is_alert ? '#fef2f2' : '#f0fdf4' %>; color: <%= is_alert ? '#dc2626' : '#16a34a' %>;">
-        <%= message %>
-      </div>
-    <% end %>
-
-    <%# Inject individual child controller view templates here %>
-    <%= yield %>
-    
-  </main>
-
+    <%# Inject individual child controller view templates here %> 
+    <%= yield %> 
+  </main> 
 </body>
 </html>

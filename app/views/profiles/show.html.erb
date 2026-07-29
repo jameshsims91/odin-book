@@ -5,31 +5,30 @@
     <% profile_owner = @profile&.user %> 
     
     <!-- Profile Header Card Section --> 
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 24px;"> 
-      <%# UPDATED: Pulls the avatar of the profile being viewed, not current_user %> 
+    <div style="background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 24px; transition: background 0.2s, border-color 0.2s;"> 
       <% if profile_owner %> 
         <%= user_avatar(profile_owner, size: 96) %> 
       <% end %> 
       <div style="flex-grow: 1;"> 
-        <%# UPDATED: Displays the name/email of the profile owner %> 
-        <h1 style="margin: 0; font-size: 24px; color: #111827;"> 
+        <h1 style="margin: 0; font-size: 24px; color: var(--text-dark);"> 
           <%= profile_owner&.name.presence || profile_owner&.email %> 
         </h1> 
-        <p style="color: #4b5563; font-size: 15px; margin: 6px 0 12px 0; line-height: 1.5;"> 
+        <p style="color: var(--text-muted); font-size: 15px; margin: 6px 0 12px 0; line-height: 1.5;"> 
           <%= @profile&.information.presence || "No bio information provided yet." %> 
         </p> 
+        
         <!-- Profile Statistics Metrics Counter Flex Row --> 
         <div style="display: flex; gap: 20px; margin-bottom: 12px; font-family: sans-serif;"> 
           <% if profile_owner %> 
-            <div style="font-size: 13px; color: #4b5563;"> 
-              <strong style="color: #111827; font-size: 15px;"><%= profile_owner.posts.count %></strong> Posts 
+            <div style="font-size: 13px; color: var(--text-muted);"> 
+              <strong style="color: var(--text-dark); font-size: 15px;"><%= profile_owner.posts.count %></strong> Posts 
             </div> 
-            <div style="font-size: 13px; color: #4b5563;"> 
-              <strong style="color: #111827; font-size: 15px;"><%= profile_owner.all_friends.count %></strong> Friends 
+            <div style="font-size: 13px; color: var(--text-muted);"> 
+              <strong style="color: var(--text-dark); font-size: 15px;"><%= profile_owner.all_friends.count %></strong> Friends 
             </div> 
           <% else %> 
-            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;">0</strong> Posts</div> 
-            <div style="font-size: 13px; color: #4b5563;"><strong style="color: #111827; font-size: 15px;">0</strong> Friends</div> 
+            <div style="font-size: 13px; color: var(--text-muted);"><strong style="color: var(--text-dark); font-size: 15px;">0</strong> Posts</div> 
+            <div style="font-size: 13px; color: var(--text-muted);"><strong style="color: var(--text-dark); font-size: 15px;">0</strong> Friends</div> 
           <% end %> 
         </div> 
         <% if @profile && current_user == profile_owner %> 
@@ -38,187 +37,170 @@
       </div> 
     </div> 
 
-    <!-- Create a Post Form Box (Only show this form if current_user owns this profile) -->
-    <% if current_user == profile_owner %>
-      <!-- Isolated wrapper context block container element -->
-      <div id="new-post-mentions-wrapper" style="position: relative; background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #111827; font-weight: 600;">Publish a New Update</h3>
-        
-        <%= form_with model: @new_post, local: true, html: { multipart: true, id: "new-status-update-form" } do |f| %>
-          <%= f.text_area :content, 
-                placeholder: "What is on your mind?", 
-                autocomplete: "off",
-                id: "new-post-text-area-input",
-                style: "width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: white; box-sizing: border-box; resize: vertical;", 
-                rows: 3 %>
+    <!-- Create a Post Form Box (Only show this form if current_user owns this profile) --> 
+    <% if current_user == profile_owner %> 
+      <!-- Isolated wrapper context block container element --> 
+      <div id="new-post-mentions-wrapper" style="position: relative; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background 0.2s, border-color 0.2s;"> 
+        <h3 style="margin: 0 0 12px 0; font-size: 16px; color: var(--text-dark); font-weight: 600;">Publish a New Update</h3> 
+        <%= form_with model: @new_post, local: true, html: { multipart: true, id: "new-status-update-form" } do |f| %> 
+          <%= f.text_area :content, placeholder: "What is on your mind?", autocomplete: "off", id: "new-post-text-area-input", style: "width: 100%; border: 1px solid var(--border-input); border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); box-sizing: border-box; resize: vertical;", rows: 3 %> 
           
-          <div style="margin-top: 12px; font-family: sans-serif;">
-            <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #4b5563; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'">
-              <span style="font-size: 16px;">📸</span> <span>Attach Photo</span>
-              <%= f.file_field :image, accept: 'image/png, image/jpeg, image/jpg, image/webp', style: "display: none;", onchange: "document.getElementById('file-chosen-indicator').innerText = '✓ ' + this.files[0].name; document.getElementById('file-chosen-indicator').style.display = 'inline-block';" %>
-            </label>
-            <span id="file-chosen-indicator" style="display: none; margin-left: 10px; font-size: 12px; color: #16a34a; font-weight: 600; font-style: italic; background-color: #f0fdf4; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;"></span>
-          </div>
+          <div style="margin-top: 12px; font-family: sans-serif;"> 
+            <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border-input); border-radius: 8px; background-color: var(--card-nested-bg); color: var(--text-body); font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;"> 
+              <span style="font-size: 16px;">📸</span> 
+              <span>Attach Photo</span> 
+              <%= f.file_field :image, accept: 'image/png, image/jpeg, image/jpg, image/webp', style: "display: none;", onchange: "document.getElementById('file-chosen-indicator').innerText = '✓ ' + this.files[0].name; document.getElementById('file-chosen-indicator').style.display = 'inline-block';" %> 
+            </label> 
+            <span id="file-chosen-indicator" style="display: none; margin-left: 10px; font-size: 12px; color: #16a34a; font-weight: 600; font-style: italic; background-color: rgba(22, 163, 74, 0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid #16a34a;"></span> 
+          </div> 
           
-          <div style="text-align: right; margin-top: 12px;">
-            <%= f.submit "Post Update", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %>
-          </div>
-        <% end %>
+          <div style="text-align: right; margin-top: 12px;"> 
+            <%= f.submit "Post Update", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %> 
+          </div> 
+        <% end %> 
 
-        <!-- Dropdown Autocomplete Pop-up Menu Panel Layer for the main creation window -->
-        <div id="new-post-mentions-menu" 
-            style="display: none; position: absolute; top: calc(100% - 40px); left: 20px; width: 220px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 2000; max-height: 180px; overflow-y: auto; padding: 4px;">
-        </div>
-      </div>
+        <!-- Dropdown Autocomplete Pop-up Menu Panel Layer for the main creation window --> 
+        <div id="new-post-mentions-menu" style="display: none; position: absolute; top: calc(100% - 40px); left: 20px; width: 220px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2000; max-height: 180px; overflow-y: auto; padding: 4px;"> </div> 
+      </div> 
 
       <script>
-      (function() {
-        const input = document.getElementById("new-post-text-area-input");
-        const menu = document.getElementById("new-post-mentions-menu");
-        
-        if (!input || !menu) return;
+        (function() {
+          const input = document.getElementById("new-post-text-area-input");
+          const menu = document.getElementById("new-post-mentions-menu");
+          if (!input || !menu) return;
+          let activeIndex = -1;
+          let matchStart = -1;
 
-        let activeIndex = -1;
-        let matchStart = -1;
-
-        input.addEventListener("input", function() {
-          const value = input.value;
-          const cursor = input.selectionStart;
-          const textBeforeCursor = value.substring(0, cursor);
-          const match = textBeforeCursor.match(/@(\w*)$/);
-
-          if (match) {
-            const query = match[1];
-            matchStart = match.index;
-            
-            fetch(`/users/search.json?q=${query}`)
-              .then(res => res.json())
-              .then(users => renderMenu(users))
-              .catch(() => hideMenu());
-          } else {
-            hideMenu();
-          }
-        });
-
-        input.addEventListener("keydown", function(e) {
-          if (menu.style.display !== "block") return;
-          const items = menu.querySelectorAll(".mention-item");
-
-          if (e.key === "ArrowDown") {
-            e.preventDefault();
-            highlightItem((activeIndex + 1) % items.length);
-          } else if (e.key === "ArrowUp") {
-            e.preventDefault();
-            highlightItem((activeIndex - 1 + items.length) % items.length);
-          } else if (e.key === "Enter" && activeIndex >= 0) {
-            e.preventDefault();
-            insertMention(items[activeIndex].dataset.username);
-          } else if (e.key === "Escape") {
-            hideMenu();
-          }
-        });
-
-        function renderMenu(users) {
-          if (users.length === 0) {
-            hideMenu();
-            return;
-          }
-
-          menu.innerHTML = users.map((user, idx) => `
-            <div class="mention-item" data-username="${user.username}" data-idx="${idx}"
-                style="padding: 8px; cursor: pointer; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; gap: 2px; background: none;">
-              <span style="font-weight: 600; color: #111827;">${user.name}</span>
-              <span style="font-size: 11px; color: #6b7280;">@${user.username}</span>
-            </div>
-          `).join("");
-
-          menu.style.display = "block";
-          highlightItem(0);
-
-          menu.querySelectorAll(".mention-item").forEach(item => {
-            item.addEventListener("click", function() {
-              insertMention(this.dataset.username);
-            });
+          input.addEventListener("input", function() {
+            const value = input.value;
+            const cursor = input.selectionStart;
+            const textBeforeCursor = value.substring(0, cursor);
+            const match = textBeforeCursor.match(/@(\w*)$/);
+            if (match) {
+              const query = match[1];
+              matchStart = match.index;
+              fetch(`/users/search.json?q=${query}`)
+                .then(res => res.json())
+                .then(users => renderMenu(users))
+                .catch(() => hideMenu());
+            } else {
+              hideMenu();
+            }
           });
-        }
 
-        function insertMention(username) {
-          const value = input.value;
-          const cursor = input.selectionStart;
-          const before = value.substring(0, matchStart);
-          const after = value.substring(cursor);
+          input.addEventListener("keydown", function(e) {
+            if (menu.style.display !== "block") return;
+            const items = menu.querySelectorAll(".mention-item");
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              highlightItem((activeIndex + 1) % items.length);
+            } else if (e.key === "ArrowUp") {
+              e.preventDefault();
+              highlightItem((activeIndex - 1 + items.length) % items.length);
+            } else if (e.key === "Enter" && activeIndex >= 0) {
+              e.preventDefault();
+              insertMention(items[activeIndex].dataset.username);
+            } else if (e.key === "Escape") {
+              hideMenu();
+            }
+          });
 
-          input.value = `${before}@${username} ${after}`;
-          hideMenu();
-          input.focus();
-        }
-
-        function highlightItem(index) {
-          const items = menu.querySelectorAll(".mention-item");
-          items.forEach(i => i.style.background = "none");
-          
-          activeIndex = index;
-          if (items[index]) {
-            items[index].style.background = "#eff6ff";
+          function renderMenu(users) {
+            if (users.length === 0) {
+              hideMenu();
+              return;
+            }
+            // UPDATED: Standardized JavaScript interpolation templates to leverage CSS custom variables
+            menu.innerHTML = users.map((user, idx) => `
+              <div class="mention-item" data-username="${user.username}" data-idx="${idx}" style="padding: 8px; cursor: pointer; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; gap: 2px; background: none;">
+                <span style="font-weight: 600; color: var(--text-dark);">${user.name}</span>
+                <span style="font-size: 11px; color: var(--text-light);">@${user.username}</span>
+              </div>
+            `).join("");
+            menu.style.display = "block";
+            highlightItem(0);
+            menu.querySelectorAll(".mention-item").forEach(item => {
+              item.addEventListener("click", function() {
+                insertMention(this.dataset.username);
+              });
+            });
           }
-        }
 
-        function hideMenu() {
-          menu.style.display = "none";
-          activeIndex = -1;
-        }
-
-        document.addEventListener("click", function(e) {
-          const wrapper = document.getElementById("new-post-mentions-wrapper");
-          if (wrapper && !wrapper.contains(e.target)) {
+          function insertMention(username) {
+            const value = input.value;
+            const cursor = input.selectionStart;
+            const before = value.substring(0, matchStart);
+            const after = value.substring(cursor);
+            input.value = `${before}@${username} ${after}`;
             hideMenu();
+            input.focus();
           }
-        });
-      })();
+
+          function highlightItem(index) {
+            const items = menu.querySelectorAll(".mention-item");
+            items.forEach(i => i.style.background = "none");
+            activeIndex = index;
+            if (items[index]) {
+              // UPDATED: Dynamically falls back safely across both modes with a clear color layout highlight
+              items[index].style.background = "rgba(37, 99, 235, 0.15)";
+            }
+          }
+
+          function hideMenu() {
+            menu.style.display = "none";
+            activeIndex = -1;
+          }
+
+          document.addEventListener("click", function(e) {
+            const wrapper = document.getElementById("new-post-mentions-wrapper");
+            if (wrapper && !wrapper.contains(e.target)) {
+              hideMenu();
+            }
+          });
+        })();
       </script>
-    <% end %>
+    <% end %> 
 
     <!-- User's Historical Post Feed Stream --> 
     <div style="display: flex; flex-direction: column; gap: 16px;"> 
       <%# Context-aware feed header heading %> 
-      <h3 style="margin: 0; font-size: 18px; color: #111827; font-weight: 700;"> 
+      <h3 style="margin: 0; font-size: 18px; color: var(--text-dark); font-weight: 700;"> 
         <%= current_user == profile_owner ? "Your Activity History" : "#{profile_owner&.name.presence || 'User'}'s Activity History" %> 
       </h3> 
       
       <% if @posts.any? %> 
-        <% @posts.each_with_index do |post, index| %> 
-          <%# CLEAN REFACTOR: Dynamically references your main partial layout file directly %>
+        <% @posts.each_with_index do |post, index| %>
           <%= render partial: "posts/post", locals: { post: post, index: index } %>
-        <% end %> 
-      <% else %> 
-        <p style="color: #6b7280; font-style: italic; text-align: center; padding: 30px 0; font-size: 14px;">No status updates have been published here yet.</p> 
-      <% end %> 
+        <% end %>
+      <% else %>
+        <p style="color: var(--text-light); font-style: italic; text-align: center; padding: 30px 0; font-size: 14px;">No status updates have been published here yet.</p>
+      <% end %>
     </div> 
   </div> 
 
   <!-- RIGHT COLUMN: Dynamic Action Engine, Incoming Friend Requests & Confirmed Friends Sidebar Widget --> 
-  <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); width: 320px; font-family: sans-serif; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;"> 
+  <div style="background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); width: 320px; font-family: sans-serif; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; transition: background 0.2s, border-color 0.2s;"> 
     <% active_friends = profile_owner&.all_friends || [] %> 
     
     <!-- DYNAMIC ACTION ENGINE SECTION: Only visible when viewing someone else's profile --> 
     <% if current_user && current_user != profile_owner %> 
-      <div style="padding-bottom: 5px; border-bottom: 1px solid #f3f4f6;"> 
+      <div style="padding-bottom: 5px; border-bottom: 1px solid var(--border-secondary);"> 
         <% current_status = current_user.friendship_status_with(profile_owner) %> 
         <% case current_status %> 
         <% when :none %> 
           <%= form_with url: friendships_path, method: :post, local: true do |f| %> 
             <%= f.hidden_field :friend_id, value: @profile.user_id %> 
-            <%= f.submit "Add Friend", style: "width: 100%; text-align: center; background-color: #10b981; color: white; font-weight: 600; padding: 10px 0; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s;", onmouseover: "this.style.backgroundColor='#059669'", onmouseout: "this.style.backgroundColor='#10b981'" %> 
+            <%= f.submit "Add Friend", style: "width: 100%; text-align: center; background-color: #10b981; color: white; font-weight: 600; padding: 10px 0; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %> 
           <% end %> 
         <% when :pending %> 
-          <button disabled style="width: 100%; background-color: #9ca3af; color: white; font-weight: 600; padding: 10px 0; border: none; border-radius: 8px; font-size: 14px; cursor: not-allowed; display: inline-flex; align-items: center; justify-content: center; gap: 6px;"> 
+          <button disabled style="width: 100%; background-color: var(--text-light); color: white; font-weight: 600; padding: 10px 0; border: none; border-radius: 8px; font-size: 14px; cursor: not-allowed; display: inline-flex; align-items: center; justify-content: center; gap: 6px;"> 
             <span>✉️</span> Friend Request Sent 
           </button> 
         <% when :incoming_pending %> 
           <% incoming_request = current_user.inverse_friendships.find_by(user_id: @profile.user_id, status: "pending") %> 
           <% if incoming_request %> 
             <div style="display: flex; flex-direction: column; gap: 8px;"> 
-              <span style="font-size: 13px; color: #4b5563; font-weight: 600; text-align: center;">This user sent you a friend request:</span> 
+              <span style="font-size: 13px; color: var(--text-muted); font-weight: 600; text-align: center;">This user sent you a friend request:</span> 
               <div style="display: flex; gap: 8px;"> 
                 <%= button_to "Accept", friendship_path(incoming_request), method: :patch, style: "flex: 1; background-color: #2563eb; color: white; font-weight: 600; padding: 8px 0; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;" %> 
                 <%= button_to "Decline", friendship_path(incoming_request), method: :delete, style: "flex: 1; background-color: #ef4444; color: white; font-weight: 600; padding: 8px 0; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;" %> 
@@ -227,7 +209,7 @@
           <% end %> 
         <% when :accepted %> 
           <% existing_friendship = Friendship.find_by(user_id: [current_user.id, @profile.user_id], friend_id: [current_user.id, @profile.user_id], status: "accepted") %> 
-          <div style="display: flex; align-items: center; justify-content: space-between; background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 8px;"> 
+          <div style="display: flex; align-items: center; justify-content: space-between; background-color: rgba(22, 163, 74, 0.1); border: 1px solid #16a34a; padding: 8px 12px; border-radius: 8px;"> 
             <span style="color: #16a34a; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;"> 
               <span>✓</span> Friends 
             </span> 
@@ -242,11 +224,11 @@
     <!-- SECTION 1: INCOMING REQUESTS (Only visible to the logged-in user on their own profile) --> 
     <% if current_user && current_user == profile_owner && current_user.pending_incoming_requests.any? %> 
       <div> 
-        <h4 style="margin: 0 0 12px 0; font-size: 13px; color: #b45309; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Incoming Requests</h4> 
+        <h4 style="margin: 0 0 12px 0; font-size: 13px; color: #d97706; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Incoming Requests</h4> 
         <div style="display: flex; flex-direction: column; gap: 8px;"> 
           <% current_user.pending_incoming_requests.each do |request| %> 
-            <div style="display: flex; align-items: center; justify-content: space-between; background-color: #fffbeb; padding: 10px; border: 1px solid #fde68a; border-radius: 8px;"> 
-              <div style="font-size: 13px; font-weight: 600; color: #78350f;"> 
+            <div style="display: flex; align-items: center; justify-content: space-between; background-color: rgba(245, 158, 11, 0.1); padding: 10px; border: 1px solid #d97706; border-radius: 8px;"> 
+              <div style="font-size: 13px; font-weight: 600; color: var(--text-dark);"> 
                 <%= request.user.name.presence || request.user.email %> 
               </div> 
               <div style="display: flex; gap: 6px;"> 
@@ -257,38 +239,38 @@
           <% end %> 
         </div> 
       </div> 
-      <hr style="border: 0; border-top: 1px solid #f3f4f6; margin: 0;"> 
+      <hr style="border: 0; border-top: 1px solid var(--border-secondary); margin: 0;"> 
     <% end %> 
 
     <!-- SECTION 2: CONFIRMED FRIENDS LIST --> 
-    <div>
+    <div> 
       <!-- Card Header Row --> 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"> 
-        <h3 style="margin: 0; font-size: 16px; color: #111827; font-weight: 600;">Friends</h3> 
-        <span style="background-color: #eff6ff; color: #2563eb; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 9999px;"> 
+        <h3 style="margin: 0; font-size: 16px; color: var(--text-dark); font-weight: 600;">Friends</h3> 
+        <span style="background-color: rgba(37, 99, 235, 0.1); color: #2563eb; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 9999px;"> 
           <%= active_friends.count %> 
         </span> 
       </div> 
-      
+
       <!-- Dynamic Friends List Loop --> 
       <div style="display: flex; flex-direction: column; gap: 12px;"> 
         <% if active_friends.any? %> 
           <% active_friends.each do |friend| %> 
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6;"> 
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-secondary);"> 
               <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %> 
               <%= link_to target_path, style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; display: inline-flex; width: calc(100% - 70px);" do %> 
                 <% if respond_to?(:user_avatar) %> 
                   <%= user_avatar(friend, size: 36) %> 
                 <% else %> 
-                  <div style="width: 36px; height: 36px; background-color: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: #4b5563; flex-shrink: 0;"> 
+                  <div style="width: 36px; height: 36px; background-color: var(--border-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: var(--text-muted); flex-shrink: 0;"> 
                     <%= (friend.name.presence || friend.email).upcase[0] %> 
                   </div> 
                 <% end %> 
                 <div style="min-width: 0; flex-grow: 1;"> 
-                  <div class="friend-link-title" style="font-size: 14px; font-weight: 600; color: #111827; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"> 
+                  <div class="friend-link-title" style="font-size: 14px; font-weight: 600; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"> 
                     <%= friend.name.presence || friend.email %> 
                   </div> 
-                  <div style="font-size: 12px; color: #6b7280;">Mutual Friend</div> 
+                  <div style="font-size: 12px; color: var(--text-light);">Mutual Friend</div> 
                 </div> 
               <% end %> 
               
@@ -301,13 +283,13 @@
             </div> 
           <% end %> 
         <% else %> 
-          <div style="text-align: center; padding: 20px 0; color: #6b7280; font-size: 14px;"> 
+          <div style="text-align: center; padding: 20px 0; color: var(--text-light); font-size: 14px;"> 
             <span style="font-size: 24px; display: block; margin-bottom: 6px;">👥</span> No friends added yet. 
           </div> 
         <% end %> 
       </div> 
     </div> 
-  </div> 
+  </div>
 
 </div> 
    
