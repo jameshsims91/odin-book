@@ -1,3 +1,7 @@
-class WebPushSubscriptionsController  e
-    render json: { error: e.message }, status: :unprocessable_entity
+class WebPushSubscriptionsController < ApplicationController
+  before_action :authenticate_user!
+
+  class WebPushSubscriptionsController e
+      render json: { error: "Server Error: #{e.message}" }, internal_server_error
+    end
 end
