@@ -1,5 +1,24 @@
-<p>Welcome <%= @email %>!</p>
-
-<p>You can confirm your account email through the link below:</p>
-
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<div style="max-width: 550px; margin: 30px auto; padding: 30px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; box-sizing: border-box; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+  <!-- Brand Heading -->
+  <h2 style="margin: 0 0 16px 0; color: #111827; font-size: 24px; font-weight: 700; letter-spacing: -0.025em;">Welcome to OdinBook!</h2>
+  
+  <!-- Email Recipient Welcome Greeting -->
+  <p style="font-size: 15px; color: #374151; line-height: 1.5; margin: 0 0 12px 0;">
+    Hello <strong><%= @email %></strong>,
+  </p>
+  
+  <!-- Informational Callout Instruction Message -->
+  <p style="font-size: 14px; color: #4b5563; line-height: 1.5; margin: 0 0 24px 0;">
+    Thank you for registering. You can activate your account and verify your email address by clicking the secure confirmation link below:
+  </p>
+  
+  <!-- Call-to-Action Action Submission Button Layout Link Trigger -->
+  <div style="margin: 24px 0 12px 0;">
+    <%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token), style: "background-color: #2563eb; color: #ffffff; font-weight: 600; font-size: 14px; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);" %>
+  </div>
+  
+  <!-- Micro Footnote Technical Recovery Fallback Info Line -->
+  <div style="margin-top: 32px; border-top: 1px solid #f3f4f6; padding-top: 16px; font-size: 12px; color: #9ca3af; line-height: 1.4;">
+    If you did not make this registration request, you can safely disregard this email message.
+  </div>
+</div>

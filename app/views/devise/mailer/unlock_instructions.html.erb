@@ -1,7 +1,34 @@
-<p>Hello <%= @resource.email %>!</p>
+<div style="max-width: 550px; margin: 30px auto; padding: 30px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; box-sizing: border-box; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+  <!-- Security Alert Header Row Icon -->
+  <div style="display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f3f4f6; padding-bottom: 14px; margin-bottom: 20px;">
+    <span style="font-size: 20px;">🚨</span>
+    <h2 style="margin: 0; color: #991b1b; font-size: 20px; font-weight: 700; letter-spacing: -0.025em;">Account Locked Alert</h2>
+  </div>
+  
+  <!-- Email Greeting -->
+  <p style="font-size: 15px; color: #374151; line-height: 1.5; margin: 0 0 14px 0;">
+    Hello <strong><%= @resource.email %></strong>,
+  </p>
+  
+  <!-- Critical Informational Warning Box Block -->
+  <div style="background-color: rgba(239, 68, 68, 0.05); border: 1px solid #fca5a5; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+    <p style="font-size: 14px; color: #991b1b; line-height: 1.5; margin: 0; font-weight: 500;">
+      Your account has been temporarily locked due to an excessive number of unsuccessful sign-in attempts. 
+    </p>
+  </div>
 
-<p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
-
-<p>Click the link below to unlock your account:</p>
-
-<p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
+  <!-- Instruction Message -->
+  <p style="font-size: 14px; color: #4b5563; line-height: 1.5; margin: 0 0 24px 0;">
+    To safely verify your identity and restore access to your profile timeline, click the secure unlock button below:
+  </p>
+  
+  <!-- Call-to-Action Action Submission Button Layout Link Trigger -->
+  <div style="text-align: center; margin: 24px 0;">
+    <%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token), style: "background-color: #2563eb; color: #ffffff; font-weight: 600; font-size: 14px; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);" %>
+  </div>
+  
+  <!-- Technical Recovery Fallback Info Line -->
+  <div style="border-top: 1px solid #f3f4f6; padding-top: 16px; font-size: 12px; color: #9ca3af; line-height: 1.5;">
+    If you did not attempt to sign in, someone else may be entering your details. Your data remains fully secure, but we recommend reviewing your password settings once access is restored.
+  </div>
+</div>

@@ -1,16 +1,23 @@
-<h2>Resend confirmation instructions</h2>
+<div style="max-width: 400px; margin: 60px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif; transition: background 0.2s, border-color 0.2s;"> 
+  <h2 style="margin: 0 0 24px 0; text-align: center; color: var(--text-dark); font-size: 22px; font-weight: 700;">Resend confirmation</h2> 
+  
+  <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, style: "display: flex; flex-direction: column; gap: 16px;" }) do |f| %> 
+    <%= render "devise/shared/error_messages", resource: resource %> 
 
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <!-- Email Resend Entry Field --> 
+    <div style="display: flex; flex-direction: column; gap: 6px;"> 
+      <%= f.label :email, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+    </div> 
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %></p>
-  </div>
+    <!-- Form Action Submission Trigger Button --> 
+    <div style="margin-top: 8px;"> 
+      <%= f.submit "Resend confirmation instructions", style: "width: 100%; background-color: #2563eb; color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s;" %> 
+    </div> 
+  <% end %> 
 
-  <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+  <!-- Footnote Footer Devise Navigation Gateway Links Links --> 
+  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-primary); padding-top: 16px;"> 
+    <%= render "devise/shared/links" %> 
+  </div> 
+</div>

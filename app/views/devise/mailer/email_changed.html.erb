@@ -1,7 +1,30 @@
-<p>Hello <%= @email %>!</p>
+<div style="max-width: 550px; margin: 30px auto; padding: 30px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; box-sizing: border-box; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+  <!-- Security Alert Header Row Icon -->
+  <div style="display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f3f4f6; padding-bottom: 14px; margin-bottom: 20px;">
+    <span style="font-size: 20px;">🔒</span>
+    <h2 style="margin: 0; color: #111827; font-size: 20px; font-weight: 700; letter-spacing: -0.025em;">Security Notification</h2>
+  </div>
+  
+  <!-- Email Greeting -->
+  <p style="font-size: 15px; color: #374151; line-height: 1.5; margin: 0 0 14px 0;">
+    Hello <strong><%= @email %></strong>,
+  </p>
+  
+  <!-- Dynamic Informational Conditional Body Box Block -->
+  <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+    <% if @resource.try(:unconfirmed_email?) %>
+      <p style="font-size: 14px; color: #374151; line-height: 1.5; margin: 0;">
+        We are contacting you to notify you that a request has been made to change the email address associated with your account to <strong style="color: #2563eb;"><%= @resource.unconfirmed_email %></strong>.
+      </p>
+    <% else %>
+      <p style="font-size: 14px; color: #374151; line-height: 1.5; margin: 0;">
+        We are contacting you to notify you that the email address associated with your account has officially been changed to <strong style="color: #10b981;"><%= @resource.email %></strong>.
+      </p>
+    <% end %>
+  </div>
 
-<% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
-<% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
-<% end %>
+  <!-- Micro Technical Alert Callout Line -->
+  <div style="border-top: 1px solid #f3f4f6; padding-top: 16px; font-size: 12px; color: #9ca3af; line-height: 1.5;">
+    If you initiated this account configuration update, you can safely ignore this automated message. If you did not authorize this change, please contact support immediately to lock your credentials.
+  </div>
+</div>
