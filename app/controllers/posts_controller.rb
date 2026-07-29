@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       respond_to do |format|
         format.html { redirect_to post_path(@post), notice: "Post updated successfully!" }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: "posts/post_card", locals: { post: @post }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@post) }
       end
     else
       render :edit, status: :unprocessable_entity
