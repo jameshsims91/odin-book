@@ -265,7 +265,7 @@
         <!-- Friends List Container (Limited to 4) -->
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <% if active_friends.any? %>
-            <% active_friends.limit(4).each do |friend| %>
+            <% active_friends.first(4).each do |friend| %>
               <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-secondary);">
                 
                 <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
