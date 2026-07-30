@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
     @user = @profile.user
     @posts = @user.posts.order(created_at: :desc)
     @new_post = current_user.posts.new
-    @active_friends = current_user.friends.where(status: "active").limit(4)
+    @active_friends = current_user.friends.select { |f| f.active? }.first(4)
   end
   def edit
   end
