@@ -252,56 +252,12 @@
         </span> 
       </div> 
 
-      <!-- Friends List -->
-      <div class="friends-dashboard-widget" style="background: var(--bg-primary); border: 1px solid var(--border-secondary); border-radius: 8px; padding: 16px;">
-        <!-- Header Row with "Show All" Link -->
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-          <h3 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin: 0;">
-            Friends (<%= active_friends.count %>)
-          </h3>
-          <%= link_to "Show All", friends_path, style: "font-size: 14px; font-weight: 600; color: var(--accent-primary, #1877f2); text-decoration: none;" %>
-        </div>
-
-        <!-- Friends List Container (Limited to 4) -->
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <% if active_friends.any? %>
-            <% active_friends.first(4).each do |friend| %>
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-secondary);">
-                
-                <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
-                <%= link_to target_path, style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; display: inline-flex; width: calc(100% - 70px);" do %>
-                  <% if respond_to?(:user_avatar) %>
-                    <%= user_avatar(friend, size: 36) %>
-                  <% else %>
-                    <div style="width: 36px; height: 36px; background-color: var(--border-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: var(--text-muted); flex-shrink: 0;">
-                      <%= (friend.name.presence || friend.email).upcase[0] %>
-                    </div>
-                  <% end %>
-
-                  <div style="min-width: 0; flex-grow: 1;">
-                    <div class="friend-link-title" style="font-size: 14px; font-weight: 600; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-                      <%= friend.name.presence || friend.email %>
-                    </div>
-                    <div style="font-size: 12px; color: var(--text-light);">Mutual Friend</div>
-                  </div>
-                <% end %>
-
-                <% rel_record = Friendship.find_by(user_id: [profile_owner.id, friend.id], friend_id: [profile_owner.id, friend.id]) %>
-                <% if rel_record %>
-                  <div style="flex-shrink: 0;">
-                    <%= link_to "Unfriend", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to remove this friend?" }, style: "font-size: 12px; color: #ef4444; text-decoration: none; font-weight: 500;" %>
-                  </div>
-                <% end %>
-
-              </div>
-            <% end %>
-          <% else %>
-            <div style="text-align: center; padding: 20px 0; color: var(--text-light); font-size: 14px;">
-              <span style="font-size: 24px; display: block; margin-bottom: 6px;">👥</span> No friends added yet.
-            </div>
-          <% end %>
-        </div>
-      </div>
+      <!-- Friends List Widget -->
+      <%= render partial: "shared/friends_widget", locals: {
+            active_friends: @active_friends,
+            profile_owner: @user
+          } 
+      %>
     </div> 
   </div>
 
