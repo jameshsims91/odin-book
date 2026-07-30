@@ -1,0 +1,64 @@
+<div style="max-width: 500px; margin: 40px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;">
+  
+  <!-- Header with Back Arrow on Left -->
+  <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-secondary); padding-bottom: 14px; margin-bottom: 24px;">
+    <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %>
+    <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">All Friends</h2>
+  </div>
+
+  <!-- Friends List Container -->
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+    <% if @friends.any? %>
+      <% @friends.each do |friend| %>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-secondary);">
+          
+          <%# Profile Link Wrapper %>
+          <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
+          <%= link_to target_path, style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; width: calc(100% - 70px);" do %>
+            
+            <%# Avatar Block %>
+            <% if respond_to?(:user_avatar) %>
+              <%= user_avatar(friend, size: 36) %>
+            <% else %>
+              <div style="width: 36px; height: 36px; background-color: var(--border-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: var(--text-muted); flex-shrink: 0;">
+                <%= (friend.name.presence || friend.email).upcase[0] %>
+              </div>
+            <% end %>
+
+            <%# Text Block %>
+            <div style="min-width: 0; flex-grow: 1;">
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                <%= friend.name.presence || friend.email %>
+              </div>
+              <div style="font-size: 12px; color: var(--text-light);">Mutual Friend</div>
+            </div>
+          <% end %>
+
+          <%# Unfriend Button Action %>
+          <% rel_record = Friendship.find_by(user_id: [current_user.id, friend.id], friend_id: [current_user.id, friend.id]) %>
+          <% if rel_record %>
+            <div style="flex-shrink: 0;">
+              <%= link_to "Unfriend", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to remove this friend?" }, style: "font-size: 12px; color: #ef4444; text-decoration: none; font-weight: 500;" %>
+            </div>
+          <% end %>
+
+        </div>
+      <% end %>
+    <% else %>
+      <!-- Empty State View -->
+      <div style="text-align: center; padding: 30px 0; color: var(--text-light); font-size: 14px;">
+        <span style="font-size: 24px; display: block; margin-bottom: 6px;">👥</span> No friends added yet.
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Pagy Pagination Section Wrapper -->
+  <% if @pagy && @pagy.pages > 1 %>
+    <div style="display: flex; justify-content: center; border-top: 1px solid var(--border-primary); padding-top: 20px; margin-top: 8px;">
+      <div class="pagy-custom-style">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

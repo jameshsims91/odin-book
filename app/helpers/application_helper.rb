@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+
   def user_avatar(user, size: 40)
     if user.avatar&.attached?
       image_tag user.avatar, style: "width: #{size}px; height: #size}px; border-radius: 50%; object-fit: cover;", alt: user.name || "User Avatar"
