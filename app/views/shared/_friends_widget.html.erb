@@ -11,9 +11,9 @@
   <div style="border-bottom: 1px solid var(--border-secondary); padding-bottom: 12px; margin-bottom: 20px;"> 
     <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); display: block; font-weight: bold; margin-bottom: 4px;">— Active Allies —</span>
     <h3 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: 1px;"> 
-      Friends (<%= active_friends.count %>) 
+      Allies (<%= active_friends.count %>) 
     </h3> 
-    <%= link_to "Show All →", friends_path, style: "font-size: 13px; font-weight: 600; color: var(--accent-primary, #1877f2); text-decoration: none; display: inline-block; margin-top: 6px;" %> 
+    <%= link_to "Reveal All →", friends_path, style: "font-size: 13px; font-weight: 600; color: var(--accent-primary, #1877f2); text-decoration: none; display: inline-block; margin-top: 6px;" %> 
   </div> 
 
   <!-- Friends List Container (Limited to 4) --> 
@@ -59,14 +59,14 @@
               <div class="friend-link-title" style="font-size: 15px; font-weight: 600; color: var(--text-dark); letter-spacing: 0.5px; text-transform: uppercase; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"> 
                 <%= friend.name.presence || friend.email %> 
               </div> 
-              <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">⚡ Mutual Friend</div> 
+              <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">⚡ Mutual Ally</div> 
             </div> 
           <% end %> 
 
           <% rel_record = Friendship.find_by(user_id: [profile_owner.id, friend.id], friend_id: [profile_owner.id, friend.id]) %> 
           <% if rel_record %> 
             <div style="margin-top: 2px;"> 
-              <%= link_to "Unfriend", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to remove this friend?" }, style: "font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;" %> 
+              <%= link_to "Cast to Tartarus", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest darkest pit of the Underworld?" }, style: "font-size: 11px; color: #ef4444; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;" %> 
             </div> 
           <% end %> 
         </div> 

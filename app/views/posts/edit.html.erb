@@ -1,8 +1,8 @@
 <div style="max-width: 650px; margin: 0 auto; padding: 20px; font-family: sans-serif;"> 
   <!-- Navigation Header Row --> 
   <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--border-secondary); padding-bottom: 14px; margin-bottom: 20px;"> 
-    <%= link_to "← Cancel", post_path(@post || params[:id]), style: "font-size: 14px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %> 
-    <h2 style="margin: 0; color: var(--text-dark); font-size: 22px; font-weight: 700;">Edit Post</h2> 
+    <%= link_to "← Recall Hermes", post_path(@post || params[:id]), style: "font-size: 14px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %> 
+    <h2 style="margin: 0; color: var(--text-dark); font-size: 22px; font-weight: 700;">Bend Fate</h2> 
   </div> 
 
   <!-- Form Wrapper Card --> 
@@ -12,7 +12,7 @@
       <!-- Error Message Banner Block (Kept red for semantic urgency, works well in both modes) --> 
       <% if @post.errors.any? %> 
         <div style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid #dc2626; border-radius: 8px; padding: 14px; font-size: 14px; color: #ef4444;"> 
-          <h4 style="margin: 0 0 6px 0; font-weight: 600;"><%= pluralize(@post.errors.count, "error") %> blocked this update:</h4> 
+          <h4 style="margin: 0 0 6px 0; font-weight: 600;"><%= pluralize(@post.errors.count, "error") %> severed this fate:</h4> 
           <ul style="margin: 0; padding-left: 20px; line-height: 1.4;"> 
             <% @post.errors.full_messages.each do |msg| %> 
               <li><%= msg %></li> 
@@ -23,8 +23,8 @@
 
       <!-- Text Inputs Body Field Box --> 
       <div style="display: flex; flex-direction: column; gap: 6px;"> 
-        <%= f.label :content, "Post Content", style: "font-size: 14px; font-weight: 600; color: var(--text-body);" %> 
-        <%= f.text_area :content, rows: 5, placeholder: "What's on your mind?", required: true, style: "width: 100%; box-sizing: border-box; border: 1px solid var(--border-input); border-radius: 8px; padding: 12px; font-size: 15px; font-family: inherit; line-height: 1.5; outline: none; background: var(--card-bg); color: var(--text-body);" %> 
+        <%= f.label :content, "The Loom of Choice", style: "font-size: 14px; font-weight: 600; color: var(--text-body);" %> 
+        <%= f.text_area :content, rows: 5, placeholder: "What fate will you weave today?", required: true, style: "width: 100%; box-sizing: border-box; border: 1px solid var(--border-input); border-radius: 8px; padding: 12px; font-size: 15px; font-family: inherit; line-height: 1.5; outline: none; background: var(--card-bg); color: var(--text-body);" %> 
       </div> 
 
       <!-- Optional File Attachment Field --> 

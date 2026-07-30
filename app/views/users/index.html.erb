@@ -2,7 +2,7 @@
   <!-- Header Bar --> 
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-secondary); padding-bottom: 10px;"> 
     <h2 style="margin: 0; color: var(--text-dark);">Discover People</h2> 
-    <%= link_to "Back to Dashboard", authenticated_root_path, style: "font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500;" %> 
+    <%= link_to "Back to Sanctuary", authenticated_root_path, style: "font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500;" %> 
   </div> 
 
   <!-- Search Filter Form Box --> 
@@ -52,20 +52,20 @@
           <div style="flex-shrink: 0;"> 
             <% case current_user.friendship_status_with(user) %> 
             <% when :none %> 
-              <%= button_to "Add Friend", friendships_path(friend_id: user.id), method: :post, style: "font-size: 12px; background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 500;" %> 
+              <%= button_to "Add Ally", friendships_path(friend_id: user.id), method: :post, style: "font-size: 12px; background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 500;" %> 
             <% when :pending %> 
               <span style="font-size: 12px; color: var(--text-muted); font-style: italic; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px; font-weight: 500;">Request Sent</span> 
             <% when :incoming_pending %> 
               <% match = current_user.inverse_friendships.find_by(user_id: user.id, status: 'pending') %> 
               <div style="display: flex; gap: 4px;"> 
-                <%= button_to "Accept", friendship_path(match), method: :patch, style: "font-size: 12px; background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 500; cursor: pointer;" if match %> 
-                <%= button_to "Decline", friendship_path(match), method: :delete, style: "font-size: 12px; background: var(--card-bg); color: #ef4444; border: 1px solid #dc2626; padding: 6px 10px; border-radius: 6px; font-weight: 500; cursor: pointer;" if match %> 
+                <%= button_to "Grant favor", friendship_path(match), method: :patch, style: "font-size: 12px; background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 500; cursor: pointer;" if match %> 
+                <%= button_to "Strike from scroll", friendship_path(match), method: :delete, style: "font-size: 12px; background: var(--card-bg); color: #ef4444; border: 1px solid #dc2626; padding: 6px 10px; border-radius: 6px; font-weight: 500; cursor: pointer;" if match %> 
               </div> 
             <% when :accepted %> 
               <% match = Friendship.find_by(user_id: [current_user.id, user.id], friend_id: [current_user.id, user.id], status: "accepted") %> 
               <div style="display: flex; align-items: center; gap: 8px;"> 
-                <span style="font-size: 12px; color: #16a34a; font-weight: bold; background: rgba(22, 163, 74, 0.1); padding: 4px 8px; border-radius: 4px; border: 1px solid #16a34a; white-space: nowrap;">✓ Friends</span> 
-                <%= button_to "Unfriend", friendship_path(match), method: :delete, data: { confirm: "Remove friend connection?" }, style: "font-size: 12px; color: var(--text-light); text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" if match %> 
+                <span style="font-size: 12px; color: #16a34a; font-weight: bold; background: rgba(22, 163, 74, 0.1); padding: 4px 8px; border-radius: 4px; border: 1px solid #16a34a; white-space: nowrap;">✓ Allies</span> 
+                <%= button_to "Cast to Tartarus", friendship_path(match), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest darkest pit of the Underworld?" }, style: "font-size: 12px; color: var(--text-light); text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" if match %> 
               </div> 
             <% end %> 
           </div> 

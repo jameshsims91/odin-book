@@ -1,7 +1,7 @@
 <div style="max-width: 650px; margin: 0 auto; padding: 20px; font-family: sans-serif;"> 
   <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #eaeaea; padding-bottom: 14px; margin-bottom: 20px;"> 
-    <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %> 
-    <h2 style="margin: 0; color: #111827; font-size: 22px; font-weight: 700;">Global Feed</h2> 
+    <%= link_to "← Sanctuary", authenticated_root_path, style: "font-size: 14px; color: #4b5563; text-decoration: none; font-weight: 500; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;" %> 
+    <h2 style="margin: 0; color: #111827; font-size: 22px; font-weight: 700;">Agora Slate</h2> 
   </div> 
 
   <div style="display: flex; flex-direction: column; gap: 20px;"> 
@@ -28,20 +28,20 @@
             <div> 
               <% case current_user.friendship_status_with(post.user) %> 
               <% when :none %> 
-                <%= button_to "Add Friend", friendships_path(friend_id: post.user.id), method: :post, style: "font-size: 12px; background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;" %> 
+                <%= button_to "Add Ally", friendships_path(friend_id: post.user.id), method: :post, style: "font-size: 12px; background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;" %> 
               <% when :pending %> 
-                <span style="font-size: 12px; color: #6b7280; font-style: italic; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;">Request Sent</span> 
+                <span style="font-size: 12px; color: #6b7280; font-style: italic; background: #f3f4f6; padding: 6px 12px; border-radius: 6px;">Whisper Sent</span> 
               <% when :incoming_pending %> 
                 <% match = current_user.inverse_friendships.find_by(user_id: post.user.id) %> 
                 <div style="display: flex; gap: 6px;"> 
-                  <%= button_to "Accept", friendship_path(match), method: :patch, style: "font-size: 12px; background: #16a34a; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;" %> 
-                  <%= button_to "Decline", friendship_path(match), method: :delete, style: "font-size: 12px; background: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;" %> 
+                  <%= button_to "Grant favor", friendship_path(match), method: :patch, style: "font-size: 12px; background: #16a34a; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;" %> 
+                  <%= button_to "Deny favor", friendship_path(match), method: :delete, style: "font-size: 12px; background: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;" %> 
                 </div> 
               <% when :accepted %> 
                 <% match = current_user.friendships.find_by(friend_id: post.user.id) || current_user.inverse_friendships.find_by(user_id: post.user.id) %> 
                 <div style="display: flex; align-items: center; gap: 8px;"> 
-                  <span style="font-size: 12px; color: #16a34a; font-weight: bold; background: #f0fdf4; padding: 4px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">✓ Friends</span> 
-                  <%= button_to "Unfriend", friendship_path(match), method: :delete, data: { confirm: "Remove friend connection?" }, style: "font-size: 12px; color: #9ca3af; text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" %> 
+                  <span style="font-size: 12px; color: #16a34a; font-weight: bold; background: #f0fdf4; padding: 4px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">✓ Allies</span> 
+                  <%= button_to "Cast to Tartarus", friendship_path(match), method: :delete, data: { confirm: "Cast this deceiver to the deepest darkest pit in the Underworld?" }, style: "font-size: 12px; color: #9ca3af; text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" %> 
                 </div> 
               <% end %> 
             </div> 
@@ -65,16 +65,32 @@
 
           <!-- Interaction Actions Toolbar Line --> 
           <div style="display: flex; align-items: center; gap: 20px; padding-top: 10px; border-top: 1px solid #f3f4f6; font-size: 13px;"> 
-            <div style="display: flex; align-items: center; gap: 6px;"> 
+            <div style="display: flex; align-items: center; gap: 16px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
               <% if current_user.liked?(post) %> 
-                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %> 
+                <%= button_to post_like_path(post, 1), method: :delete, style: "display: flex; align-items: center; gap: 6px; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+                  <!-- Connected Loop Icon (Liked) -->
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
+                  </svg>
+                  <span style="letter-spacing: -0.1px;">Cut the bond</span>
+                <% end %> 
               <% else %> 
-                <%= button_to post_likes_path(post), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>♡ Like<% end %> 
+                <%= button_to post_likes_path(post), method: :post, style: "display: flex; align-items: center; gap: 6px; color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+                  <!-- Straight Thread Icon (Unliked) -->
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+                    <path d="M2 12h20" />
+                  </svg>
+                  <span style="letter-spacing: -0.1px;">Join the thread</span>
+                <% end %> 
               <% end %> 
-              <span style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: bold;"><%= post.likes.count %></span> 
+
+              <!-- Minimal Floating Counter -->
+              <span style="font-size: 13px; font-weight: 600; color: <%= current_user.liked?(post) ? '#dc2626' : '#4b5563' %>; transition: color 0.2s ease;">
+                <%= post.likes.count %>
+              </span> 
             </div> 
             <% if post.user == current_user %> 
-              <%= button_to "Delete My Post", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, style: "font-size: 13px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; margin-left: auto;" %> 
+              <%= button_to "Wipe from the scroll", post_path(post), method: :delete, data: { confirm: "Are you sure?" }, style: "font-size: 13px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; margin-left: auto;" %> 
             <% end %> 
           </div> 
 
@@ -97,24 +113,36 @@
                         <!-- Inline Comment Likes Interaction Toolbar --> 
                         <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px; font-size: 11px;"> 
                           <span style="color: #9ca3af;"><%= time_ago_in_words(comment.created_at) %> ago</span> 
-                          <div style="display: flex; align-items: center; gap: 4px;"> 
+                          <div style="display: flex; align-items: center; gap: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
                             <% if current_user.liked_comment?(comment) %> 
-                              <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>
-                                &hearts; Unlike
+                              <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "display: flex; align-items: center; gap: 5px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-size: 12px; font-weight: 500; transition: color 0.2s ease;" do %>
+                                <!-- Connected Loop Icon (Liked) -->
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
+                                </svg>
+                                <span style="letter-spacing: -0.1px;">Cut the bond</span>
                               <% end %> 
                             <% else %> 
-                              <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>
-                                ♡ Like
+                              <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "display: flex; align-items: center; gap: 5px; color: #9ca3af; background: none; border: none; padding: 0; cursor: pointer; font-size: 12px; font-weight: 500; transition: color 0.2s ease;" do %>
+                                <!-- Straight Thread Icon (Unliked) -->
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+                                  <path d="M2 12h20" />
+                                </svg>
+                                <span style="letter-spacing: -0.1px;">Join the thread</span>
                               <% end %> 
                             <% end %> 
-                            <span style="background: #f3f4f6; color: #6b7280; font-weight: bold; padding: 1px 4px; border-radius: 3px;"><%= comment.comment_likes.count %></span> 
-                          </div> 
+
+                            <!-- Minimal Floating Counter -->
+                            <span style="font-size: 12px; font-weight: 600; color: <%= current_user.liked_comment?(comment) ? '#ef4444' : '#6b7280' %>; transition: color 0.2s ease;">
+                              <%= comment.comment_likes.count %>
+                            </span> 
+                          </div>
                         </div> 
                       </div> 
                       
                       <%# Allows comment author OR post author to delete comments %>
                       <% if comment.user == current_user || post.user == current_user %> 
-                        <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %> 
+                        <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Strike this scroll?" }, style: "font-size: 11px; color: #ef4444; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %> 
                       <% end %> 
                     </div> 
                   <% end %> 
@@ -123,8 +151,8 @@
               
               <!-- Inline Comment Input Box Form -->
               <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;" do |f| %> 
-                <%= f.text_field :content, placeholder: "Write a reply...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %> 
-                <%= f.submit "Reply", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %> 
+                <%= f.text_field :content, placeholder: "Speak, mortal...", required: true, style: "flex-grow: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; outline: none; background: white;" %> 
+                <%= f.submit "Echo", style: "background-color: #2563eb; color: white; font-weight: 500; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;" %> 
               <% end %> 
             </div> 
           </details> 
@@ -133,7 +161,7 @@
       <% end %> 
     <% else %> 
       <!-- Zero State Placeholder -->
-      <p style="color: #6b7280; font-style: italic; text-align: center; padding: 40px 0;">No posts have been published yet.</p> 
+      <p style="color: #6b7280; font-style: italic; text-align: center; padding: 40px 0;">No mortal deeds have been recorded here yet.</p> 
     <% end %> 
   </div> 
 

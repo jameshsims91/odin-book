@@ -5,8 +5,8 @@
 
     <!-- Navigation Header Block with Back Arrow on Left -->
     <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--border-secondary); padding-bottom: 14px; margin-bottom: 4px;">
-      <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 14px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %>
-      <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">Public Profile</h2>
+      <%= link_to "← Sanctuary", authenticated_root_path, style: "font-size: 14px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %>
+      <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">Public Slate</h2>
     </div>
 
     <!-- Profile Header Details Card Section -->
@@ -23,23 +23,23 @@
         <div>
           <h2 style="margin: 0; font-size: 20px; color: var(--text-dark);"><%= @user.name.presence || @user.email %></h2>
           <p style="margin: 2px 0 0 0; font-size: 13px; color: var(--text-light);">@<%= @user.username.presence || "user" %></p>
-          <p style="color: var(--text-body); font-size: 14px; margin: 8px 0 12px 0; line-height: 1.4;"><%= @profile&.information.presence || "No bio summary shared yet." %></p>
+          <p style="color: var(--text-body); font-size: 14px; margin: 8px 0 12px 0; line-height: 1.4;"><%= @profile&.information.presence || "No myth shared yet." %></p>
           
           <!-- INSERTED: Public Profile Statistics Metrics Counter Flex Row -->
           <div style="display: flex; gap: 20px; font-family: sans-serif;"> 
             <!-- Counts posts live -->
             <div style="font-size: 13px; color: var(--text-muted);">
-              <strong style="color: var(--text-dark); font-size: 15px;"><%= @user.posts.count %></strong> Posts
+              <strong style="color: var(--text-dark); font-size: 15px;"><%= @user.posts.count %></strong> Scrolls
             </div> 
             
             <!-- Counts mutual friends live -->
             <div style="font-size: 13px; color: var(--text-muted);">
-              <strong style="color: var(--text-dark); font-size: 15px;"><%= @user.friends_count %></strong> Friends
+              <strong style="color: var(--text-dark); font-size: 15px;"><%= @user.friends_count %></strong> Allies
             </div> 
             
             <!-- Counts likes received live -->
             <div style="font-size: 13px; color: var(--text-muted);">
-              <strong style="color: var(--text-dark); font-size: 15px;"><%= @user.total_likes_received_count %></strong> Likes
+              <strong style="color: var(--text-dark); font-size: 15px;"><%= @user.total_likes_received_count %></strong> Threads
             </div> 
           </div>
         </div>
@@ -56,13 +56,13 @@
         <% if already_friends %>
           <%# Visual status indicator if a request or friendship is active %>
           <button disabled style="background-color: var(--text-light); color: white; font-weight: 600; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: not-allowed; display: inline-flex; align-items: center; gap: 6px;">
-            <span>👥</span> Pending or Friends
+            <span>👥</span> Whispers or Allies
           </button>
         <% else %>
           <%# Form button that sends a POST request to your FriendshipsController %>
           <%= form_with url: friendships_path, method: :post, local: true do |f| %>
             <%= f.hidden_field :friend_id, value: @profile.user_id %>
-            <%= f.submit "Add Friend", style: "background-color: #10b981; color: white; font-weight: 600; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center;", onmouseover: "this.style.backgroundColor='#059669'", onmouseout: "this.style.backgroundColor='#10b981'" %>
+            <%= f.submit "Add Ally", style: "background-color: #10b981; color: white; font-weight: 600; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center;", onmouseover: "this.style.backgroundColor='#059669'", onmouseout: "this.style.backgroundColor='#10b981'" %>
           <% end %>
         <% end %>
 
@@ -74,20 +74,20 @@
       <% case current_user.friendship_status_with(@user) %> 
       <% when :none %> 
         <%# UPDATED: Uniform tracking labels for your Mutual Friendship system %>
-        <%= button_to "Add Friend", friendships_path(friend_id: @user.id), method: :post, style: "font-size: 13px; background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;" %> 
+        <%= button_to "Add Ally", friendships_path(friend_id: @user.id), method: :post, style: "font-size: 13px; background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;" %> 
       <% when :pending %> 
-        <span style="font-size: 13px; color: #6b7280; font-style: italic; background: var(--border-secondary); padding: 8px 16px; border-radius: 6px; font-weight: 500;">Request Sent</span> 
+        <span style="font-size: 13px; color: #6b7280; font-style: italic; background: var(--border-secondary); padding: 8px 16px; border-radius: 6px; font-weight: 500;">Whisper Sent</span> 
       <% when :incoming_pending %> 
         <% match = current_user.inverse_friendships.find_by(user_id: @user.id) %> 
         <div style="display: flex; gap: 6px;"> 
-          <%= button_to "Accept", friendship_path(match), method: :patch, style: "font-size: 12px; background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;" %> 
-          <%= button_to "Decline", friendship_path(match), method: :delete, style: "font-size: 12px; background: var(--card-bg); color: var(--text-body); border: 1px solid var(--border-input); padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;" %> 
+          <%= button_to "Grant favor", friendship_path(match), method: :patch, style: "font-size: 12px; background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;" %> 
+          <%= button_to "Strike from the scroll", friendship_path(match), method: :delete, style: "font-size: 12px; background: var(--card-bg); color: var(--text-body); border: 1px solid var(--border-input); padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;" %> 
         </div> 
       <% when :accepted %> 
         <% match = current_user.friendships.find_by(friend_id: @user.id) || current_user.inverse_friendships.find_by(user_id: @user.id) %> 
         <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;"> 
-          <span style="background: rgba(22, 163, 74, 0.1); color: #16a34a; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 6px; border: 1px solid #16a34a;">✓ Friends</span> 
-          <%= button_to "Unfriend", friendship_path(match), method: :delete, data: { confirm: "Remove friend connection?" }, style: "font-size: 11px; color: var(--text-light); text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" if match %> 
+          <span style="background: rgba(22, 163, 74, 0.1); color: #16a34a; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 6px; border: 1px solid #16a34a;">✓ Allies</span> 
+          <%= button_to "Cast to Tartarus", friendship_path(match), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest and darkers pit of the Underworld?" }, style: "font-size: 11px; color: var(--text-light); text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer;" if match %> 
         </div> 
       <% end %> 
     </div> 
@@ -95,7 +95,7 @@
 
   <!-- User's Historical Updates Activity Stream Feed --> 
   <div style="display: flex; flex-direction: column; gap: 16px;"> 
-    <h3 style="margin: 0; font-size: 16px; color: var(--text-dark); font-weight: 700;"><%= @user.name.presence || @user.email %>'s Updates</h3> 
+    <h3 style="margin: 0; font-size: 16px; color: var(--text-dark); font-weight: 700;"><%= @user.name.presence || @user.email %>'s Scrolls</h3> 
     
     <% if @posts.any? %> 
       <%# PERFORMANCE OPTIMIZATION: Loops with index to target the primary LCP image element %>
@@ -124,17 +124,37 @@
           <% end %>
 
           <!-- Interaction Actions Toolbar Line -->
-          <div style="display: flex; align-items: center; gap: 20px; padding-top: 10px; border-top: 1px solid var(--border-secondary); font-size: 13px;"> 
-            <div style="display: flex; align-items: center; gap: 6px;"> 
+          <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border-secondary); font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
+  
+            <div style="display: flex; align-items: center; gap: 16px;">
               <% if current_user.liked?(post) %> 
-                <%= button_to post_like_path(post, 1), method: :delete, style: "color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %> 
+                <%= button_to post_like_path(post, 1), method: :delete, style: "display: flex; align-items: center; gap: 6px; color: #e11d48; background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+                  <!-- Connected Loop Icon (Liked) -->
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
+                  </svg>
+                  <span style="letter-spacing: -0.1px;">Cut the bond</span>
+                <% end %> 
               <% else %> 
-                <%= button_to post_likes_path(post), method: :post, style: "color: var(--text-light); background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>♡ Like<% end %> 
+                <%= button_to post_likes_path(post), method: :post, style: "display: flex; align-items: center; gap: 6px; color: var(--text-muted); background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+                  <!-- Straight Thread Icon (Unliked) -->
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+                    <path d="M2 12h20" />
+                  </svg>
+                  <span style="letter-spacing: -0.1px;">Join thread</span>
+                <% end %> 
               <% end %> 
-              <span style="background: var(--border-secondary); padding: 2px 6px; border-radius: 4px; color: var(--text-muted); font-weight: bold;"><%= post.likes.count %></span> 
-            </div> 
-            <span style="font-size: 12px; color: var(--text-muted); margin-left: auto;"><%= time_ago_in_words(post.created_at) %> ago</span> 
-          </div> 
+
+              <!-- Minimal Floating Counter -->
+              <span style="font-size: 13px; font-weight: 600; color: <%= current_user.liked?(post) ? '#e11d48' : 'var(--text-muted)' %>; transition: color 0.2s ease;">
+                <%= post.likes.count %>
+              </span>
+            </div>
+
+            <!-- Time Stamp -->
+            <span style="font-size: 11px; color: var(--text-muted); opacity: 0.7; letter-spacing: 0.1px;"><%= time_ago_in_words(post.created_at) %> ago</span>
+
+          </div>
 
           <!-- Native Details Comments Box Drawer Section --> 
           <details style="margin-top: 12px; font-size: 13px;"> 
@@ -149,14 +169,30 @@
                         <span style="color: var(--text-body);"><%= comment.content %></span> 
                         <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px; font-size: 11px;"> 
                           <span style="color: var(--text-light);"><%= time_ago_in_words(comment.created_at) %> ago</span> 
-                          <div style="display: flex; align-items: center; gap: 4px;"> 
+                          <div style="display: flex; align-items: center; gap: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
                             <% if current_user.liked_comment?(comment) %> 
-                              <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "color: #ef4444; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600;" do %>&hearts; Unlike<% end %> 
+                              <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "display: flex; align-items: center; gap: 5px; color: #e11d48; background: none; border: none; padding: 0; cursor: pointer; font-size: 12px; font-weight: 500; transition: color 0.2s ease;" do %>
+                                <!-- Connected Loop Icon (Liked) -->
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
+                                </svg>
+                                <span style="letter-spacing: -0.1px;">Cut the bond</span>
+                              <% end %> 
                             <% else %> 
-                              <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "color: var(--text-light); background: none; border: none; padding: 0; cursor: pointer; font-weight: 500;" do %>♡ Like<% end %> 
+                              <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "display: flex; align-items: center; gap: 5px; color: var(--text-muted); background: none; border: none; padding: 0; cursor: pointer; font-size: 12px; font-weight: 500; transition: color 0.2s ease;" do %>
+                                <!-- Straight Thread Icon (Unliked) -->
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+                                  <path d="M2 12h20" />
+                                </svg>
+                                <span style="letter-spacing: -0.1px;">Join thread</span>
+                              <% end %>
                             <% end %> 
-                            <span style="background: var(--border-secondary); color: var(--text-muted); font-weight: bold; padding: 1px 5px; border-radius: 4px;"><%= comment.comment_likes.count %></span> 
-                          </div> 
+
+                            <!-- Minimal Floating Counter -->
+                            <span style="font-size: 12px; font-weight: 600; color: <%= current_user.liked_comment?(comment) ? '#e11d48' : 'var(--text-muted)' %>; transition: color 0.2s ease;">
+                              <%= comment.comment_likes.count %>
+                            </span> 
+                          </div>
                         </div> 
                       </div> 
                       <% if comment.user == current_user || post.user == current_user %> 
@@ -176,7 +212,7 @@
         </div> 
       <% end %> 
     <% else %> 
-      <p style="color: var(--text-light); font-style: italic; text-align: center; padding: 30px 0; font-size: 14px; background: var(--card-bg); border: 1px dashed var(--border-input); border-radius: 12px;">This user has not published any updates yet.</p> 
+      <p style="color: var(--text-light); font-style: italic; text-align: center; padding: 30px 0; font-size: 14px; background: var(--card-bg); border: 1px dashed var(--border-input); border-radius: 12px;">This user has not published any scrolls yet.</p> 
     <% end %> 
   </div> 
 </div> 
@@ -186,7 +222,7 @@
   
   <!-- Sidebar Header Panel --> 
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-secondary); padding-bottom: 8px; margin-bottom: 12px;"> 
-    <h3 style="margin: 0; font-size: 14px; color: var(--text-dark); font-weight: 700;">Mutual Friends</h3> 
+    <h3 style="margin: 0; font-size: 14px; color: var(--text-dark); font-weight: 700;">Mutual Allies</h3> 
     <span style="background: var(--border-secondary); color: var(--text-muted); font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 10px;">
       <%= @mutual_friends.count %>
     </span> 

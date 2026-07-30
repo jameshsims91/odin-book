@@ -1,8 +1,8 @@
 <div style="max-width: 500px; margin: 40px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;"> 
   <!-- Header with Back Arrow on Left --> 
   <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-secondary); padding-bottom: 14px; margin-bottom: 24px;"> 
-    <%= link_to "← Dashboard", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %> 
-    <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">Edit Profile Settings</h2> 
+    <%= link_to "← Sanctuary", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %> 
+    <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">Edit Sanctuary Settings</h2> 
   </div>
 
   <%= form_with model: @profile, url: profile_path, method: :patch, local: true, html: { multipart: true, style: "display: flex; flex-direction: column; gap: 20px;" } do |f| %> 
