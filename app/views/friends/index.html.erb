@@ -1,3 +1,25 @@
+<style>
+  /* Standard style setup for the full-width grid cards */
+  .greek-grid-card:hover .laurel-leaf {
+    border-color: var(--accent-primary, #1877f2) !important;
+  }
+
+  /* Target and style the native Pagy container wrapper */
+  .greek-pagination-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 45px;
+    margin: 0 auto;
+  }
+
+  /* Interactive hover rules for the pagination container foliage */
+  .greek-pagination-wrapper:hover .laurel-leaf {
+    border-color: var(--accent-primary, #1877f2) !important;
+  }
+</style>
+
 <div style="max-width: 1200px; margin: 40px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box; transition: background 0.2s, border-color 0.2s; width: 95%;">
   
   <!-- Header with Back Arrow on Left -->
@@ -14,23 +36,44 @@
           
           <%# Profile Link Wrapper %>
           <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
-          <%= link_to target_path, style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; min-width: 0;" do %>
+          <%= link_to target_path, class: "greek-grid-card", style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; min-width: 0;" do %>
             
-            <%# Avatar Block %>
-            <% if respond_to?(:user_avatar) %>
-              <%= user_avatar(friend, size: 36) %>
-            <% else %>
-              <div style="width: 36px; height: 36px; background-color: var(--border-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: var(--text-muted); flex-shrink: 0;">
-                <%= (friend.name.presence || friend.email).upcase[0] %>
+            <%# Relative Wrapper to Position the Card Side Wreaths %>
+            <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 0 25px; flex-shrink: 0;">
+              
+              <!-- Left Card Foliage -->
+              <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 4px; transform: rotate(-15deg) scale(0.85);">
+                <div class="laurel-leaf" style="width: 12px; height: 7px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(20deg); transition: border-color 0.2s;"></div>
+                <div class="laurel-leaf" style="width: 14px; height: 8px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(10deg); margin-left: -2px; transition: border-color 0.2s;"></div>
+                <div class="laurel-leaf" style="width: 12px; height: 7px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
               </div>
-            <% end %>
 
-            <%# Text Block %>
+              <%# Circular Avatar Block %>
+              <div style="position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-primary); padding: 3px; background: var(--card-bg, #fff); display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 2;">
+                <% if respond_to?(:user_avatar) %>
+                  <%= user_avatar(friend, size: 44) %>
+                <% else %>
+                  <div style="width: 100%; height: 100%; background-color: var(--border-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--text-muted);">
+                    <%= (friend.name.presence || friend.email).upcase[0] %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Right Card Foliage -->
+              <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 4px; transform: rotate(15deg) scale(0.85);">
+                <div class="laurel-leaf" style="width: 12px; height: 7px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-20deg); transition: border-color 0.2s;"></div>
+                <div class="laurel-leaf" style="width: 14px; height: 8px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-10deg); margin-right: -2px; transition: border-color 0.2s;"></div>
+                <div class="laurel-leaf" style="width: 12px; height: 7px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+              </div>
+
+            </div>
+
+            <%# Text Details Block %>
             <div style="min-width: 0; flex-grow: 1;">
-              <div style="font-size: 14px; font-weight: 600; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px;">
                 <%= friend.name.presence || friend.email %>
               </div>
-              <div style="font-size: 12px; color: var(--text-light);">Mutual Friend</div>
+              <div style="font-size: 12px; color: var(--text-light);">⚡ Mutual Friend</div>
             </div>
           <% end %>
 
@@ -52,12 +95,34 @@
     </div>
   <% end %>
 
-  <!-- Pagy Pagination Section Wrapper -->
+  <!-- Pagy Pagination Footer Section Wrapper -->
   <% if @pagy && @pagy.pages > 1 %>
-    <div style="display: flex; justify-content: center; border-top: 1px solid var(--border-primary); padding-top: 20px; margin-top: 24px;">
-      <div class="pagy-custom-style">
-        <%== pagy_nav(@pagy) %>
+    <div style="display: flex; justify-content: center; border-top: 1px solid var(--border-primary); padding-top: 24px; margin-top: 24px;">
+      
+      <%# Outer structural positioning box for pagination layout leaves %>
+      <div class="greek-pagination-wrapper">
+        
+        <!-- Left Footer Pagination Laurel Branch -->
+        <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-15deg) scale(1.1);">
+          <div class="laurel-leaf" style="width: 16px; height: 9px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(20deg); transition: border-color 0.2s;"></div>
+          <div class="laurel-leaf" style="width: 18px; height: 10px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(10deg); margin-left: -2px; transition: border-color 0.2s;"></div>
+          <div class="laurel-leaf" style="width: 16px; height: 9px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+        </div>
+
+        <%# Nav links injection point %>
+        <div class="pagy-custom-style" style="position: relative; z-index: 2;">
+          <%== pagy_nav(@pagy) %>
+        </div>
+
+        <!-- Right Footer Pagination Laurel Branch -->
+        <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(15deg) scale(1.1);">
+          <div class="laurel-leaf" style="width: 16px; height: 9px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-20deg); transition: border-color 0.2s;"></div>
+          <div class="laurel-leaf" style="width: 18px; height: 10px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-10deg); margin-right: -2px; transition: border-color 0.2s;"></div>
+          <div class="laurel-leaf" style="width: 16px; height: 9px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+        </div>
+
       </div>
+
     </div>
   <% end %>
 
