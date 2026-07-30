@@ -12,6 +12,7 @@ class ProfilesController < ApplicationController
     @user = @profile.user
     @posts = @user.posts.order(created_at: :desc)
     @new_post = current_user.posts.new
+    @preview_friends = current_user.friends.limit(4)
   end
 
   def edit
