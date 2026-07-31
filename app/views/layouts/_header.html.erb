@@ -1,3 +1,40 @@
+<style>
+  /* Base Navigation Links styling rules */
+  .nav-myth-link {
+    font-size: 14px; 
+    font-weight: 500; 
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    color: var(--text-muted);
+  }
+
+  /* Dynamic Override: Luminous Golden Glow applied ONLY under The Void theme */
+  [data-theme="void"] .nav-myth-link,
+  html:not([data-theme="ether"]) .nav-myth-link {
+    color: #f59e0b !important;
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  }
+
+  /* Hover states for enhanced cosmic glow inside the Void layout layer */
+  [data-theme="void"] .nav-myth-link:hover,
+  html:not([data-theme="ether"]) .nav-myth-link:hover {
+    color: #fbbf24 !important;
+    text-shadow: 0 0 14px rgba(251, 191, 36, 0.8);
+  }
+
+  /* Clear fallback reset when user shifts interface into The Ether */
+  .light-theme .nav-myth-link,
+  [data-theme="ether"] .nav-myth-link {
+    color: var(--text-muted) !important;
+    text-shadow: none !important;
+  }
+
+  .light-theme .nav-myth-link:hover,
+  [data-theme="ether"] .nav-myth-link:hover {
+    color: var(--accent-primary) !important;
+  }
+</style>
+
 <header style="background: var(--bg-surface); border-bottom: 1px solid var(--border-input); box-shadow: 0 1px 3px rgba(0,0,0,0.02); padding: 12px 24px; font-family: sans-serif; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;"> 
   <!-- Logo Section --> 
   <div style="font-weight: 800; font-size: 20px; letter-spacing: -0.03em;"> 
@@ -44,23 +81,23 @@
     </button>
 
     <% if user_signed_in? %> 
-      <!-- Primary Core Application Feeds Links --> 
-      <%= link_to "Agora of Athens", posts_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none;" %> 
+      <!-- Primary Core Application Feeds Links (Hooked to our dynamic style classes) --> 
+      <%= link_to "Agora of Athens", posts_path, class: "nav-myth-link" %> 
       
       <!-- Global Activity Notifications --> 
-      <%= link_to notifications_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px;" do %> 
+      <%= link_to notifications_path, class: "nav-myth-link", style: "display: flex; align-items: center; gap: 6px;" do %> 
         Hermes' Scroll 
         <% if unread_notifications_count > 0 %> 
-          <span style="background-color: var(--accent-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px;"> 
+          <span style="background-color: var(--accent-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px; text-shadow: none !important;"> 
             <%= unread_notifications_count %> 
           </span> 
         <% end %> 
       <% end %> 
 
-      <%= link_to users_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px;" do %> 
+      <%= link_to users_path, class: "nav-myth-link", style: "display: flex; align-items: center; gap: 6px;" do %> 
         Unwoven Threads 
         <% if pending_follow_requests_count > 0 %> 
-          <span style="background-color: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px;"> 
+          <span style="background-color: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px; text-shadow: none !important;"> 
             <%= pending_follow_requests_count %> 
           </span> 
         <% end %> 
