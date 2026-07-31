@@ -151,3 +151,106 @@ a.user-mention:hover {
 [data-theme="ether"] a.user-mention:hover {
   filter: brightness(1.15) !important;
 }
+
+/* ==========================================================================
+   MOBILE DISPLAY GRID ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* 1. Force sidebar columns to drop below the main content feed stream smoothly */
+  main,
+  div[style*="display: flex"],
+  div[style*="display: flex; flex-wrap: wrap"] {
+    flex-direction: column !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    gap: 20px !important;
+  }
+
+  /* 2. Scale right sidebar blocks to span across the entire available screen width */
+  div[style*="max-width: 380px"],
+  div[style*="width: 320px"],
+  .friends-dashboard-widget {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* 3. Drop layout wrappers from widescreen auto margins down to standard safe gutters */
+  div[style*="max-width: 1400px"] {
+    padding: 16px 12px !important;
+    margin-top: 10px !important;
+  }
+
+  /* 4. Restructure your main toolbar layout bar to stack action buttons */
+  header,
+  nav {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE INTERACTION & TOUCH TARGET OPTIMIZATIONS (WCAG Safe)
+   ========================================================================== */
+
+/* 1. Optimize Form Inputs for Mobile Typing and Tapping Targets */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  min-height: 42px; /* Expands interaction bounding boxes for thumb taps */
+  font-size: 16px !important; /* CRUCIAL: Prevents iOS Safari from forcefully zooming in on focus */
+  -webkit-tap-highlight-color: transparent; /* Eliminates the default mobile box-highlight flicker */
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* Dynamic Active Input Focus States */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  border-color: var(--accent-primary) !important;
+  outline: none !important;
+  /* Baseline: Subtle glow matching active scheme properties */
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* Explicit Custom Highlight: Luminous Golden Glow applied ONLY under The Void */
+[data-theme="void"] input[type="text"]:focus,
+[data-theme="void"] textarea:focus,
+html:not([data-theme="ether"]) input[type="text"]:focus,
+html:not([data-theme="ether"]) textarea:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important;
+}
+
+/* 2. Scale Interactive Buttons for Finger Tap Accessibility (Min 44px) */
+button,
+input[type="submit"],
+.fate-toggle-btn,
+a[style*="padding"] {
+  min-height: 44px; /* Standardizes tap safety guidelines to prevent misclicks */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation; /* Optimizes mobile click event processing delays */
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, filter 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* Micro-interaction feedback layer when long-pressed or tapped on real devices */
+button:active,
+input[type="submit"]:active,
+.fate-toggle-btn:active {
+  transform: scale(0.97); /* Tactile click response */
+}
+
+/* 3. Mobile Comments Scrollbar Tracking Adjustments */
+@media (max-width: 768px) {
+  div[style*="max-height"], 
+  .comments-drawer-stream {
+    max-height: 280px !important; /* Grants extra breathing vertical height on phone viewports */
+    -webkit-overflow-scrolling: touch; /* Forces buttery-smooth kinetic momentum scrolling in iOS */
+  }
+}

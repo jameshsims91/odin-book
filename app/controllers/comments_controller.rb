@@ -5,10 +5,14 @@ class CommentsController < ApplicationController
     @post = Post.find(params[:post_id])
     @comment = @post.comments.build(comment_params)
     @comment.user = current_user
-    if @comment.save
-      redirect_back fallback_location: authenticated_root_path, notice: "Comment added!"
-    else
-      redirect_back fallback_location: authenticated_root_path, alert: "Comment cannot be blank."
+
+    respond_to do  |format|
+      if @comment.save
+        format.turbo_stream
+        format.html { redirect_to post_path(@post), notice: "Echo recorded." }
+      else
+        format.html { redirect_to post_path(@post), alert: "The threads collapsed." }
+      end
     end
   end
 
@@ -17,9 +21,13 @@ class CommentsController < ApplicationController
     @comment = @post.comments.find(params[:id])
     if @comment.user == current_user || @post.user == current_user
       @comment.destroy
-      redirect_back fallback_location: authenticated_root_path, notice: "Comment removed successfully."
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to post_path(@post), notice: "Echo erased." }
+      end
     else
-      redirect_back fallback_location: authenticated_root_path, alert: "You are not authorized to delete this comment."
+      redirect_to post_path(@post), alert: "You lack divine authority to alter this scroll."
     end
   end
 

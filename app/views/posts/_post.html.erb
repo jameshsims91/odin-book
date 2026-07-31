@@ -119,58 +119,30 @@
 
   <!-- NATIVE HTML DISCLOSURE ELEMENT FOR TOGGLEABLE COMMENT DRAWER --> 
   <details style="margin-top: 15px; font-size: 13px;"> 
-    <summary style="color: var(--accent-primary); font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;"> 💬 Echo (<%= post.comments.count %>) </summary> 
+    
+    <!-- Hook 1: Added unique target ID to the counter element for dynamic layout replacements -->
+    <summary id="comments-count-<%= post.id %>" style="color: var(--accent-primary); font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;"> 💬 Echo (<%= post.comments.count %>) </summary> 
+    
     <div style="margin-top: 10px; padding: 12px; background-color: var(--bg-main); border: 1px solid var(--border-input); border-radius: 8px; transition: background-color 0.4s, border-color 0.3s;"> 
-      <% if post.comments.any? %> 
-        <div style="margin-bottom: 10px; max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"> 
-          <% post.comments.each do |comment| %> 
-            <div style="background: var(--bg-surface); padding: 8px; border: 1px solid var(--border-input); border-radius: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; transition: background-color 0.4s, border-color 0.3s;"> 
-              <div style="flex-grow: 1;"> 
-                <%= link_to (comment.user.name.presence || comment.user.email), user_path(comment.user), style: "font-weight: bold; color: var(--accent-primary); text-decoration: none;" %>: 
-                <span style="color: var(--text-body);"><%= comment.content %></span> 
-                
-                <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px; font-size: 11px;"> 
-                  <span style="color: var(--text-muted);"><%= time_ago_in_words(comment.created_at) %> ago</span> 
-                  
-                  <div style="display: flex; align-items: center; gap: 12px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
-                    <% if current_user.liked_comment?(comment) %> 
-                      <%= button_to post_comment_comment_like_path(post, comment, 1), method: :delete, style: "display: flex; align-items: center; gap: 5px; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-size: 12px; font-weight: 500; transition: color 0.2s ease;" do %>
-                        <!-- Connected Loop Icon (Liked) -->
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
-                        </svg>
-                        <span style="letter-spacing: -0.1px;">Break the bond</span>
-                      <% end %> 
-                    <% else %> 
-                      <%= button_to post_comment_comment_likes_path(post, comment), method: :post, style: "display: flex; align-items: center; gap: 5px; color: var(--text-muted); background: none; border: none; padding: 0; cursor: pointer; font-size: 12px; font-weight: 500; transition: color 0.2s ease;" do %>
-                        <!-- Straight Thread Icon (Unliked) -->
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
-                          <path d="M2 12h20" />
-                        </svg>
-                        <span style="letter-spacing: -0.1px;">Join the threads</span>
-                      <% end %> 
-                    <% end %> 
-
-                    <!-- Minimal Floating Counter -->
-                    <span style="font-size: 12px; font-weight: 600; color: <%= current_user.liked_comment?(comment) ? '#dc2626' : 'var(--text-muted)' %>; transition: color 0.2s ease;">
-                      <%= comment.comment_likes.count %>
-                    </span> 
-                  </div>
-                </div> 
-              </div> 
-              <% if comment.user == current_user || post.user == current_user %> 
-                <%= button_to post_comment_path(post, comment), method: :delete, data: { confirm: "Delete this comment?" }, style: "font-size: 11px; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer;" do %>✕<% end %> 
-              <% end %> 
-            </div> 
-          <% end %> 
-        </div> 
-      <% end %> 
       
+      <!-- Hook 2: Added unique target ID to the stream container for real-time prepends/appends -->
+      <div id="comments-list-<%= post.id %>" style="margin-bottom: 10px; max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"> 
+        <% if post.comments.any? %> 
+          <% post.comments.each do |comment| %> 
+            
+            <%# ===================================================================== %>
+            <%# NUMBER 2 POSITION PLACEMENT: Renders the separate tiny layout file  #%>
+            <%# ===================================================================== %>
+            <%= render partial: "comments/comment", locals: { comment: comment, post: post } %>
+
+          <% end %> 
+        <% end %> 
+      </div>
+
       <!-- Wrapper to position the autocomplete dropdown popup -->
       <div id="mentions-wrapper-<%= post.id %>" style="position: relative; width: 100%;">
-        
         <!-- Inline Comment Input Box Form -->
-        <%= form_with model: [post, Comment.new], local: true, style: "display: flex; gap: 8px;", html: { id: "reply-form-#{post.id}" } do |f| %>
+        <%= form_with model: [post, Comment.new], style: "display: flex; gap: 8px;", html: { id: "reply-form-#{post.id}" } do |f| %>
           <%= f.text_field :content, 
                 placeholder: "Speak mortal...", 
                 required: true, 

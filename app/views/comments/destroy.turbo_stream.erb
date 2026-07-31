@@ -1,0 +1,7 @@
+<%# 1. Remove the targeted comment row matching the dom id query selector %>
+<%= turbo_stream.remove @comment %>
+
+<%# 2. Recalibrate and update the total indicator reply count box string live %>
+<%= turbo_stream.replace "comments-count-#{@post.id}" do %>
+  <summary id="comments-count-<%= @post.id %>" style="color: var(--accent-primary); font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;"> 💬 Echo (<%= @post.comments.count %>) </summary> 
+<% end %>
