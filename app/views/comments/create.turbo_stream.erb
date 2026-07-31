@@ -1,0 +1,16 @@
+<%# app/views/comments/create.turbo_stream.erb %>
+
+<%# 1. Append the new comment bubble cleanly to your list stream %>
+<%= turbo_stream.append "comments-list-#{@comment.post_id}" do %>
+  <%= render partial: "comments/comment", locals: { comment: @comment, post: @comment.post } %>
+<% end %>
+
+<%# 2. Update the absolute total text indicator number %>
+<%= turbo_stream.replace "comments-count-#{@comment.post_id}" do %>
+  <summary id="comments-count-<%= @comment.post_id %>" style="color: var(--accent-primary); font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;"> 💬 Echo (<%= @comment.post.comments.count %>) </summary> 
+<% end %>
+
+<%# 3. Target and forcefully clear out the mobile and desktop text typing box %>
+<%= turbo_stream.replace "reply-input-#{@comment.post_id}" do %>
+  <input type="text" name="comment[content]" placeholder="Speak mortal..." required="required" autocomplete="off" id="reply-input-<%= @comment.post_id %>" style="flex-grow: 1; border: 1px solid var(--border-input); border-radius: 6px; padding: 6px 12px; outline: none; background: var(--bg-surface); color: var(--text-body); transition: background-color 0.4s, border-color 0.3s;" value="">
+<% end %>
