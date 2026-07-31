@@ -12,9 +12,18 @@
   <nav style="display: flex; align-items: center; gap: 20px;"> 
     
     <!-- Central Theme Toggle Button (Always Available) -->
-    <button id="dark-mode-toggle" style="background: none; border: 1px solid var(--border-input); color: var(--text-body); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 31px;">
-      <span class="theme-sun">☀️ Light Mode</span>
-      <span class="theme-moon">🌙 Dark Mode</span>
+    <button id="dark-mode-toggle" class="fate-toggle-btn" aria-label="Toggle between The Void and The Ether" style="background: none; border: 1px solid var(--border-input); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 31px; gap: 8px;">
+      <!-- Left Label -->
+      <span class="mode-label label-void" style="color: var(--text-body); opacity: 0.6; transition: opacity 0.3s ease;">The Void</span>
+      
+      <!-- Mini Thread Track -->
+      <div class="mini-track" style="position: relative; width: 34px; height: 18px; background-color: rgba(0,0,0,0.2); border: 1px solid var(--border-input); border-radius: 10px; overflow: hidden;">
+        <div class="mini-trail" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 2px; width: 0; background: #FFD700; box-shadow: 0 0 4px #FFD700; transition: width 0.3s ease;"></div>
+        <div class="mini-knob" style="position: absolute; left: 2px; top: 2px; width: 12px; height: 12px; background: radial-gradient(circle at 30% 30%, #FFE066, #D4AF37, #AA7C11); border-radius: 50%; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+      </div>
+
+      <!-- Right Label -->
+      <span class="mode-label label-ether" style="color: var(--text-body); opacity: 0.6; transition: opacity 0.3s ease;">The Ether</span>
     </button>
 
     <% if user_signed_in? %> 
