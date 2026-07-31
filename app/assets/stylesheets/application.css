@@ -286,7 +286,7 @@ header div[style*="border-radius:50%"] {
 }
 
 /* ==========================================================================
-   PRODUCTION SOLID AVATAR RESOLUTION (Fixed Index Image Sizing Bug)
+   PRODUCTION SOLID AVATAR RESOLUTION (Fixed Header Navigation Oval Bug)
    ========================================================================== */
 
 /* 1. Prevent parent flexbox containers from squeezing circular portrait blocks on mobile */
@@ -310,26 +310,42 @@ div[style*="border-radius:50%"] img,
   height: 100% !important;
   max-width: 100% !important;
   max-height: 100% !important;
-  object-fit: cover !important; /* Crops image cleanly into a perfect circle without warping faces */
+  object-fit: cover !important; 
   flex-shrink: 0 !important;
   border-radius: 50% !important;
 }
 
-/* 4. Safety Override: Ensure actual post attachment uploads (like timeline photos) can stay large */
+/* 4. SAFETY RESET FOR TIMELINE PHOTOS: Let attached media files scale natively and take up natural ratios */
 div[style*="max-height: 450px"] img,
-div[style*="max-height: 400px"] img {
+div[style*="max-height: 400px"] img,
+summary img,
+details img {
   width: 100% !important;
-  height: auto !important;
+  height: auto !important; 
   max-height: 450px !important;
   object-fit: cover !important;
-  border-radius: 8px !important; /* Preserves your standard rounded corners on post attachments */
+  border-radius: 8px !important; 
+  flex-shrink: initial !important; 
 }
 
-/* 5. Explicitly lock your top header navigation avatar size constraints */
-header img,
-header div[style*="border-radius: 50%"] {
+/* 5. SPECIFIC FIX: Lock the Header Navigation Avatar Frame AND its inner Image to be perfectly square */
+header div[style*="border-radius: 50%"],
+header div[style*="border-radius:50%"] {
   width: 36px !important;
   height: 36px !important;
+  min-width: 36px !important;  
   max-width: 36px !important;
+  min-height: 36px !important;
   max-height: 36px !important;
+  flex-shrink: 0 !important;
+}
+
+header div[style*="border-radius: 50%"] img,
+header div[style*="border-radius:50%"] img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
 }
