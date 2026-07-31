@@ -256,24 +256,31 @@ input[type="submit"]:active,
 }
 
 /* ==========================================================================
-   MOBILE AVATAR SQUISH RESET SAFETY LOCK (Widescreen & Mobile Adaptive)
+   PRODUCTION REFINED AVATAR SQUISH RESET (Fixed Navigation Bug)
    ========================================================================== */
-   
+
 div[style*="border-radius: 50%"],
-div[style*="border-radius:50%"],
-div[style*="width: 50px; height: 50px"],
-div[style*="width: 80px; height: 80px"],
-div[style*="width: 32px; height: 32px"],
-div[style*="width: 48px; height: 48px"],
-.avatar-frame,
-main img {
+div[style*="border-radius:50%"] {
   flex-shrink: 0 !important; 
 }
 
-div[style*="border-radius: 50%"] img,
-div[style*="border-radius:50%"] img {
+.friends-dashboard-widget img,
+.greek-friend-card img,
+.greek-grid-card img,
+#comments-list img,
+.mention-item img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important; 
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+}
+
+header img,
+header div[style*="border-radius: 50%"],
+header div[style*="border-radius:50%"] {
+  width: 36px !important;   
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
   flex-shrink: 0 !important;
 }
