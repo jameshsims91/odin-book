@@ -103,3 +103,51 @@ button {
   /* Ensures the rotation axis is perfectly centered in the SVG */
   transform-origin: center;
 }
+
+/* ==========================================================================
+   HEROKU PRODUCTION SPECIFICITY OVERRIDES (Strict Reset)
+   ========================================================================== */
+
+/* Target every possible state of a mention link to kill default blue/underlines */
+a.user-mention,
+a.user-mention:link,
+a.user-mention:visited,
+a.user-mention:hover,
+a.user-mention:active,
+.greek-grid-card a.user-mention,
+main p a.user-mention {
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-weight: 600 !important;
+  display: inline-block !important;
+  box-shadow: none !important;
+}
+
+/* THE VOID MODE: Luminous Glowing Gold Baseline */
+a.user-mention,
+a.user-mention:link,
+a.user-mention:visited {
+  color: #f59e0b !important;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important;
+}
+
+a.user-mention:hover {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.7) !important;
+}
+
+/* THE ETHER MODE: Clean Daytime Text Primary Accent Overrides */
+.light-theme a.user-mention,
+.light-theme a.user-mention:link,
+.light-theme a.user-mention:visited,
+[data-theme="ether"] a.user-mention,
+[data-theme="ether"] a.user-mention:link,
+[data-theme="ether"] a.user-mention:visited {
+  color: var(--accent-primary) !important;
+  text-shadow: none !important;
+}
+
+.light-theme a.user-mention:hover,
+[data-theme="ether"] a.user-mention:hover {
+  filter: brightness(1.15) !important;
+}

@@ -43,7 +43,7 @@
       <div id="new-post-mentions-wrapper" style="position: relative; background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background 0.4s, border-color 0.3s;"> 
         <h3 style="margin: 0 0 12px 0; font-size: 16px; color: var(--text-body); font-weight: 600;">Proclaim a New Myth</h3> 
         <%= form_with model: @new_post, local: true, html: { multipart: true, id: "new-status-update-form" } do |f| %> 
-          <%= f.text_area :content, placeholder: "What is on your mind?", autocomplete: "off", id: "new-post-text-area-input", style: "width: 100%; border: 1px solid var(--border-input); border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); box-sizing: border-box; resize: vertical; transition: background-color 0.4s, border-color 0.3s;", rows: 3 %> 
+          <%= f.text_area :content, placeholder: "Speak, mortal, and let your voice echo.", autocomplete: "off", id: "new-post-text-area-input", style: "width: 100%; border: 1px solid var(--border-input); border-radius: 8px; padding: 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); box-sizing: border-box; resize: vertical; transition: background-color 0.4s, border-color 0.3s;", rows: 3 %> 
           
           <div style="margin-top: 12px; font-family: sans-serif;"> 
             <label style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border-input); border-radius: 8px; background-color: var(--bg-main); color: var(--text-body); font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.4s, border-color 0.3s;"> 

@@ -1,16 +1,38 @@
 <style>
-  /* Base Navigation Links styling rules */
-  .nav-myth-link {
+  /* Base Navigation Links and Text Elements styling rules */
+  .nav-myth-link,
+  .nav-myth-greeting {
     font-size: 14px; 
     font-weight: 500; 
     text-decoration: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+  
+  .nav-myth-link {
     color: var(--text-muted);
+  }
+  
+  .nav-myth-greeting {
+    color: var(--text-muted);
+  }
+  
+  .nav-myth-greeting strong {
+    color: var(--text-body);
+    font-weight: 600;
+    transition: color 0.3s ease;
   }
 
   /* Dynamic Override: Luminous Golden Glow applied ONLY under The Void theme */
   [data-theme="void"] .nav-myth-link,
   html:not([data-theme="ether"]) .nav-myth-link {
+    color: #f59e0b !important;
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  }
+
+  [data-theme="void"] .nav-myth-greeting,
+  [data-theme="void"] .nav-myth-greeting strong,
+  html:not([data-theme="ether"]) .nav-myth-greeting,
+  html:not([data-theme="ether"]) .nav-myth-greeting strong {
     color: #f59e0b !important;
     text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
   }
@@ -32,6 +54,17 @@
   .light-theme .nav-myth-link:hover,
   [data-theme="ether"] .nav-myth-link:hover {
     color: var(--accent-primary) !important;
+  }
+
+  .light-theme .nav-myth-greeting,
+  [data-theme="ether"] .nav-myth-greeting {
+    color: var(--text-muted) !important;
+    text-shadow: none !important;
+  }
+  
+  .light-theme .nav-myth-greeting strong,
+  [data-theme="ether"] .nav-myth-greeting strong {
+    color: var(--text-body) !important;
   }
 </style>
 
@@ -81,7 +114,7 @@
     </button>
 
     <% if user_signed_in? %> 
-      <!-- Primary Core Application Feeds Links (Hooked to our dynamic style classes) --> 
+      <!-- Primary Core Application Feeds Links --> 
       <%= link_to "Agora of Athens", posts_path, class: "nav-myth-link" %> 
       
       <!-- Global Activity Notifications --> 
@@ -103,8 +136,9 @@
         <% end %> 
       <% end %> 
 
-      <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--border-input); padding-left: 16px;"> 
-        Awaken, <strong style="color: var(--text-body); font-weight: 600;"><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
+      <!-- Greeting Text (Glows under The Void theme rules) -->
+      <span class="nav-myth-greeting" style="border-left: 1px solid var(--border-input); padding-left: 16px;"> 
+        Awaken, <strong><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
       </span> 
 
       <!-- Interactive Profile Settings Avatar Link Router --> 
