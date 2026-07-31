@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :liked_comments, through: :comment_likes, source: :comment
 
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+  has_many :triggered_notifications, class_name: "Notification", foreign_key: :actor_id, dependent: :destroy
   has_many :mentions
   has_many :mentioned_in_posts, through: :mentions, source: :post
   has_many :web_push_subscriptions, dependent: :destroy

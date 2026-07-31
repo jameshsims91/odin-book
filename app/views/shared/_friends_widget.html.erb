@@ -19,12 +19,12 @@
   <div style="border-bottom: 1px solid var(--border-input); padding-bottom: 12px; margin-bottom: 20px;"> 
     <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); display: block; font-weight: bold; margin-bottom: 4px;">— Active Allies —</span>
     <h3 style="font-size: 20px; font-weight: 700; color: var(--text-body); margin: 0; text-transform: uppercase; letter-spacing: 1px;"> 
-      Allies (<%= active_friends.count %>) 
+      Allies (<%= profile_owner.all_friends.count %>) 
     </h3> 
     <%= link_to "Reveal All →", friends_path, style: "font-size: 13px; font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-block; margin-top: 6px;" %> 
   </div> 
 
-  <!-- Friends List Container (Limited to 4) --> 
+  <!-- Friends List Container (Strictly Capped at 4) --> 
   <div style="display: flex; flex-direction: column; gap: 20px;"> 
     <% if active_friends.any? %> 
       <% active_friends.first(4).each do |friend| %> 
