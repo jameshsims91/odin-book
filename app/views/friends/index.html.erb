@@ -1,7 +1,17 @@
 <style>
   /* Standard style setup for the full-width grid cards */
   .greek-grid-card:hover .laurel-leaf {
-    border-color: var(--accent-primary, #1877f2) !important;
+    opacity: 1 !important;
+    color: var(--accent-primary) !important;
+  }
+
+  /* Specific color override logic mapping gold shadows while using The Void */
+  [data-theme="void"] .greek-grid-card:hover .laurel-leaf,
+  [data-theme="void"] .greek-pagination-wrapper:hover .laurel-leaf,
+  html:not([data-theme="ether"]) .greek-grid-card:hover .laurel-leaf,
+  html:not([data-theme="ether"]) .greek-pagination-wrapper:hover .laurel-leaf {
+    color: #f59e0b !important;
+    filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.6)) !important;
   }
 
   /* Target and style the native Pagy container wrapper */
@@ -10,13 +20,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 45px;
+    padding: 0 55px;
     margin: 0 auto;
+    user-select: none;
   }
 
   /* Interactive hover rules for the pagination container foliage */
   .greek-pagination-wrapper:hover .laurel-leaf {
-    border-color: var(--accent-primary, #1877f2) !important;
+    opacity: 1 !important;
+    color: var(--accent-primary) !important;
   }
 </style>
 
@@ -32,59 +44,60 @@
   <% if @friends.any? %>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; margin-bottom: 24px;">
       <% @friends.each do |friend| %>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-input); border-radius: 8px; background: var(--bg-surface); ">
+        <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-input); border-radius: 8px; background: var(--bg-surface); width: 100%; box-sizing: border-box;">
           
           <%# Profile Link Wrapper %>
           <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
-          <%= link_to target_path, class: "greek-grid-card", style: "display: flex; align-items: center; gap: 12px; text-decoration: none; flex-grow: 1; cursor: pointer; min-width: 0;" do %>
+          <%= link_to target_path, class: "greek-grid-card", style: "display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 8px; text-decoration: none; color: inherit; width: 100%; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;" do %>
             
-            <%# Relative Wrapper to Position the Card Side Wreaths %>
-            <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 0 25px; flex-shrink: 0;">
-              
-              <!-- Left Card Foliage -->
-              <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 4px; transform: rotate(-15deg) scale(0.85);">
-                <div class="laurel-leaf" style="width: 12px; height: 7px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(20deg); transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 14px; height: 8px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(10deg); margin-left: -2px; transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 12px; height: 7px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+            <div style="display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0;">
+              <%# Relative Wrapper to Position the Card Side Wreaths %>
+              <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 0 28px; flex-shrink: 0; user-select: none;">
+                
+                <!-- LEFT LAUREL BRANCH: Curving up and slightly outward -->
+                <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-12deg) scale(0.95); align-items: flex-end;">
+                  <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                  <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(15deg); margin-right: -3px; opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                  <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(-5deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                </div>
+
+                <%# Circular Avatar Block %>
+                <div style="position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-input); padding: 3px; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 2;">
+                  <% if respond_to?(:user_avatar) %>
+                    <%= user_avatar(friend, size: 44) %>
+                  <% else %>
+                    <div style="width: 100%; height: 100%; background-color: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--text-muted);">
+                      <%= (friend.name.presence || friend.email).upcase[0] %>
+                    </div>
+                  <% end %>
+                </div>
+
+                <!-- RIGHT LAUREL BRANCH: Mirroring the left configuration -->
+                <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(12deg) scale(0.95); align-items: flex-start;">
+                  <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(-35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                  <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(-15deg); margin-left: -3px; opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                  <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(5deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                </div>
+
               </div>
 
-              <%# Circular Avatar Block %>
-              <div style="position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-input); padding: 3px; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 2;">
-                <% if respond_to?(:user_avatar) %>
-                  <%= user_avatar(friend, size: 44) %>
-                <% else %>
-                  <div style="width: 100%; height: 100%; background-color: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--text-muted);">
-                    <%= (friend.name.presence || friend.email).upcase[0] %>
-                  </div>
-                <% end %>
+              <%# Text Details Block %>
+              <div style="min-width: 0; flex-grow: 1; padding-right: 8px;">
+                <div style="font-size: 13px; font-weight: 600; color: var(--text-body); text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; line-height: 1.2; margin-bottom: 2px;">
+                  <%= friend.name.presence || friend.email %>
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted);">⚡ Mutual Ally</div>
               </div>
-
-              <!-- Right Card Foliage -->
-              <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 4px; transform: rotate(15deg) scale(0.85);">
-                <div class="laurel-leaf" style="width: 12px; height: 7px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-20deg); transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 14px; height: 8px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-10deg); margin-right: -2px; transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 12px; height: 7px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
-              </div>
-
             </div>
 
-            <%# Text Details Block %>
-            <div style="min-width: 0; flex-grow: 1; padding-right: 8px;">
-              <div style="font-size: 13px; font-weight: 600; color: var(--text-body); text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; line-height: 1.2; margin-bottom: 2px;">
-                <%= friend.name.presence || friend.email %>
+            <%# Unfriend Button Action %>
+            <% rel_record = Friendship.find_by(user_id: [current_user.id, friend.id], friend_id: [current_user.id, friend.id]) %>
+            <% if rel_record %>
+              <div style="flex-shrink: 0; margin-left: 8px; z-index: 5;">
+                <%= link_to "Cast to Tartarus", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest darkest pit of the Underworld?" }, style: "font-size: 12px; color: #dc2626; text-decoration: none; font-weight: 500;" %>
               </div>
-              <div style="font-size: 11px; color: var(--text-muted);">⚡ Mutual Ally</div>
-            </div>
+            <% end %>
           <% end %>
-
-          <%# Unfriend Button Action %>
-          <% rel_record = Friendship.find_by(user_id: [current_user.id, friend.id], friend_id: [current_user.id, friend.id]) %>
-          <% if rel_record %>
-            <div style="flex-shrink: 0; margin-left: 8px;">
-              <%= link_to "Cast to Tartarus", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest darkest pit of the Underworld?" }, style: "font-size: 12px; color: #ef4444; text-decoration: none; font-weight: 500;" %>
-            </div>
-          <% end %>
-
         </div>
       <% end %>
     </div>
@@ -103,26 +116,23 @@
       <div class="greek-pagination-wrapper">
         
         <!-- Left Footer Pagination Laurel Branch -->
-        <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-15deg) scale(1.1);">
-          <div class="laurel-leaf" style="width: 16px; height: 9px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(20deg); transition: border-color 0.2s;"></div>
-          <div class="laurel-leaf" style="width: 18px; height: 10px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(10deg); margin-left: -2px; transition: border-color 0.2s;"></div>
-          <div class="laurel-leaf" style="width: 16px; height: 9px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+        <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-12deg) scale(1.1); align-items: flex-end;">
+          <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+          <div class="laurel-leaf" style="width: 18px; height: 10px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(15deg); margin-right: -3px; opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+          <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(-5deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
         </div>
 
         <%# Nav links injection point %>
-        <div>
+        <div style="z-index: 2;">
           <%== pagy_nav(@pagy) %>
         </div>
 
         <!-- Right Footer Pagination Laurel Branch -->
-        <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(15deg) scale(1.1);">
-          <div class="laurel-leaf" style="width: 16px; height: 9px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-20deg); transition: border-color 0.2s;"></div>
-          <div class="laurel-leaf" style="width: 18px; height: 10px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-10deg); margin-right: -2px; transition: border-color 0.2s;"></div>
-          <div class="laurel-leaf" style="width: 16px; height: 9px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+        <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(12deg) scale(1.1); align-items: flex-start;">
+          <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(-35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+          <div class="laurel-leaf" style="width: 18px; height: 10px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(-15deg); margin-left: -3px; opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+          <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(5deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
         </div>
 
       </div>
     </div>
-  <% end %>
-
-</div>

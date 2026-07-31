@@ -1,7 +1,15 @@
 <style>
   /* Target the branch elements inside the card on hover */
   .greek-friend-card:hover .laurel-leaf {
-    border-color: var(--accent-primary, #1877f2) !important;
+    opacity: 1 !important;
+    color: var(--accent-primary) !important;
+  }
+
+  /* Specific theme configuration for glowing gold leaves inside the Void layout sidebar */
+  [data-theme="void"] .greek-friend-card:hover .laurel-leaf,
+  html:not([data-theme="ether"]) .greek-friend-card:hover .laurel-leaf {
+    color: #f59e0b !important;
+    filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.6)) !important;
   }
 </style>
 
@@ -26,13 +34,13 @@
           <%= link_to target_path, class: "greek-friend-card", style: "display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; width: 100%;" do %> 
             
             <%# Relative Wrapper to Position the Side Wreaths %>
-            <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 6px; padding: 0 35px;">
+            <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 6px; padding: 0 35px; user-select: none;">
               
-              <!-- Left Laurel Wreath Branch (Thicker, color-shifting leaves) -->
-              <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 5px; transform: rotate(-15deg);">
-                <div class="laurel-leaf" style="width: 14px; height: 8px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(20deg); transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 16px; height: 9px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(10deg); margin-left: -2px; transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 14px; height: 8px; border-left: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-left-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+              <!-- LEFT LAUREL BRANCH: Geometric teardrop-shaped leaves curving upward -->
+              <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-12deg) scale(0.95); align-items: flex-end;">
+                <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(15deg); margin-right: -3px; opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(-5deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
               </div>
 
               <%# Circular Portrait Frame %>
@@ -46,11 +54,11 @@
                 <% end %> 
               </div>
 
-              <!-- Right Laurel Wreath Branch (Thicker, color-shifting leaves) -->
-              <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 5px; transform: rotate(15deg);">
-                <div class="laurel-leaf" style="width: 14px; height: 8px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-20deg); transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 16px; height: 9px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(-10deg); margin-right: -2px; transition: border-color 0.2s;"></div>
-                <div class="laurel-leaf" style="width: 14px; height: 8px; border-right: 3px solid var(--text-muted); border-bottom: 3px solid var(--text-muted); border-bottom-right-radius: 12px; transform: rotate(0deg); transition: border-color 0.2s;"></div>
+              <!-- RIGHT LAUREL BRANCH: Geometric teardrop-shaped leaves mirroring the left configuration -->
+              <div style="position: absolute; right: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(12deg) scale(0.95); align-items: flex-start;">
+                <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(-35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(-15deg); margin-left: -3px; opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
+                <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 0% 100% 0% 100%; transform: rotate(5deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
               </div>
 
             </div>
@@ -65,7 +73,7 @@
 
           <% rel_record = Friendship.find_by(user_id: [profile_owner.id, friend.id], friend_id: [profile_owner.id, friend.id]) %> 
           <% if rel_record %> 
-            <div style="margin-top: 2px;"> 
+            <div style="margin-top: 2px; z-index: 5; position: relative;"> 
               <%= link_to "Cast to Tartarus", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest darkest pit of the Underworld?" }, style: "font-size: 11px; color: #dc2626; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;" %> 
             </div> 
           <% end %> 
