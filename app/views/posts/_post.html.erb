@@ -250,11 +250,17 @@
               return;
             }
 
+            // Check current theme context state on the document layout element
+            const isEtherTheme = document.documentElement.classList.contains('light-theme');
+            
+            // Assign dynamic gold with no underline text-decoration if using The Void (dark mode)
+            const usernameColorStyle = isEtherTheme ? "color: var(--text-muted);" : "color: #f59e0b;";
+
             menu.innerHTML = users.map((user, idx) => `
               <div class="mention-item" data-username="${user.username}" data-idx="${idx}"
-                  style="padding: 8px; cursor: pointer; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; gap: 2px; background: none; transition: background 0.15s ease;">
-                <span style="font-weight: 600; color: var(--text-body);">${user.name}</span>
-                <span style="font-size: 11px; color: var(--text-muted);">@${user.username}</span>
+                  style="padding: 8px; cursor: pointer; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; gap: 2px; background: none; transition: background 0.15s ease; text-decoration: none !important;">
+                <span style="font-weight: 600; color: var(--text-body); text-decoration: none !important;">${user.name}</span>
+                <span style="${usernameColorStyle} font-size: 11px; text-decoration: none !important;">@${user.username}</span>
               </div>
             `).join("");
 
