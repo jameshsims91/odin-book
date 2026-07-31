@@ -142,7 +142,7 @@
       <!-- Wrapper to position the autocomplete dropdown popup -->
       <div id="mentions-wrapper-<%= post.id %>" style="position: relative; width: 100%;">
         <!-- Inline Comment Input Box Form -->
-        <%= form_with model: [post, Comment.new], style: "display: flex; gap: 8px;", html: { id: "reply-form-#{post.id}" } do |f| %>
+        <%= form_with model: [post, Comment.new], data: { turbo_stream: true }, style: "display: flex; gap: 8px;", html: { id: "reply-form-#{post.id}" } do |f| %>
           <%= f.text_field :content, 
                 placeholder: "Speak mortal...", 
                 required: true, 
