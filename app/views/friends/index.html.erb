@@ -20,19 +20,19 @@
   }
 </style>
 
-<div style="max-width: 1200px; margin: 40px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box; transition: background 0.2s, border-color 0.2s; width: 95%;">
+<div style="max-width: 1200px; margin: 40px auto; padding: 30px; background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box; transition: background 0.4s, border-color 0.3s; width: 95%;">
   
   <!-- Header with Back Arrow on Left -->
-  <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-secondary); padding-bottom: 14px; margin-bottom: 24px;">
-    <%= link_to "← Sanctuary", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--border-secondary); padding: 6px 12px; border-radius: 6px;" %>
-    <h2 style="margin: 0; color: var(--text-dark); font-size: 20px; font-weight: 700;">Allies</h2>
+  <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-input); padding-bottom: 14px; margin-bottom: 24px;">
+    <%= link_to "← Sanctuary", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--bg-main); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-input);" %>
+    <h2 style="margin: 0; color: var(--text-body); font-size: 20px; font-weight: 700;">Allies</h2>
   </div>
 
-  <!-- Full-Width Responsive Responsive Grid Container -->
+  <!-- Full-Width Responsive Grid Container -->
   <% if @friends.any? %>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; margin-bottom: 24px;">
       <% @friends.each do |friend| %>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-secondary); border-radius: 8px; background: var(--card-bg); min-height: 76px; box-sizing: border-box;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-input); border-radius: 8px; background: var(--bg-surface); ">
           
           <%# Profile Link Wrapper %>
           <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
@@ -49,11 +49,11 @@
               </div>
 
               <%# Circular Avatar Block %>
-              <div style="position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-primary); padding: 3px; background: var(--card-bg, #fff); display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 2;">
+              <div style="position: relative; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-input); padding: 3px; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 2;">
                 <% if respond_to?(:user_avatar) %>
                   <%= user_avatar(friend, size: 44) %>
                 <% else %>
-                  <div style="width: 100%; height: 100%; background-color: var(--border-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--text-muted);">
+                  <div style="width: 100%; height: 100%; background-color: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--text-muted);">
                     <%= (friend.name.presence || friend.email).upcase[0] %>
                   </div>
                 <% end %>
@@ -70,10 +70,10 @@
 
             <%# Text Details Block %>
             <div style="min-width: 0; flex-grow: 1; padding-right: 8px;">
-              <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; line-height: 1.2; margin-bottom: 2px;">
+              <div style="font-size: 13px; font-weight: 600; color: var(--text-body); text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; line-height: 1.2; margin-bottom: 2px;">
                 <%= friend.name.presence || friend.email %>
               </div>
-              <div style="font-size: 11px; color: var(--text-light);">⚡ Mutual Ally</div>
+              <div style="font-size: 11px; color: var(--text-muted);">⚡ Mutual Ally</div>
             </div>
           <% end %>
 
@@ -90,14 +90,14 @@
     </div>
   <% else %>
     <!-- Empty State View -->
-    <div style="text-align: center; padding: 40px 0; color: var(--text-light); font-size: 14px;">
+    <div style="text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 14px;">
       <span style="font-size: 24px; display: block; margin-bottom: 6px;">👥</span> No allies added yet.
     </div>
   <% end %>
 
   <!-- Pagy Pagination Footer Section Wrapper -->
   <% if @pagy && @pagy.pages > 1 %>
-    <div style="display: flex; justify-content: center; border-top: 1px solid var(--border-primary); padding-top: 24px; margin-top: 24px;">
+    <div style="display: flex; justify-content: center; border-top: 1px solid var(--border-input); padding-top: 24px; margin-top: 24px;">
       
       <%# Outer structural positioning box for pagination layout leaves %>
       <div class="greek-pagination-wrapper">
@@ -110,7 +110,7 @@
         </div>
 
         <%# Nav links injection point %>
-        <div class="pagy-custom-style" style="position: relative; z-index: 2;">
+        <div>
           <%== pagy_nav(@pagy) %>
         </div>
 
@@ -122,7 +122,6 @@
         </div>
 
       </div>
-
     </div>
   <% end %>
 

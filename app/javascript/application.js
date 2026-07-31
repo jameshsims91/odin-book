@@ -3,19 +3,18 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()
+
 function initializeThemeToggle() {
   const toggleBtn = document.getElementById('dark-mode-toggle');
-  if (!toggleBtn) return; // Guard clause in case the button isn't on the current page
+  if (!toggleBtn) return; 
 
-  const knob = toggleBtn.querySelector('.mini-knob');
-  const trail = toggleBtn.querySelector('.mini-trail');
+  const iconCard = toggleBtn.querySelector('.icon-card');
   const labelVoid = toggleBtn.querySelector('.label-void');
   const labelEther = toggleBtn.querySelector('.label-ether');
 
   function updateToggleVisuals(isEther) {
     if (isEther) {
-      knob.style.transform = 'translateX(16px)';
-      trail.style.width = '20px';
+      if (iconCard) iconCard.style.transform = 'rotateY(0deg)';
       labelEther.style.opacity = '1';
       labelEther.style.color = '#FFD700';
       labelEther.style.textShadow = '0 0 8px rgba(255, 215, 0, 0.6)';
@@ -23,8 +22,7 @@ function initializeThemeToggle() {
       labelVoid.style.color = 'var(--text-body)';
       labelVoid.style.textShadow = 'none';
     } else {
-      knob.style.transform = 'translateX(0px)';
-      trail.style.width = '0px';
+      if (iconCard) iconCard.style.transform = 'rotateY(180deg)';
       labelVoid.style.opacity = '1';
       labelVoid.style.color = 'var(--text-body)';
       labelVoid.style.textShadow = '0 0 8px rgba(255, 255, 255, 0.2)';
@@ -34,20 +32,35 @@ function initializeThemeToggle() {
     }
   }
 
-  // Set the initial visual state based on your app's active class on page load
-  const isLightModeNow = document.body.classList.contains('light-theme'); // Update 'light-theme' to match your setup
+  // Check state on load from either the root element or body element
+  const isLightModeNow = document.documentElement.classList.contains('light-theme') || document.body.classList.contains('light-theme'); 
+  
+  // Sync elements in case head script only modified documentElement
+  if (isLightModeNow) {
+    document.body.classList.add('light-theme');
+  }
+
   updateToggleVisuals(isLightModeNow);
 
   // Click Handler
   toggleBtn.addEventListener('click', () => {
-    // 1. Run your existing theme switching logic here (e.g., adding classes, saving to local storage)
-    document.body.classList.toggle('light-theme'); 
+    const wasLightMode = document.body.classList.contains('light-theme');
+    const willBeLightMode = !wasLightMode;
+
+    if (willBeLightMode) {
+      document.body.classList.add('light-theme');
+      document.documentElement.classList.add('light-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.body.classList.remove('light-theme');
+      document.documentElement.classList.remove('light-theme');
+      localStorage.setItem('theme', 'dark');
+    }
     
-    // 2. Animate the Golden Thread elements
-    const updatedState = document.body.classList.contains('light-theme');
-    updateToggleVisuals(updatedState); 
+    updateToggleVisuals(willBeLightMode); 
   });
 }
 
-// Listen to Turbo loads so the switch functions properly across page transitions
+// Ensure execution across all dynamic Turbo page switches
 document.addEventListener('turbo:load', initializeThemeToggle);
+document.addEventListener('turbo:render', initializeThemeToggle);

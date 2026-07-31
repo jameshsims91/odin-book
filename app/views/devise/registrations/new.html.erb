@@ -1,5 +1,5 @@
-<div style="max-width: 420px; margin: 50px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;"> 
-  <h2 style="margin: 0 0 24px 0; text-align: center; color: var(--text-dark); font-size: 24px; font-weight: 700;">Create your Account</h2> 
+<div style="max-width: 420px; margin: 50px auto; padding: 30px; background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;"> 
+  <h2 style="margin: 0 0 24px 0; text-align: center; color: var(--text-body); font-size: 24px; font-weight: 700;">Create your Account</h2> 
   
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { style: "display: flex; flex-direction: column; gap: 16px;" }) do |f| %> 
     <%# Render default Devise inline validation alerts if fields are incorrect %> 
@@ -8,20 +8,20 @@
     <!-- Real Name Entry Field --> 
     <div style="display: flex; flex-direction: column; gap: 6px;"> 
       <%= f.label :name, "Full Name", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-      <%= f.text_field :name, autofocus: true, placeholder: "John Doe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+      <%= f.text_field :name, autofocus: true, placeholder: "John Doe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
     </div> 
 
     <!-- Custom Username Entry Field --> 
     <div style="display: flex; flex-direction: column; gap: 6px;"> 
       <%= f.label :username, "Username", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-      <%= f.text_field :username, placeholder: "johndoe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
-      <p style="margin: 0; font-size: 11px; color: var(--text-light);">Letters, numbers, and underscores only.</p> 
+      <%= f.text_field :username, placeholder: "johndoe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
+      <p style="margin: 0; font-size: 11px; color: var(--text-muted);">Letters, numbers, and underscores only.</p> 
     </div> 
 
     <!-- Email Entry Field --> 
     <div style="display: flex; flex-direction: column; gap: 6px;"> 
       <%= f.label :email, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-      <%= f.email_field :email, autocomplete: "email", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+      <%= f.email_field :email, autocomplete: "email", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
     </div> 
 
     <!-- Password Entry Field --> 
@@ -29,16 +29,16 @@
       <div style="display: flex; justify-content: space-between; align-items: center;"> 
         <%= f.label :password, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
         <% if @minimum_password_length %> 
-          <span style="font-size: 11px; color: var(--text-light);"><%= @minimum_password_length %> chars min</span> 
+          <span style="font-size: 11px; color: var(--text-muted);"><%= @minimum_password_length %> chars min</span> 
         <% end %> 
       </div> 
-      <%= f.password_field :password, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+      <%= f.password_field :password, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
     </div> 
 
     <!-- Password Confirmation Entry Field --> 
     <div style="display: flex; flex-direction: column; gap: 6px;"> 
       <%= f.label :password_confirmation, "Confirm Password", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
     </div> 
 
     <!-- Action Submission Trigger Button --> 
@@ -48,7 +48,7 @@
   <% end %> 
 
   <!-- Footnote Alternative Action Link Block Links --> 
-  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-primary); padding-top: 16px;"> 
+  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-input); padding-top: 16px;"> 
     <%= render "devise/shared/links" %> 
   </div> 
 </div>

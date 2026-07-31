@@ -1,10 +1,10 @@
-<header style="background: var(--card-bg); border-bottom: 1px solid var(--border-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.02); padding: 12px 24px; font-family: sans-serif; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;"> 
+<header style="background: var(--bg-surface); border-bottom: 1px solid var(--border-input); box-shadow: 0 1px 3px rgba(0,0,0,0.02); padding: 12px 24px; font-family: sans-serif; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;"> 
   <!-- Logo Section --> 
   <div style="font-weight: 700; font-size: 18px; letter-spacing: -0.025em;"> 
     <% if user_signed_in? %> 
-      <%= link_to "OdinBook", authenticated_root_path, style: "color: #2563eb; text-decoration: none;" %> 
+      <%= link_to "OdinBook", authenticated_root_path, style: "color: var(--accent-primary); text-decoration: none;" %> 
     <% else %> 
-      <%= link_to "OdinBook", unauthenticated_root_path, style: "color: #2563eb; text-decoration: none;" %> 
+      <%= link_to "OdinBook", unauthenticated_root_path, style: "color: var(--accent-primary); text-decoration: none;" %> 
     <% end %> 
   </div> 
 
@@ -16,10 +16,28 @@
       <!-- Left Label -->
       <span class="mode-label label-void" style="color: var(--text-body); opacity: 0.6; transition: opacity 0.3s ease;">The Void</span>
       
-      <!-- Mini Thread Track -->
-      <div class="mini-track" style="position: relative; width: 34px; height: 18px; background-color: rgba(0,0,0,0.2); border: 1px solid var(--border-input); border-radius: 10px; overflow: hidden;">
-        <div class="mini-trail" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 2px; width: 0; background: #FFD700; box-shadow: 0 0 4px #FFD700; transition: width 0.3s ease;"></div>
-        <div class="mini-knob" style="position: absolute; left: 2px; top: 2px; width: 12px; height: 12px; background: radial-gradient(circle at 30% 30%, #FFE066, #D4AF37, #AA7C11); border-radius: 50%; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+      <!-- 3D Card Flip Icon Container -->
+      <div class="icon-flip-container" style="position: relative; width: 24px; height: 24px; perspective: 1000px;">
+        <div class="icon-card" style="position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+          
+          <!-- FRONT FACE: The Ether (Glowing Golden Spindle) -->
+          <div class="face face-ether" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; color: #FFD700; filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));">
+            <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M8 12c0-4.4 1.8-8 4-8s4 3.6 4 8-1.8 8-4 8-4-3.6-4-8z" />
+              <circle cx="12" cy="12" r="2" fill="currentColor"/>
+            </svg>
+          </div>
+
+          <!-- BACK FACE: The Void (Empty Black Circle + Faint Ring) -->
+          <div class="face face-void" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; color: var(--text-body); opacity: 0.8;">
+            <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Added the animate-void-ring class here -->
+              <circle class="animate-void-ring" cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="3 3" style="opacity: 0.4;" />
+              <circle cx="12" cy="12" r="5" fill="black" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </div>
+
+        </div>
       </div>
 
       <!-- Right Label -->
@@ -34,7 +52,7 @@
       <%= link_to notifications_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px;" do %> 
         Hermes' Scroll 
         <% if unread_notifications_count > 0 %> 
-          <span style="background-color: #2563eb; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px;"> 
+          <span style="background-color: var(--accent-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px;"> 
             <%= unread_notifications_count %> 
           </span> 
         <% end %> 
@@ -49,8 +67,8 @@
         <% end %> 
       <% end %> 
 
-      <span style="font-size: 14px; color: var(--text-light); border-left: 1px solid var(--border-primary); padding-left: 16px;"> 
-        Awaken, <strong style="color: var(--text-dark); font-weight: 600;"><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
+      <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--border-input); padding-left: 16px;"> 
+        Awaken, <strong style="color: var(--text-body); font-weight: 600;"><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
       </span> 
 
       <!-- Interactive Profile Settings Avatar Link Router --> 
@@ -61,10 +79,10 @@
       <% end %> 
 
       <!-- Session Destroy Action Exit Button Trigger Form --> 
-      <%= button_to "Return to Mortality", destroy_user_session_path, method: :delete, style: "font-size: 13px; background-color: var(--border-secondary); color: var(--text-muted); font-weight: 500; border: 1px solid var(--border-input); padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.2s;" %> 
+      <%= button_to "Return to Mortality", destroy_user_session_path, method: :delete, style: "font-size: 13px; background-color: var(--bg-main); color: var(--text-muted); font-weight: 500; border: 1px solid var(--border-input); padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.2s;" %> 
     <% else %> 
       <!-- Public Sign In Gateway Routing Access Button Link --> 
-      <%= link_to "Ascend to Olympus", new_user_session_path, style: "font-size: 14px; background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border-radius: 6px; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" %> 
+      <%= link_to "Ascend to Olympus", new_user_session_path, style: "font-size: 14px; background-color: var(--accent-primary); color: white; font-weight: 500; padding: 8px 16px; border-radius: 6px; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" %> 
     <% end %> 
   </nav> 
 </header>

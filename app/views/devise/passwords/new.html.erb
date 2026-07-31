@@ -1,5 +1,5 @@
-<div style="max-width: 400px; margin: 60px auto; padding: 30px; background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif; transition: background 0.2s, border-color 0.2s;"> 
-  <h2 style="margin: 0 0 24px 0; text-align: center; color: var(--text-dark); font-size: 22px; font-weight: 700;">Forgot your password?</h2> 
+<div style="max-width: 400px; margin: 60px auto; padding: 30px; background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); font-family: sans-serif; transition: background 0.4s, border-color 0.3s;"> 
+  <h2 style="margin: 0 0 24px 0; text-align: center; color: var(--text-body); font-size: 22px; font-weight: 700;">Forgot your password?</h2> 
   
   <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, style: "display: flex; flex-direction: column; gap: 16px;" }) do |f| %> 
     <%= render "devise/shared/error_messages", resource: resource %> 
@@ -7,17 +7,17 @@
     <!-- Email Address Entry Field --> 
     <div style="display: flex; flex-direction: column; gap: 6px;"> 
       <%= f.label :email, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
     </div> 
 
     <!-- Submit Action Button Trigger --> 
     <div style="margin-top: 8px;"> 
-      <%= f.submit "Send me password reset instructions", style: "width: 100%; background-color: #2563eb; color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s;" %> 
+      <%= f.submit "Send me password reset instructions", style: "width: 100%; background-color: var(--accent-primary); color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;" %> 
     </div> 
   <% end %> 
 
   <!-- Footnote Alternative Gateway Routing Links Links --> 
-  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-primary); padding-top: 16px;"> 
+  <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-input); padding-top: 16px;"> 
     <%= render "devise/shared/links" %> 
   </div> 
 </div>

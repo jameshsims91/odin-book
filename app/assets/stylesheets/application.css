@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --bg-color: #f9fafb;
   --card-bg: #ffffff;
   --card-nested-bg: #f9fafb;
@@ -30,4 +30,76 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.2s, color 0.2s;
+} */
+
+/* ==========================================================================
+   THE VOID (Default Baseline Theme — Dark)
+   ========================================================================== */
+:root {
+  /* Layout & Surfaces */
+  --bg-main: #050507;            /* Deep cosmic black */
+  --bg-surface: #0d0d12;         /* Raised cards/menus */
+  --border-input: #1f1f2e;       /* Faint border accent */
+  
+  /* Typography */
+  --text-body: #e4e4e7;          /* Soft stark off-white */
+  --text-muted: #71717a;         /* Dimmed text for secondary elements */
+  
+  /* App Accent Colors */
+  --accent-primary: #3b82f6;     /* Hermes' blue notifications */
+  --accent-glow: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   THE ETHER (Light Theme Transformation)
+   ========================================================================== */
+.light-theme {
+  /* Layout & Surfaces */
+  --bg-main: #fcfbfa;            /* Warm, bright ethereal parchment */
+  --bg-surface: #ffffff;         /* Clean pure white surfaces */
+  --border-input: #e4e4e7;       /* Soft grey border divider */
+  
+  /* Typography */
+  --text-body: #18181b;          /* High-contrast ink text */
+  --text-muted: #52525b;         /* Sophisticated grey secondary text */
+  
+  /* App Accent Colors */
+  --accent-primary: #2563eb;     /* Clear readable blue for light backgrounds */
+  --accent-glow: rgba(245, 158, 11, 0.15); /* Warm amber hint */
+}
+
+/* ==========================================================================
+   Global Base Applications Hooks
+   ========================================================================== */
+body {
+  background-color: var(--bg-main);
+  color: var(--text-body);
+  transition: background-color 0.4s ease, color 0.3s ease;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Smooth layout transitions for specific UI text hooks */
+.mode-label, 
+a, 
+button {
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* ==========================================================================
+   The Void Idle Animation
+   ========================================================================== */
+@keyframes spin-cosmic {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-void-ring {
+  /* Rotates slowly over 25 seconds infinitely and smoothly */
+  animation: spin-cosmic 25s linear infinite;
+  /* Ensures the rotation axis is perfectly centered in the SVG */
+  transform-origin: center;
 }

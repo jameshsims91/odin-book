@@ -15,37 +15,29 @@
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/icon.png">
 
+  <script>
+    (function() {
+      // Read theme from localStorage or fall back to system dark-mode preference
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      
+      if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
+        document.documentElement.classList.add('light-theme');
+        // Fallback if your existing CSS hooks onto document.body instead of document.documentElement
+        document.addEventListener("DOMContentLoaded", function() {
+          document.body.classList.add('light-theme');
+        });
+      }
+    })();
+  </script>
+
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <meta name="google-site-verification" content="DQhzJbxSVPg80ql-VRJVAGOZP_CbMhHNAg4iHBjJJZo" />
-  <script>
-    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-
-    function toggleDarkMode() {
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    }
-
-    document.addEventListener("turbo:load", function() {
-      const toggleBtn = document.getElementById("dark-mode-toggle");
-      if (toggleBtn) {
-        toggleBtn.removeEventListener("click", toggleDarkMode);
-        toggleBtn.addEventListener("click", toggleDarkMode);
-      }
-    });
-  </script>
+  
 </head>
 
-<body style="margin: 0; padding: 0; background-color: var(--bg-color); font-family: sans-serif; color: var(--text-body); transition: background-color 0.2s, color 0.2s;"> 
+<body style="margin: 0; padding: 0; background-color: var(--bg-main); font-family: sans-serif; color: var(--text-body); transition: background-color 0.4s ease, color 0.3s ease;"> 
   
   <!-- Global Application Navigation Header Bar --> 
   <%= render "layouts/header" %> 

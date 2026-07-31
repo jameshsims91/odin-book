@@ -1,13 +1,13 @@
-<div style="max-width: 460px; margin: 40px auto; display: flex; flex-direction: column; gap: 24px; font-family: sans-serif; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;"> 
+<div style="max-width: 460px; margin: 40px auto; display: flex; flex-direction: column; gap: 24px; font-family: sans-serif; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;"> 
   <!-- Primary Profile Configuration Settings Card --> 
-  <div style="background: var(--card-bg); border: 1px solid var(--border-primary); border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);"> 
+  <div style="background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: background 0.4s, border-color 0.3s;"> 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;"> 
-      <h2 style="margin: 0; color: var(--text-dark); font-size: 22px; font-weight: 700;">Account Settings</h2> 
-      <%= link_to "← Back", :back, style: "font-size: 13px; color: var(--text-light); text-decoration: none; font-weight: 500;" %> 
+      <h2 style="margin: 0; color: var(--text-body); font-size: 22px; font-weight: 700;">Account Settings</h2> 
+      <%= link_to "← Back", :back, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500;" %> 
     </div> 
 
-    <div data-controller="web-push" data-web-push-public-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>" class="hidden">
-      <button data-action="click->web-push#subscribe" class="btn btn-primary">
+    <div data-controller="web-push" data-web-push-public-key-value="<%= ENV['VAPID_PUBLIC_KEY'] %>" style="margin-bottom: 16px;">
+      <button data-action="click->web-push#subscribe" style="width: 100%; background-color: var(--bg-main); color: var(--accent-primary); border: 1px solid var(--border-input); font-weight: 600; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: background-color 0.3s, border-color 0.3s;">
         🔔 Enable Desktop & Mobile Push Notifications
       </button>
     </div>
@@ -18,65 +18,65 @@
       <!-- Display Name Input Field --> 
       <div style="display: flex; flex-direction: column; gap: 6px;"> 
         <%= f.label :name, "Full Name", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-        <%= f.text_field :name, autofocus: true, placeholder: "John Doe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+        <%= f.text_field :name, autofocus: true, placeholder: "John Doe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
       </div> 
 
       <!-- Handle Username Input Field --> 
       <div style="display: flex; flex-direction: column; gap: 6px;"> 
         <%= f.label :username, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-        <%= f.text_field :username, placeholder: "johndoe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+        <%= f.text_field :username, placeholder: "johndoe", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
       </div> 
 
       <!-- Email Address Input Field --> 
       <div style="display: flex; flex-direction: column; gap: 6px;"> 
         <%= f.label :email, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-        <%= f.email_field :email, autocomplete: "email", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+        <%= f.email_field :email, autocomplete: "email", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
       </div> 
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %> 
-        <div style="background-color: rgba(245, 158, 11, 0.1); border: 1px solid #d97706; color: #f59e0b; font-size: 13px; padding: 10px; border-radius: 8px;"> 
+        <div style="background-color: rgba(217, 119, 6, 0.1); border: 1px solid #d97706; color: #d97706; font-size: 13px; padding: 10px; border-radius: 8px;"> 
           Waiting confirmation for: <strong><%= resource.unconfirmed_email %></strong> 
         </div> 
       <% end %> 
 
-      <hr style="border: 0; border-top: 1px solid var(--border-primary); margin: 8px 0;" /> 
+      <hr style="border: 0; border-top: 1px solid var(--border-input); margin: 8px 0;" /> 
 
       <!-- Optional New Password Credentials Selection --> 
       <div style="display: flex; flex-direction: column; gap: 6px;"> 
         <div style="display: flex; justify-content: space-between; align-items: center;"> 
           <%= f.label :password, "New Password", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-          <span style="font-size: 11px; color: var(--text-light); font-style: italic;">leave blank to keep current</span> 
+          <span style="font-size: 11px; color: var(--text-muted); font-style: italic;">leave blank to keep current</span> 
         </div> 
-        <%= f.password_field :password, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+        <%= f.password_field :password, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
         <% if @minimum_password_length %> 
-          <span style="font-size: 11px; color: var(--text-light);"><%= @minimum_password_length %> characters minimum</span> 
+          <span style="font-size: 11px; color: var(--text-muted);"><%= @minimum_password_length %> characters minimum</span> 
         <% end %> 
       </div> 
 
       <!-- New Password Confirmation Input Field --> 
       <div style="display: flex; flex-direction: column; gap: 6px;"> 
         <%= f.label :password_confirmation, "Confirm New Password", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box;" %> 
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
       </div> 
 
-      <hr style="border: 0; border-top: 1px solid var(--border-primary); margin: 8px 0;" /> 
+      <hr style="border: 0; border-top: 1px solid var(--border-input); margin: 8px 0;" /> 
 
       <!-- Crucial Verification Step Password Gate --> 
-      <div style="display: flex; flex-direction: column; gap: 6px; background-color: var(--card-nested-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-primary);"> 
-        <%= f.label :current_password, style: "font-size: 13px; font-weight: 600; color: var(--text-dark);" %> 
-        <%= f.password_field :current_password, autocomplete: "current-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--card-bg); color: var(--text-body); width: 100%; box-sizing: border-box; margin-bottom: 4px;" %> 
+      <div style="display: flex; flex-direction: column; gap: 6px; background-color: var(--bg-main); padding: 12px; border-radius: 8px; border: 1px solid var(--border-input); transition: background-color 0.4s, border-color 0.3s;"> 
+        <%= f.label :current_password, style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
+        <%= f.password_field :current_password, autocomplete: "current-password", style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; margin-bottom: 4px; transition: background-color 0.4s, border-color 0.3s;" %> 
         <span style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">Required to authorize modifications.</span> 
       </div> 
 
       <!-- Form Submission Trigger Action Button --> 
       <div style="margin-top: 8px;"> 
-        <%= f.submit "Update Settings", style: "width: 100%; background-color: #2563eb; color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;" %> 
+        <%= f.submit "Update Settings", style: "width: 100%; background-color: var(--accent-primary); color: white; font-weight: 600; padding: 10px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;" %> 
       </div> 
     <% end %> 
   </div> 
 
   <!-- Danger Zone Account Deletion Panel Box Container --> 
-  <div style="background: rgba(220, 38, 38, 0.1); border: 1px solid #dc2626; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 12px;"> 
+  <div style="background: rgba(220, 38, 38, 0.08); border: 1px solid #dc2626; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 12px;"> 
     <h4 style="margin: 0; color: #ef4444; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Danger Zone</h4> 
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;"> 
       <p style="margin: 0; font-size: 13px; color: var(--text-body); line-height: 1.4;">Permanently wipe your account records, historical profile content, connections, and posts.</p> 
