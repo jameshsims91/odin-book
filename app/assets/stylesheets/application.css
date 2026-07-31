@@ -284,3 +284,41 @@ header div[style*="border-radius:50%"] {
   max-height: 36px !important;
   flex-shrink: 0 !important;
 }
+
+/* ==========================================================================
+   BULLETPROOF AVATAR & FRAME CONSTRAINT UN-SQUISH (Production Override)
+   ========================================================================== */
+
+div[style*="width: 48px"], 
+div[style*="width: 50px"], 
+div[style*="width: 80px"],
+div[style*="width: 96px"],
+div[style*="width: 72px"],
+.friends-dashboard-widget div[style*="position: relative"],
+.greek-grid-card div[style*="position: relative"],
+.greek-friend-card div[style*="position: relative"],
+div[style*="border-radius: 50%"],
+div[style*="border-radius:50%"] {
+  width: attr(style) !important; 
+  flex-shrink: 0 !important;      
+  min-width: 32px !important;   
+}
+
+div[style*="width: 50px; height: 50px"] { min-width: 50px !important; max-width: 50px !important; }
+div[style*="width: 80px; height: 80px"] { min-width: 80px !important; max-width: 80px !important; }
+div[style*="width: 48px; height: 48px"] { min-width: 48px !important; max-width: 48px !important; }
+div[style*="width: 96px; height: 96px"] { min-width: 96px !important; max-width: 96px !important; }
+
+.friends-dashboard-widget img,
+.greek-friend-card img,
+.greek-grid-card img,
+main div[style*="display: grid"] img,
+main div[style*="display: flex"] img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+  border-radius: 50% !important;
+}
