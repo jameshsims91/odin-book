@@ -62,34 +62,38 @@
     </div> 
   <% end %> 
 
-  <!-- Interaction Actions Toolbar Line --> 
-  <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border-input); font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
-  
-    <!-- Left Side: Interactive Thread Actions -->
-    <div style="display: flex; align-items: center; gap: 16px;"> 
-      <% if current_user.liked?(post) %> 
-        <%= button_to post_like_path(post, 1), method: :delete, style: "display: flex; align-items: center; gap: 6px; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
-          <!-- Connected Loop Icon (Liked) -->
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
-          </svg>
-          <span style="letter-spacing: -0.1px;">Break the bond</span>
-        <% end %> 
-      <% else %> 
-        <%= button_to post_likes_path(post), method: :post, style: "display: flex; align-items: center; gap: 6px; color: var(--text-muted); background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
-          <!-- Straight Thread Icon (Unliked) -->
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
-            <path d="M2 12h20" />
-          </svg>
-          <span style="letter-spacing: -0.1px;">Join the threads</span>
-        <% end %> 
+  <!-- Interaction Actions Toolbar Line inside app/views/posts/_post.html.erb -->
+<div style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border-input); font-family: -apple-system, BlinkMacSystemFont, sans-serif;"> 
+
+  <!-- Dynamic Target Container Container Hook Identifier -->
+  <div id="likes-container-<%= post.id %>" style="display: flex; align-items: center; gap: 16px;">
+    <% if current_user.liked?(post) %> 
+      <%= button_to post_like_path(post, 1), method: :delete, data: { turbo_stream: true }, style: "display: flex; align-items: center; gap: 6px; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+        <!-- Connected Loop Icon (Liked) -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
+        </svg>
+        <span style="letter-spacing: -0.1px;">Break the bond</span>
       <% end %> 
-      
-      <!-- Minimal Floating Counter -->
-      <span style="font-size: 13px; font-weight: 600; color: <%= current_user.liked?(post) ? '#dc2626' : 'var(--text-muted)' %>; transition: color 0.2s ease;">
-        <%= post.likes.count %>
-      </span> 
-    </div> 
+    <% else %> 
+      <%= button_to post_likes_path(post), method: :post, data: { turbo_stream: true }, style: "display: flex; align-items: center; gap: 6px; color: var(--text-muted); background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+        <!-- Straight Thread Icon (Unliked) -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+          <path d="M2 12h20" />
+        </svg>
+        <span style="letter-spacing: -0.1px;">Join the threads</span>
+      <% end %> 
+    <% end %> 
+    
+    <!-- Minimal Floating Counter -->
+    <span style="font-size: 13px; font-weight: 600; color: <%= current_user.liked?(post) ? '#dc2626' : 'var(--text-muted)' %>; transition: color 0.2s ease;">
+      <%= post.likes.count %>
+    </span> 
+  </div> 
+
+  <!-- Time Stamp -->
+  <span style="font-size: 11px; color: var(--text-muted); opacity: 0.7; letter-spacing: 0.1px;"><%= time_ago_in_words(post.created_at) %> ago</span>
+
 
     <!-- Right Side: Post Management (Only for Author) -->
     <% if post.user == current_user %> 

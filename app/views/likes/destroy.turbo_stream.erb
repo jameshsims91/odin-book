@@ -1,0 +1,13 @@
+<%= turbo_stream.replace "likes-container-#{@post.id}" do %>
+  <div id="likes-container-<%= @post.id %>" style="display: flex; align-items: center; gap: 16px;">
+    <%= button_to post_likes_path(@post), method: :post, data: { turbo_stream: true }, style: "display: flex; align-items: center; gap: 6px; color: var(--text-muted); background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+        <path d="M2 12h20" />
+      </svg>
+      <span style="letter-spacing: -0.1px;">Join the threads</span>
+    <% end %>
+    <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); transition: color 0.2s ease;">
+      <%= @post.likes.count %>
+    </span>
+  </div>
+<% end %>

@@ -1,0 +1,13 @@
+<%= turbo_stream.replace "likes-container-#{@post.id}" do %>
+  <div id="likes-container-<%= @post.id %>" style="display: flex; align-items: center; gap: 16px;">
+    <%= button_to post_like_path(@post, 1), method: :delete, data: { turbo_stream: true }, style: "display: flex; align-items: center; gap: 6px; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-size: 13px; font-weight: 500; transition: color 0.2s ease;" do %>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12h5c1-2 2-3 4-3s3 2 3 4-1 4-3 4-3-1-4-3c0-2 1-4 4-4s4 1 4 3h5" />
+      </svg>
+      <span style="letter-spacing: -0.1px;">Break the bond</span>
+    <% end %>
+    <span style="font-size: 13px; font-weight: 600; color: #dc2626; transition: color 0.2s ease;">
+      <%= @post.likes.count %>
+    </span>
+  </div>
+<% end %>
