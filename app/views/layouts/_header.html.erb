@@ -19,11 +19,11 @@
 
     <% if user_signed_in? %> 
       <!-- Primary Core Application Feeds Links --> 
-      <%= link_to "Global Feed", posts_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none;" %> 
+      <%= link_to "Agora of Athens", posts_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none;" %> 
       
       <!-- Global Activity Notifications --> 
       <%= link_to notifications_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px;" do %> 
-        Notifications 
+        Hermes' Scroll 
         <% if unread_notifications_count > 0 %> 
           <span style="background-color: #2563eb; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px;"> 
             <%= unread_notifications_count %> 
@@ -32,7 +32,7 @@
       <% end %> 
 
       <%= link_to users_path, style: "font-size: 14px; color: var(--text-muted); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px;" do %> 
-        Find People 
+        Unwoven Threads 
         <% if pending_follow_requests_count > 0 %> 
           <span style="background-color: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px;"> 
             <%= pending_follow_requests_count %> 
@@ -41,7 +41,7 @@
       <% end %> 
 
       <span style="font-size: 14px; color: var(--text-light); border-left: 1px solid var(--border-primary); padding-left: 16px;"> 
-        Welcome, <strong style="color: var(--text-dark); font-weight: 600;"><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
+        Awaken, <strong style="color: var(--text-dark); font-weight: 600;"><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
       </span> 
 
       <!-- Interactive Profile Settings Avatar Link Router --> 
@@ -52,10 +52,10 @@
       <% end %> 
 
       <!-- Session Destroy Action Exit Button Trigger Form --> 
-      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, style: "font-size: 13px; background-color: var(--border-secondary); color: var(--text-muted); font-weight: 500; border: 1px solid var(--border-input); padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.2s;" %> 
+      <%= button_to "Return to Mortality", destroy_user_session_path, method: :delete, style: "font-size: 13px; background-color: var(--border-secondary); color: var(--text-muted); font-weight: 500; border: 1px solid var(--border-input); padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.2s;" %> 
     <% else %> 
       <!-- Public Sign In Gateway Routing Access Button Link --> 
-      <%= link_to "Sign In", new_user_session_path, style: "font-size: 14px; background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border-radius: 6px; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" %> 
+      <%= link_to "Ascend to Olympus", new_user_session_path, style: "font-size: 14px; background-color: #2563eb; color: white; font-weight: 500; padding: 8px 16px; border-radius: 6px; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" %> 
     <% end %> 
   </nav> 
 </header>

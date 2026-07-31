@@ -119,7 +119,7 @@
 
   <!-- NATIVE HTML DISCLOSURE ELEMENT FOR TOGGLEABLE COMMENT DRAWER --> 
   <details style="margin-top: 15px; font-size: 13px;"> 
-    <summary style="color: #2563eb; font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;"> 💬 Reply (<%= post.comments.count %>) </summary> 
+    <summary style="color: #2563eb; font-weight: 600; cursor: pointer; user-select: none; outline: none; padding: 5px 0;"> 💬 Echo (<%= post.comments.count %>) </summary> 
     <div style="margin-top: 10px; padding: 12px; background-color: var(--card-nested-bg); border: 1px solid var(--border-primary); border-radius: 8px;"> 
       <% if post.comments.any? %> 
         <div style="margin-bottom: 10px; max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"> 

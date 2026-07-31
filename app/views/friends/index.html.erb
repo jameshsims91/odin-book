@@ -30,9 +30,9 @@
 
   <!-- Full-Width Responsive Responsive Grid Container -->
   <% if @friends.any? %>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; margin-bottom: 24px;">
       <% @friends.each do |friend| %>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-secondary); border-radius: 8px; background: var(--card-bg);">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-secondary); border-radius: 8px; background: var(--card-bg); min-height: 76px; box-sizing: border-box;">
           
           <%# Profile Link Wrapper %>
           <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
@@ -69,11 +69,11 @@
             </div>
 
             <%# Text Details Block %>
-            <div style="min-width: 0; flex-grow: 1;">
-              <div style="font-size: 14px; font-weight: 600; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div style="min-width: 0; flex-grow: 1; padding-right: 8px;">
+              <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.5px; word-break: break-word; line-height: 1.2; margin-bottom: 2px;">
                 <%= friend.name.presence || friend.email %>
               </div>
-              <div style="font-size: 12px; color: var(--text-light);">⚡ Mutual Ally</div>
+              <div style="font-size: 11px; color: var(--text-light);">⚡ Mutual Ally</div>
             </div>
           <% end %>
 
