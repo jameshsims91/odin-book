@@ -286,39 +286,50 @@ header div[style*="border-radius:50%"] {
 }
 
 /* ==========================================================================
-   BULLETPROOF AVATAR & FRAME CONSTRAINT UN-SQUISH (Production Override)
+   PRODUCTION SOLID AVATAR RESOLUTION (Fixed Index Image Sizing Bug)
    ========================================================================== */
 
-div[style*="width: 48px"], 
-div[style*="width: 50px"], 
-div[style*="width: 80px"],
-div[style*="width: 96px"],
-div[style*="width: 72px"],
-.friends-dashboard-widget div[style*="position: relative"],
-.greek-grid-card div[style*="position: relative"],
-.greek-friend-card div[style*="position: relative"],
+/* 1. Prevent parent flexbox containers from squeezing circular portrait blocks on mobile */
 div[style*="border-radius: 50%"],
 div[style*="border-radius:50%"] {
-  width: attr(style) !important; 
-  flex-shrink: 0 !important;      
-  min-width: 32px !important;   
+  flex-shrink: 0 !important;
 }
 
-div[style*="width: 50px; height: 50px"] { min-width: 50px !important; max-width: 50px !important; }
-div[style*="width: 80px; height: 80px"] { min-width: 80px !important; max-width: 80px !important; }
-div[style*="width: 48px; height: 48px"] { min-width: 48px !important; max-width: 48px !important; }
-div[style*="width: 96px; height: 96px"] { min-width: 96px !important; max-width: 96px !important; }
+/* 2. Enforce rigid width constraints on avatar portrait wrappers across folders */
+div[style*="width: 50px; height: 50px"] { min-width: 50px !important; max-width: 50px !important; height: 50px !important; }
+div[style*="width: 80px; height: 80px"] { min-width: 80px !important; max-width: 80px !important; height: 80px !important; }
+div[style*="width: 48px; height: 48px"] { min-width: 48px !important; max-width: 48px !important; height: 48px !important; }
+div[style*="width: 96px; height: 96px"] { min-width: 96px !important; max-width: 96px !important; height: 96px !important; }
+div[style*="width: 32px; height: 32px"] { min-width: 32px !important; max-width: 32px !important; height: 32px !important; }
 
-.friends-dashboard-widget img,
-.greek-friend-card img,
-.greek-grid-card img,
-main div[style*="display: grid"] img,
-main div[style*="display: flex"] img {
+/* 3. ONLY allow an image to fill 100% width if it lives INSIDE an explicit portrait wrapper ring */
+div[style*="border-radius: 50%"] img,
+div[style*="border-radius:50%"] img,
+.icon-card img {
   width: 100% !important;
   height: 100% !important;
   max-width: 100% !important;
   max-height: 100% !important;
-  object-fit: cover !important;
+  object-fit: cover !important; /* Crops image cleanly into a perfect circle without warping faces */
   flex-shrink: 0 !important;
   border-radius: 50% !important;
+}
+
+/* 4. Safety Override: Ensure actual post attachment uploads (like timeline photos) can stay large */
+div[style*="max-height: 450px"] img,
+div[style*="max-height: 400px"] img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 450px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important; /* Preserves your standard rounded corners on post attachments */
+}
+
+/* 5. Explicitly lock your top header navigation avatar size constraints */
+header img,
+header div[style*="border-radius: 50%"] {
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
 }
