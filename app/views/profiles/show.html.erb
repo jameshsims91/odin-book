@@ -10,10 +10,23 @@
         <%= user_avatar(profile_owner, size: 96) %> 
       <% end %> 
       <div style="flex-grow: 1;"> 
-        <h1 style="margin: 0; font-size: 24px; color: var(--text-body);"> 
-          <%= profile_owner&.name.presence || profile_owner&.email %> 
+        
+        <!-- Context-Aware Majestic Divine Greeting Title Layer -->
+        <h1 style="margin: 0; font-size: 24px; color: var(--text-body); font-weight: 700; letter-spacing: -0.02em;"> 
+          <% if current_user == profile_owner %>
+            Your Sacred Sanctuary
+          <% else %>
+            You stand in the presence of <%= profile_owner&.name.presence || "the Divine" %>
+          <% end %>
         </h1> 
-        <p style="color: var(--text-muted); font-size: 15px; margin: 6px 0 12px 0; line-height: 1.5;"> 
+
+        <!-- Small high-contrast handle subtitle row below the greeting header -->
+        <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted); font-weight: 500;">
+          @<%= profile_owner&.username.presence || (profile_owner&.email ? profile_owner.email.split('@').first : "mortal") %>
+        </p>
+
+        <!-- Profile Bio Description Narrative Content block -->
+        <p style="color: var(--text-muted); font-size: 15px; margin: 10px 0 12px 0; line-height: 1.5; font-style: italic;"> 
           <%= @profile&.information.presence || "No myth shared yet." %> 
         </p> 
         
