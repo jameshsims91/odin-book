@@ -1,7 +1,7 @@
 <div style="max-width: 850px; margin: 0 auto; padding: 20px; font-family: sans-serif; display: flex; flex-direction: column; gap: 20px;"> 
   <!-- Header Bar --> 
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-input); padding-bottom: 10px;"> 
-    <h2 style="margin: 0; color: var(--text-body);">Discover People</h2> 
+    <h2 style="margin: 0; color: var(--text-body);">Unknown Souls</h2> 
     <%= link_to "Back to Sanctuary", authenticated_root_path, style: "font-size: 14px; color: var(--accent-primary); text-decoration: none; font-weight: 500;" %> 
   </div> 
 
@@ -9,11 +9,11 @@
   <div style="background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background 0.4s, border-color 0.3s;"> 
     <%= form_with url: users_path, method: :get, local: true, style: "display: flex; gap: 10px; width: 100%;" do |f| %> 
       <div style="flex-grow: 1;"> 
-        <%= f.text_field :query, value: params[:query], placeholder: "Search profiles by name, username, or keywords...", style: "width: 100%; border: 1px solid var(--border-input); border-radius: 8px; padding: 8px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
+        <%= f.text_field :query, value: params[:query], placeholder: "Whom do you seek, oh mortal?", style: "width: 100%; border: 1px solid var(--border-input); border-radius: 8px; padding: 8px 12px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
       </div> 
-      <%= f.submit "Search", style: "background-color: var(--accent-primary); color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: background-color 0.2s;" %> 
+      <%= f.submit "Seek!", style: "background-color: var(--accent-primary); color: white; font-weight: 500; padding: 8px 16px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: background-color 0.2s;" %> 
       <% if params[:query].present? %> 
-        <%= link_to "Clear", users_path, style: "background-color: var(--bg-main); color: var(--text-muted); font-weight: 500; padding: 8px 14px; border-radius: 8px; font-size: 14px; text-decoration: none; display: flex; align-items: center; border: 1px solid var(--border-input); transition: background-color 0.4s, border-color 0.3s;" %> 
+        <%= link_to "Cease!", users_path, style: "background-color: var(--bg-main); color: var(--text-muted); font-weight: 500; padding: 8px 14px; border-radius: 8px; font-size: 14px; text-decoration: none; display: flex; align-items: center; border: 1px solid var(--border-input); transition: background-color 0.4s, border-color 0.3s;" %> 
       <% end %> 
     <% end %> 
   </div> 
