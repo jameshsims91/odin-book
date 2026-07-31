@@ -254,3 +254,26 @@ input[type="submit"]:active,
     -webkit-overflow-scrolling: touch; /* Forces buttery-smooth kinetic momentum scrolling in iOS */
   }
 }
+
+/* ==========================================================================
+   MOBILE AVATAR SQUISH RESET SAFETY LOCK (Widescreen & Mobile Adaptive)
+   ========================================================================== */
+   
+div[style*="border-radius: 50%"],
+div[style*="border-radius:50%"],
+div[style*="width: 50px; height: 50px"],
+div[style*="width: 80px; height: 80px"],
+div[style*="width: 32px; height: 32px"],
+div[style*="width: 48px; height: 48px"],
+.avatar-frame,
+main img {
+  flex-shrink: 0 !important; 
+}
+
+div[style*="border-radius: 50%"] img,
+div[style*="border-radius:50%"] img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; 
+  flex-shrink: 0 !important;
+}
