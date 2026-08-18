@@ -11,7 +11,7 @@ gem "propshaft"
 
 gem "webpush"
 
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 43.6"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
