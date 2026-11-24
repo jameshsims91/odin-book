@@ -90,7 +90,7 @@ Devise.setup do |config|
   # It will change confirmation, password recovery and other workflows
   # to behave the same regardless if the e-mail provided was right or wrong.
   # Does not affect registerable.
-  # config.paranoid = true
+  config.paranoid = true
 
   # By default Devise will store the user in session. You can skip storage for
   # particular strategies by setting this option.
@@ -181,7 +181,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :validatable
   # Range for password length.
-  config.password_length = 6..128
+  config.password_length = 12..128
 
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly
@@ -313,30 +313,4 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
-
-  OmniAuth.config.allowed_request_methods = [ :post ]
-  OmniAuth.config.request_validation_phase = nil
-
-  # --- WORDPRESS PROVIDER CONFIGURATION ---
-  # SAFELY WRAPPED: Prevents asset precompilation compilation failure if keys are unset
-  if ENV["WORDPRESS_CLIENT_ID"].present? || Rails.env.development?
-    wordpress_callback = if Rails.env.production?
-                           "https://herokuapp.com"
-    else
-                           "http://localhost:3000/users/auth/wordpress/callback"
-    end
-
-    config.omniauth :wordpress, ENV["WORDPRESS_CLIENT_ID"], ENV["WORDPRESS_CLIENT_SECRET"],
-                    scope: "auth",
-                    provider_ignores_state: true,
-                    redirect_uri: wordpress_callback,
-                    client_options: { redirect_uri: wordpress_callback }
-  end
-
-  # --- GITHUB PROVIDER CONFIGURATION ---
-  if ENV["GITHUB_APP_ID"].present? || Rails.env.development?
-    config.omniauth :github, ENV["GITHUB_APP_ID"], ENV["GITHUB_APP_SECRET"],
-                    scope: "user:email",
-                    provider_ignores_state: true
-  end
 end

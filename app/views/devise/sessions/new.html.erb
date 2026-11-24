@@ -36,19 +36,6 @@
     <div style="flex-grow: 1; border-bottom: 1px solid var(--border-input);"></div> 
   </div> 
 
-  <!-- Third Party OmniAuth Integrations SSO Section --> 
-  <div style="display: flex; flex-direction: column; gap: 10px;"> 
-    <!-- WordPress / Gravatar Single Sign-On Button --> 
-    <%= button_to user_wordpress_omniauth_authorize_path, method: :post, data: { turbo: false }, style: "width: 100%; background-color: var(--bg-main); color: var(--text-body); border: 1px solid var(--border-input); padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.4s, border-color 0.3s;" do %> 
-      <span>🔵</span> Sign in with Gravatar 
-    <% end %> 
-
-    <!-- GitHub Single Sign-On Button --> 
-    <%= button_to user_github_omniauth_authorize_path, method: :post, data: { turbo: false }, style: "width: 100%; background-color: #24292e; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" do %> 
-      <span>🐈‍⬛</span> Sign in with GitHub 
-    <% end %> 
-  </div> 
-
   <!-- Footnote Registration Context Link Links --> 
   <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-input); padding-top: 16px;"> 
     <%= render "devise/shared/links" %> 

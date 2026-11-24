@@ -1,11 +1,10 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :wordpress, :github ]
-
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: [ :wordpress, :github ]
+  include ImageValidatable
+  devise :database_authenticatable,
+         :registerable,
+         :recoverable,
+         :rememberable,
+         :validatable
 
   has_one :profile, dependent: :destroy
   has_one_attached :avatar
@@ -33,6 +32,7 @@ class User < ApplicationRecord
   USERNAME_REGEX = /\A[a-zA-Z0-9_]{3,23}\z/
   validates :name, presence: true
   validates :username, presence: true, uniqueness: { case_sensitive: false }, format: { with: USERNAME_REGEX, message: "only allows letters, numbers, and underscores" }
+  validate :acceptable_avatar
 
   def self.from_omniauth(auth, current_user = nil)
     identity = Identity.find_by(provider: auth.provider, uid: auth.uid)
@@ -121,5 +121,9 @@ class User < ApplicationRecord
     if Rails.env.development?
       UserMailer.welcome_email(self).deliver_now
     end
+  end
+
+  def acceptable_avatar
+    validate_image_attachment(avatar, :avatar)
   end
 end

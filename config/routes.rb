@@ -1,16 +1,7 @@
 Rails.application.routes.draw do
-  get "notifications/index"
-  get "comment_likes/create"
-  get "comment_likes/destroy"
-  get "c_omment_likes/create"
-  get "c_omment_likes/destroy"
-  get "comments/create"
-  get "likes/create"
-  get "likes/destroy"
-  get "users/index"
   resources :posts
   resources :profiles
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users
 
   # root "devise/sessions#new"
 

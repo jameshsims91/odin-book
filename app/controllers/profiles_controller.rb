@@ -18,12 +18,31 @@ class ProfilesController < ApplicationController
   end
 
   def update
-    if params[:profile][:avatar].present?
-      current_user.avatar.attach(params[:profile][:avatar])
+    avatar = params.dig(:profile, :avatar)
+
+    if avatar.present?
+      current_user.avatar = avatar
+
+      unless current_user.valid?
+        current_user.errors.full_messages.each do |message|
+          @profile.errors.add(:base, message)
+        end
+
+        return render :edit, status: :unprocessable_entity
+      end
     end
 
-    if @profile.update(profile_params)
-      redirect_to profile_path(@profile), notice: "Profile settings updated successfully!"
+    @profile.assign_attributes(profile_params)
+
+    if @profile.valid?
+      ActiveRecord::Base.transaction do
+        current_user.save! if avatar.present?
+        @profile.update!(profile_params)
+      end
+
+      redirect_to profile_path,
+                  notice: "Profile settings updated successfully!",
+                  status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end

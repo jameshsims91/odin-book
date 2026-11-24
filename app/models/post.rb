@@ -1,4 +1,5 @@
 class Post < ApplicationRecord
+  include ImageValidatable
   belongs_to :user
 
   has_one_attached :image
@@ -7,7 +8,10 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :mentions, dependent: :destroy
   has_many :mentioned_users, through: :mentions, source: :user
-  validates :content, presence: true, length: { maximum: 560 }, unless: -> { image.attached? }
+  validates :content, presence: true,
+    unless: -> { image.attached? }
+  validates :content, length: { maximum: 560 }
+  validate :acceptable_image
   default_scope -> { order(created_at: :desc) }
 
   after_save :create_mentions
@@ -27,5 +31,9 @@ class Post < ApplicationRecord
         action: "tagged"
       )
     end
+  end
+
+  def acceptable_image
+    validate_image_attachment(image, :image)
   end
 end

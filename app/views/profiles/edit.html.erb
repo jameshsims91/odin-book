@@ -22,7 +22,7 @@
     <!-- Profile Picture Upload Field --> 
     <div style="display: flex; flex-direction: column; gap: 6px;"> 
       <%= f.label :avatar, "Upload Profile Picture", style: "font-size: 13px; font-weight: 600; color: var(--text-body);" %> 
-      <%= f.file_field :avatar, accept: 'image/png, image/jpeg, image/jpg, image/webp', direct_upload: true, style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 8px 10px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
+      <%= f.file_field :avatar, accept: 'image/png, image/jpeg, image/jpg, image/webp', direct_upload: false, style: "border: 1px solid var(--border-input); border-radius: 8px; padding: 8px 10px; font-size: 14px; outline: none; background: var(--bg-surface); color: var(--text-body); width: 100%; box-sizing: border-box; transition: background-color 0.4s, border-color 0.3s;" %> 
       <p style="margin: 0; font-size: 11px; color: var(--text-muted); line-height: 1.4;">Select a JPG, PNG, or WEBP file from your device folder.</p> 
     </div> 
 
