@@ -91,7 +91,7 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     ENV.fetch("APP_HOST", "odinbook.jameshsims.tech"),
-    ENV["RENDER_EXTERNAM_HOSTNAME"]
+    ENV["RENDER_EXTERNAL_HOSTNAME"]
   ].compact
 
   config.host_authorization = {
