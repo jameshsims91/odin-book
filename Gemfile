@@ -78,8 +78,8 @@ group :test do
 end
 
 gem "devise", "~> 5.0"
+gem "pg"
 
 group :production do
-  gem "pg"
   gem "aws-sdk-s3", require: false
 end

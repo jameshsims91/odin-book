@@ -2,10 +2,10 @@
 
 one:
   user: one
-  provider: MyString
-  uid: MyString
+  provider: github
+  uid: "100001"
 
 two:
   user: two
-  provider: MyString
-  uid: MyString
+  provider: github
+  uid: "100002"

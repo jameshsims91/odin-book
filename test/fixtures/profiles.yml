@@ -1,9 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  information: MyText
-  picture_url: MyString
+  user: one
+  information: Welcome to Alice's profile!
+  picture_url: https://example.com/alice.png
 
 two:
-  information: MyText
-  picture_url: MyString
+  user: two
+  information: Welcome to Bob's profile!
+  picture_url: https://example.com/bob.png
