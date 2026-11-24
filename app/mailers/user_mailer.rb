@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
 
     mail(
       to: @user.email,
-      subject: `✨ Welcome to OdinBook, #{@display_name}! Glad you're here.`
+      subject: "✨ Welcome to OdinBook, #{@display_name}! Glad you're here."
     )
   end
 end
