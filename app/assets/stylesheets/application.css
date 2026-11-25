@@ -319,7 +319,7 @@ div[style*="border-radius:50%"] img,
 div[style*="max-height: 450px"] img,
 div[style*="max-height: 400px"] img,
 summary img,
-details img {
+details img:not(.user-avatar) {
   width: 100% !important;
   height: auto !important; 
   max-height: 450px !important;
@@ -348,4 +348,415 @@ header div[style*="border-radius:50%"] img {
   max-height: 100% !important;
   object-fit: cover !important;
   border-radius: 50% !important;
+}
+
+
+/* =========================================
+   Demo Mode Banner
+   ========================================= */
+
+.demo-banner {
+  --demo-accent: #fbbf24;
+
+  background: var(--bg-surface);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-left: 4px solid var(--demo-accent);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  color: var(--text-body);
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: background 0.4s, color 0.3s;
+}
+
+.demo-banner-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--demo-accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.demo-banner-title {
+  margin: 12px 0 8px;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--text-body);
+}
+
+.demo-banner-description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 760px;
+}
+
+.demo-banner-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.demo-banner-footer svg {
+  color: var(--demo-accent);
+  flex-shrink: 0;
+}
+
+/* The Ether / light theme */
+
+.light-theme .demo-banner,
+[data-theme="ether"] .demo-banner {
+  --demo-accent: #a16207;
+  background: #fffbeb;
+  border-color: rgba(161, 98, 7, 0.35);
+  border-left-color: var(--demo-accent);
+}
+
+/* Mobile responsiveness */
+
+@media (max-width: 600px) {
+  .demo-banner {
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  .demo-banner-title {
+    font-size: 18px;
+  }
+
+  .demo-banner-description {
+    font-size: 13px;
+  }
+
+  .demo-banner-footer {
+    font-size: 11px;
+    flex-wrap: wrap;
+  }
+}
+
+/* ========================================
+   Comment and Notification Avatars
+   ======================================== */
+
+.comment-avatar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  max-width: 32px;
+}
+
+.comment-avatar a {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  text-decoration: none;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.comment-avatar img {
+  display: block;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  object-fit: cover;
+  border-radius: 50% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.notification-avatar {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  max-width: 40px;
+}
+
+.notification-avatar a {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  text-decoration: none;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.notification-avatar img {
+  display: block;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  object-fit: cover;
+  border-radius: 50% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* ==========================================================================
+   ODINBOOK LOGIN & RECRUITER DEMO ENTRY
+   ========================================================================== */
+
+.odin-login-card {
+  max-width: 400px;
+  width: 100%;
+  margin: 60px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-input);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.4s ease, border-color 0.3s ease;
+}
+
+.odin-login-heading {
+  margin: 0 0 24px;
+  text-align: center;
+  color: var(--text-body);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.odin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.odin-login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.odin-login-field label {
+  color: var(--text-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.odin-login-field input {
+  width: 100%;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background: var(--bg-surface);
+  color: var(--text-body);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.odin-login-field input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.odin-remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.odin-remember-me input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.odin-remember-me label {
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.odin-login-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.odin-login-button:hover {
+  filter: brightness(1.1);
+}
+
+/* Login divider */
+
+.odin-login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.odin-login-divider span {
+  flex: 1;
+  height: 1px;
+  background: var(--border-input);
+}
+
+.odin-login-divider p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+/* Recruiter demo section */
+
+.odin-demo-entry {
+  padding: 18px;
+  background: rgba(245, 158, 11, 0.055);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.odin-demo-entry-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fbbf24;
+}
+
+.odin-demo-entry-heading svg {
+  flex-shrink: 0;
+}
+
+.odin-demo-entry-heading h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.odin-demo-description {
+  margin: 12px 0 16px;
+  color: var(--text-body);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.odin-demo-login-form {
+  width: 100%;
+  margin: 0;
+}
+
+.odin-demo-login-button {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  color: #18181b;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.odin-demo-login-button:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+}
+
+.odin-demo-login-button:focus-visible,
+.odin-login-button:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
+}
+
+.odin-demo-disclaimer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.odin-demo-disclaimer svg {
+  flex-shrink: 0;
+}
+
+/* Ether theme */
+
+.light-theme .odin-demo-entry {
+  background: #fffbeb;
+  border-color: rgba(180, 83, 9, 0.25);
+}
+
+.light-theme .odin-demo-entry-heading {
+  color: #92400e;
+}
+
+.light-theme .odin-demo-login-button {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #18181b;
+}
+
+/* Registration and recovery links */
+
+.odin-login-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-input);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.odin-login-footer a {
+  color: var(--accent-primary);
+}
+
+/* Mobile responsiveness */
+
+@media (max-width: 480px) {
+  .odin-login-card {
+    width: calc(100% - 24px);
+    margin: 24px auto;
+    padding: 22px;
+  }
+
+  .odin-demo-entry {
+    padding: 14px;
+  }
+
+  .odin-demo-disclaimer {
+    font-size: 10px;
+  }
 }

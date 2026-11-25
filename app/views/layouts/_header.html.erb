@@ -2,20 +2,20 @@
   /* Base Navigation Links and Text Elements styling rules */
   .nav-myth-link,
   .nav-myth-greeting {
-    font-size: 14px; 
-    font-weight: 500; 
+    font-size: 14px;
+    font-weight: 500;
     text-decoration: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
   }
-  
+
   .nav-myth-link {
     color: var(--text-muted);
   }
-  
+
   .nav-myth-greeting {
     color: var(--text-muted);
   }
-  
+
   .nav-myth-greeting strong {
     color: var(--text-body);
     font-weight: 600;
@@ -61,35 +61,35 @@
     color: var(--text-muted) !important;
     text-shadow: none !important;
   }
-  
+
   .light-theme .nav-myth-greeting strong,
   [data-theme="ether"] .nav-myth-greeting strong {
     color: var(--text-body) !important;
   }
 </style>
 
-<header style="background: var(--bg-surface); border-bottom: 1px solid var(--border-input); box-shadow: 0 1px 3px rgba(0,0,0,0.02); padding: 12px 24px; font-family: sans-serif; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;"> 
-  <!-- Logo Section --> 
-  <div style="font-weight: 800; font-size: 20px; letter-spacing: -0.03em;"> 
-    <% if user_signed_in? %> 
-      <%= link_to "OdinBook", authenticated_root_path, style: "color: var(--text-body); text-decoration: none; transition: color 0.2s;" %> 
-    <% else %> 
-      <%= link_to "OdinBook", unauthenticated_root_path, style: "color: var(--text-body); text-decoration: none; transition: color 0.2s;" %> 
-    <% end %> 
-  </div> 
+<header style="background: var(--bg-surface); border-bottom: 1px solid var(--border-input); box-shadow: 0 1px 3px rgba(0,0,0,0.02); padding: 12px 24px; font-family: sans-serif; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;">
+  <!-- Logo Section -->
+  <div style="font-weight: 800; font-size: 20px; letter-spacing: -0.03em;">
+    <% if user_signed_in? %>
+      <%= link_to "OdinBook", authenticated_root_path, style: "color: var(--text-body); text-decoration: none; transition: color 0.2s;" %>
+    <% else %>
+      <%= link_to "OdinBook", unauthenticated_root_path, style: "color: var(--text-body); text-decoration: none; transition: color 0.2s;" %>
+    <% end %>
+  </div>
 
-  <!-- Navigation Action Toolbar Menu Links --> 
-  <nav style="display: flex; align-items: center; gap: 20px;"> 
-    
+  <!-- Navigation Action Toolbar Menu Links -->
+  <nav style="display: flex; align-items: center; gap: 20px;">
+
     <!-- Central Theme Toggle Button (Always Available) -->
-    <button id="dark-mode-toggle" class="fate-toggle-btn" aria-label="Toggle between The Void and The Ether" style="background: none; border: 1px solid var(--border-input); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 31px; gap: 8px;">
+    <button type="button" id="dark-mode-toggle" class="fate-toggle-btn" aria-label="Toggle between The Void and The Ether" style="background: none; border: 1px solid var(--border-input); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 31px; gap: 8px;">
       <!-- Left Label -->
       <span class="mode-label label-void" style="color: var(--text-body); opacity: 0.6; transition: opacity 0.3s ease;">The Void</span>
-      
+
       <!-- 3D Card Flip Icon Container -->
       <div class="icon-flip-container" style="position: relative; width: 24px; height: 24px; perspective: 1000px;">
         <div class="icon-card" style="position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
-          
+
           <!-- FRONT FACE: The Ether (Glowing Golden Spindle) -->
           <div class="face face-ether" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; color: #FFD700; filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));">
             <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -113,52 +113,54 @@
       <span class="mode-label label-ether" style="color: var(--text-body); opacity: 0.6; transition: opacity 0.3s ease;">The Ether</span>
     </button>
 
-    <% if user_signed_in? %> 
-      <!-- Primary Core Application Feeds Links --> 
-      <%= link_to "Agora of Athens", posts_path, class: "nav-myth-link" %> 
-      
-      <!-- Global Activity Notifications --> 
-      <%= link_to notifications_path, class: "nav-myth-link", style: "display: flex; align-items: center; gap: 6px;" do %> 
-        Hermes' Scroll 
-        <% if unread_notifications_count > 0 %> 
-          <span style="background-color: var(--accent-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px; text-shadow: none !important;"> 
-            <%= unread_notifications_count %> 
-          </span> 
-        <% end %> 
-      <% end %> 
+    <% if user_signed_in? %>
+      <!-- Primary Core Application Feeds Links -->
+      <%= link_to "Agora of Athens", posts_path, class: "nav-myth-link" %>
 
-      <%= link_to users_path, class: "nav-myth-link", style: "display: flex; align-items: center; gap: 6px;" do %> 
-        Unwoven Threads 
-        <% if pending_follow_requests_count > 0 %> 
-          <span style="background-color: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px; text-shadow: none !important;"> 
-            <%= pending_follow_requests_count %> 
-          </span> 
-        <% end %> 
-      <% end %> 
+      <!-- Global Activity Notifications -->
+      <%= link_to notifications_path, class: "nav-myth-link", style: "display: flex; align-items: center; gap: 6px;" do %>
+        Hermes' Scroll
+        <% if unread_notifications_count > 0 %>
+          <span style="background-color: var(--accent-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px; text-shadow: none !important;">
+            <%= unread_notifications_count %>
+          </span>
+        <% end %>
+      <% end %>
+
+      <%= link_to users_path, class: "nav-myth-link", style: "display: flex; align-items: center; gap: 6px;" do %>
+        Unwoven Threads
+        <% if pending_follow_requests_count > 0 %>
+          <span style="background-color: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-width: 14px; text-shadow: none !important;">
+            <%= pending_follow_requests_count %>
+          </span>
+        <% end %>
+      <% end %>
 
       <!-- Greeting Text (Glows under The Void theme rules) -->
-      <span class="nav-myth-greeting" style="border-left: 1px solid var(--border-input); padding-left: 16px;"> 
-        Awaken, <strong><%= current_user.name.presence || current_user.email.split('@').first %></strong> 
-      </span> 
+      <span class="nav-myth-greeting" style="border-left: 1px solid var(--border-input); padding-left: 16px;">
+        Awaken, <strong><%= current_user.name.presence || current_user.email.split('@').first %></strong>
+      </span>
 
-      <!-- Interactive Profile Settings Avatar Link Router --> 
-      <%= link_to edit_user_registration_path, style: "display: flex; align-items: center; justify-content: center; text-decoration: none; outline: none;" do %> 
-        <div style="border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-input); transition: border-color 0.2s;"> 
-          <%= user_avatar(current_user, size: 36) %> 
-        </div> 
-      <% end %> 
+      <!-- Interactive Profile Settings Avatar Link Router -->
+      <% unless demo_mode? %>
+        <%= link_to edit_user_registration_path, style: "display: flex; align-items: center; justify-content: center; text-decoration: none; outline: none;" do %>
+          <div style="border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-input); transition: border-color 0.2s;">
+            <%= user_avatar(current_user, size: 36) %>
+          </div>
+        <% end %>
+      <% end %>
 
-      <!-- Session Destroy Action Exit Button Trigger Form --> 
-      <%= button_to "Return to Mortality", destroy_user_session_path, method: :delete, 
+      <!-- Session Destroy Action Exit Button Trigger Form -->
+      <%= button_to "Return to Mortality", destroy_user_session_path, method: :delete,
             style: "font-size: 13px; background: transparent; color: #ef4444; font-weight: 600; border: 1px solid rgba(239, 68, 68, 0.4); padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 0 8px rgba(239, 68, 68, 0.05);",
             onmouseover: "this.style.background='rgba(239, 68, 68, 0.08)'; this.style.borderColor='#ef4444'; this.style.boxShadow='0 0 12px rgba(239, 68, 68, 0.25)'",
-            onmouseout: "this.style.background='transparent'; this.style.borderColor='rgba(239, 68, 68, 0.4)'; this.style.boxShadow='0 0 8px rgba(239, 68, 68, 0.05)'" %> 
-    <% else %> 
-      <!-- Public Sign In Gateway Routing Access Button Link --> 
-      <%= link_to "Ascend to Olympus", new_user_session_path, 
+            onmouseout: "this.style.background='transparent'; this.style.borderColor='rgba(239, 68, 68, 0.4)'; this.style.boxShadow='0 0 8px rgba(239, 68, 68, 0.05)'" %>
+    <% else %>
+      <!-- Public Sign In Gateway Routing Access Button Link -->
+      <%= link_to "Ascend to Olympus", new_user_session_path,
             style: "font-size: 14px; background-color: var(--accent-primary); color: white; font-weight: 600; padding: 8px 18px; border-radius: 6px; text-decoration: none; box-shadow: 0 2px 8px var(--accent-glow); transition: all 0.2s ease;",
             onmouseover: "this.style.transform='translateY(-1px)'; this.style.filter='brightness(1.15)'",
-            onmouseout: "this.style.transform='translateY(0)'; this.style.filter='none'" %> 
-    <% end %> 
-  </nav> 
+            onmouseout: "this.style.transform='translateY(0)'; this.style.filter='none'" %>
+    <% end %>
+  </nav>
 </header>

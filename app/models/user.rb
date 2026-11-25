@@ -33,6 +33,8 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :username, presence: true, uniqueness: { case_sensitive: false }, format: { with: USERNAME_REGEX, message: "only allows letters, numbers, and underscores" }
   validate :acceptable_avatar
+  validate :protect_demo_credentials, on: :update
+  before_destroy :prevent_demo_account_deletion
 
   def self.from_omniauth(auth, current_user = nil)
     identity = Identity.find_by(provider: auth.provider, uid: auth.uid)
@@ -64,8 +66,14 @@ class User < ApplicationRecord
   end
 
   def friends
-    User.where(id: friendships.accepted.select(:friend_id)) +
-    User.where(id: inverse_friendships.accepted.select(:user_id))
+    compatible_users = User.where(demo_account: demo_account?)
+
+    compatible_users.where(
+      id: friendships.accepted.select(:friend_id)
+    ) +
+      compatible_users.where(
+        id: inverse_friendships.accepted.select(:user_id)
+      )
   end
 
   def all_friends
@@ -77,7 +85,11 @@ class User < ApplicationRecord
   end
 
   def pending_incoming_requests
-    inverse_friendships.pending
+    inverse_friendships.pending.where(
+      user_id: User.where(
+        demo_account: demo_account?
+      ).select(:id)
+    )
   end
 
   def friendship_status_with(other_user)
@@ -108,7 +120,19 @@ class User < ApplicationRecord
   end
 
   def total_likes_received_count
-    posts.joins(:likes).count
+    posts.joins(:likes).where(
+      likes: {
+        user_id: User.where(
+          demo_account: demo_account?
+        ).select(:id)
+      }
+    ).count
+  end
+
+  def send_reset_password_instructions
+    return if demo_account?
+
+    super
   end
 
   private
@@ -125,5 +149,29 @@ class User < ApplicationRecord
 
   def acceptable_avatar
     validate_image_attachment(avatar, :avatar)
+  end
+
+  def protect_demo_credentials
+    return unless demo_account_in_database
+
+    protected_attributes = %w[
+      email
+      encrypted_password
+      username
+      demo_account
+    ]
+
+    protected_attributes.each do |attribute|
+      if will_save_change_to_attribute?(attribute)
+        errors.add(attribute, "cannot be changed for a demo account")
+      end
+    end
+  end
+
+  def prevent_demo_account_deletion
+    return unless demo_account_in_database
+
+    errors.add(:base, "Demo accounts cannot be deleted")
+    throw :abort
   end
 end

@@ -33,7 +33,7 @@
 </style>
 
 <div style="max-width: 1200px; margin: 40px auto; padding: 30px; background: var(--bg-surface); border: 1px solid var(--border-input); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); font-family: sans-serif; box-sizing: border-box; transition: background 0.4s, border-color 0.3s; width: 95%;">
-  
+
   <!-- Header with Back Arrow on Left -->
   <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-input); padding-bottom: 14px; margin-bottom: 24px;">
     <%= link_to "← Sanctuary", authenticated_root_path, style: "font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; background: var(--bg-main); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-input);" %>
@@ -45,15 +45,15 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; margin-bottom: 24px;">
       <% @friends.each do |friend| %>
         <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-input); border-radius: 8px; background: var(--bg-surface); width: 100%; box-sizing: border-box;">
-          
+
           <%# Profile Link Wrapper %>
-          <% target_path = friend.profile ? profile_path(friend.profile) : user_path(friend) %>
+          <% target_path = user_profile_path(friend) %>
           <%= link_to target_path, class: "greek-grid-card", style: "display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 8px; text-decoration: none; color: inherit; width: 100%; box-sizing: border-box; transition: background 0.4s, border-color 0.3s;" do %>
-            
+
             <div style="display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0;">
               <%# Relative Wrapper to Position the Card Side Wreaths %>
               <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 0 28px; flex-shrink: 0; user-select: none;">
-                
+
                 <!-- LEFT LAUREL BRANCH -->
                 <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-12deg) scale(0.95); align-items: flex-end;">
                   <div class="laurel-leaf" style="width: 14px; height: 8px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>
@@ -92,7 +92,7 @@
 
             <%# Unfriend Button Action %>
             <% rel_record = Friendship.find_by(user_id: [current_user.id, friend.id], friend_id: [current_user.id, friend.id]) %>
-            <% if rel_record %>
+            <% if rel_record && !demo_mode? %>
               <div style="flex-shrink: 0; margin-left: 8px; z-index: 5;">
                 <%= link_to "Cast to Tartarus", friendship_path(rel_record), method: :delete, data: { confirm: "Are you sure you want to cast this deceiver into the deepest darkest pit of the Underworld?" }, style: "font-size: 12px; color: #dc2626; text-decoration: none; font-weight: 500;" %>
               </div>
@@ -111,10 +111,10 @@
   <!-- Pagy Pagination Footer Section Wrapper -->
   <% if @pagy && @pagy.pages > 1 %>
     <div style="display: flex; justify-content: center; border-top: 1px solid var(--border-input); padding-top: 24px; margin-top: 24px;">
-      
+
       <%# Outer structural positioning box for pagination layout leaves %>
       <div class="greek-pagination-wrapper">
-        
+
         <!-- Left Footer Pagination Laurel Branch -->
         <div style="position: absolute; left: 0; display: flex; flex-direction: column; gap: 6px; transform: rotate(-12deg) scale(1.1); align-items: flex-end;">
           <div class="laurel-leaf" style="width: 16px; height: 9px; background: currentColor; border-radius: 100% 0% 100% 0%; transform: rotate(35deg); opacity: 0.5; color: var(--text-muted); transition: all 0.3s ease;"></div>

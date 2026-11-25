@@ -4,7 +4,7 @@ class ProfilesController < ApplicationController
 
   def show
     if params[:id]
-      @profile = Profile.find(params[:id])
+      @profile = visible_profiles.find(params[:id])
     else
       @profile = current_user.profile
     end
@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
     @user = @profile.user
     @posts = @user.posts.order(created_at: :desc)
     @new_post = current_user.posts.new
-    @active_friends = current_user.friends.first(4)
+    @active_friends = visible_friends.first(4)
   end
   def edit
   end

@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @post = Post.find(params[:post_id])
+    @post = visible_posts.find(params[:post_id])
     @comment = @post.comments.build(comment_params)
     @comment.user = current_user
 
@@ -17,8 +17,8 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @post = Post.find(params[:post_id])
-    @comment = @post.comments.find(params[:id])
+    @post = visible_posts.find(params[:post_id])
+    @comment = visible_comments.where(post: @post).find(params[:id])
     if @comment.user == current_user || @post.user == current_user
       @comment.destroy
 

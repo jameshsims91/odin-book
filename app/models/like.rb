@@ -1,4 +1,6 @@
 class Like < ApplicationRecord
+  include DemoAccountIsolation
+  validate :compatible_accounts
   belongs_to :user
   belongs_to :post
 
@@ -17,5 +19,9 @@ class Like < ApplicationRecord
       action: "liked_post",
       notifiable: post
     )
+  end
+
+  def compatible_accounts
+    validate_account_compatibility(user, post&.user)
   end
 end

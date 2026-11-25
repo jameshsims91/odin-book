@@ -1,4 +1,6 @@
 class Comment < ApplicationRecord
+  include DemoAccountIsolation
+  validate :compatible_accounts
   belongs_to :user
   belongs_to :post
   has_many :comment_likes, dependent: :destroy
@@ -20,5 +22,9 @@ class Comment < ApplicationRecord
       action: "commented_on_post",
       notifiable: post
     )
+  end
+
+  def compatible_accounts
+    validate_account_compatibility(user, post&.user)
   end
 end

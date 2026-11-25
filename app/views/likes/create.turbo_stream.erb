@@ -7,7 +7,7 @@
       <span style="letter-spacing: -0.1px;">Break the bond</span>
     <% end %>
     <span style="font-size: 13px; font-weight: 600; color: #dc2626; transition: color 0.2s ease;">
-      <%= @post.likes.count %>
+      <%= visible_post_likes(@post).count %>
     </span>
   </div>
 <% end %>

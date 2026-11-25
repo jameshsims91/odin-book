@@ -20,7 +20,10 @@ class Post < ApplicationRecord
 
   def create_mentions
     extracted_usernames = content.to_s.scan(/@(\w+)/).flatten.uniq
-    matching_users = User.where(username: extracted_usernames)
+    matching_users = User.where(
+      username: extracted_usernames,
+      demo_account: user.demo_account?
+    )
     self.mentioned_users = matching_users
     matching_users.each do |tagged_user|
       next if tagged_user == self.user

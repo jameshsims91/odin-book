@@ -16,6 +16,10 @@ class CommentLikesController < ApplicationController
   private
 
   def set_comment
-    @comment = Comment.find(params[:comment_id])
+    @post = visible_posts.find(params[:post_id])
+
+    @comment = visible_comments
+                 .where(post: @post)
+                 .find(params[:comment_id])
   end
 end

@@ -1,4 +1,6 @@
 class Friendship < ApplicationRecord
+  include DemoAccountIsolation
+  validate :compatible_accounts
   belongs_to :user
   belongs_to :friend, class_name: "User"
 
@@ -25,5 +27,9 @@ class Friendship < ApplicationRecord
       action: "friend_request",
       notifiable: self
     )
+  end
+
+  def compatible_accounts
+    validate_account_compatibility(user, friend)
   end
 end

@@ -2,7 +2,7 @@ class FriendshipsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @friend = User.find(params[:friend_id])
+    @friend = visible_users.find(params[:friend_id])
     @friendship = current_user.friendships.build(friend: @friend, status: "pending")
 
     if @friendship.save
@@ -13,7 +13,7 @@ class FriendshipsController < ApplicationController
   end
 
   def update
-    @friendship = Friendship.find(params[:id])
+    @friendship = visible_friendships.find(params[:id])
     if @friendship.friend == current_user && @friendship.update(status: "accepted")
       redirect_back fallback_location: authenticated_root_path, notice: "Friend request accepted!"
     else
@@ -22,7 +22,7 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    @friendship = Friendship.find(params[:id])
+    @friendship = visible_friendships.find(params[:id])
     if @friendship.user == current_user || @friendship.friend == current_user
       @friendship.destroy
       redirect_back fallback_location: authenticated_root_path, notice: "Connection removed."

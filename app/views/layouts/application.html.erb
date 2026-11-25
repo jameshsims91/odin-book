@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Odinbook">
   <meta name="mobile-web-app-capable" content="yes">
-  
+
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= yield :head %>
@@ -17,52 +17,59 @@
 
   <script>
     (function() {
-      // Read theme from localStorage or fall back to system dark-mode preference
-      const savedTheme = localStorage.getItem('theme');
-      const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      
-      if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
-        document.documentElement.classList.add('light-theme');
-        // Fallback if your existing CSS hooks onto document.body instead of document.documentElement
-        document.addEventListener("DOMContentLoaded", function() {
-          document.body.classList.add('light-theme');
-        });
-      }
+      const savedTheme = localStorage.getItem("theme");
+
+      const systemPrefersLight =
+        window.matchMedia("(prefers-color-scheme: light)").matches;
+
+      const isEther =
+        savedTheme === "light" ||
+        (savedTheme !== "dark" && systemPrefersLight);
+
+      const root = document.documentElement;
+
+      root.classList.toggle("light-theme", isEther);
+      root.dataset.theme = isEther ? "ether" : "void";
     })();
   </script>
 
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
   <meta name="google-site-verification" content="DQhzJbxSVPg80ql-VRJVAGOZP_CbMhHNAg4iHBjJJZo" />
-  
+
 </head>
 
-<body style="margin: 0; padding: 0; background-color: var(--bg-main); font-family: sans-serif; color: var(--text-body); transition: background-color 0.4s ease, color 0.3s ease;"> 
-  
-  <!-- Global Application Navigation Header Bar --> 
-  <%= render "layouts/header" %> 
+<body style="margin: 0; padding: 0; background-color: var(--bg-main); font-family: sans-serif; color: var(--text-body); transition: background-color 0.4s ease, color 0.3s ease;">
 
-  <!-- Main Workspace View Container --> 
-  <main style="max-width: 1050px; margin: 0 auto; padding: 20px; box-sizing: border-box;"> 
-    <% flash.each do |type, message| %> 
-      <% if message.is_a?(Hash) %> 
-        <%# Flatten deep OmniAuth structured exceptions data %> 
-        <% message = message["alert"] || message[:alert] || message.values.first.to_s %> 
-      <% end %> 
-      
-      <% is_alert = (type.to_s == 'alert' || type.to_s == 'danger') %> 
-      
+  <!-- Global Application Navigation Header Bar -->
+  <%= render "layouts/header" %>
+
+  <!-- Main Workspace View Container -->
+  <main style="max-width: 1050px; margin: 0 auto; padding: 20px; box-sizing: border-box;">
+
+    <% if user_signed_in? && current_user.demo_account? %>
+      <%= render "shared/demo_banner" %>
+    <% end %>
+
+    <% flash.each do |type, message| %>
+      <% if message.is_a?(Hash) %>
+        <%# Flatten deep OmniAuth structured exceptions data %>
+        <% message = message["alert"] || message[:alert] || message.values.first.to_s %>
+      <% end %>
+
+      <% is_alert = (type.to_s == 'alert' || type.to_s == 'danger') %>
+
       <%# Transformed flash boxes to use alpha opacities for dark-mode contrast fallback safety %>
-      <div style="padding: 14px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; font-weight: 500; 
-                  border: 1px solid <%= is_alert ? '#dc2626' : '#16a34a' %>; 
-                  background-color: <%= is_alert ? 'rgba(239, 68, 68, 0.1)' : 'rgba(22, 163, 74, 0.1)' %>; 
-                  color: <%= is_alert ? '#ef4444' : '#4ade80' %>;"> 
-        <%= message %> 
-      </div> 
-    <% end %> 
+      <div style="padding: 14px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
+                  border: 1px solid <%= is_alert ? '#dc2626' : '#16a34a' %>;
+                  background-color: <%= is_alert ? 'rgba(239, 68, 68, 0.1)' : 'rgba(22, 163, 74, 0.1)' %>;
+                  color: <%= is_alert ? '#ef4444' : '#4ade80' %>;">
+        <%= message %>
+      </div>
+    <% end %>
 
-    <%# Inject individual child controller view templates here %> 
-    <%= yield %> 
-  </main> 
+    <%# Inject individual child controller view templates here %>
+    <%= yield %>
+  </main>
 </body>
 </html>
