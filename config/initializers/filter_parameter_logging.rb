@@ -1,8 +1,16 @@
 # Be sure to restart your server when you modify this file.
 
-# Configure parameters to be partially matched (e.g. passw matches password) and filtered from the log file.
-# Use this to limit dissemination of sensitive information.
-# See the ActiveSupport::ParameterFilter documentation for supported notations and behaviors.
+# Filter sensitive request parameters from application logs.
 Rails.application.config.filter_parameters += [
-  :passw, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn, :cvv, :cvc
+  :passw, :email, :secret, :token, :_key,
+  :crypt, :salt, :certificate, :otp, :ssn,
+  :cvv, :cvc
+]
+
+# Prevent temporary signed storage URLs from appearing in logs.
+# This does not modify the actual redirect response sent to the browser.
+Rails.application.config.filter_redirect += [
+  "X-Amz-Signature=",
+  "X-Amz-Credential=",
+  ".storage.supabase.co/"
 ]
