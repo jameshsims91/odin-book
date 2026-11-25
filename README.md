@@ -1,4 +1,3 @@
-
 # OdinBook
 
 A full-stack social networking application built with Ruby on Rails, featuring secure authentication, social interactions, private image storage, and an isolated, read-only live demo.
@@ -230,6 +229,8 @@ Additional safeguards include:
 - Private attachment delivery
 - Environment-managed production credentials
 - Automated dependency and static security scanning
+- Sensitive request parameter filtering
+- Native Rails redirect log filtering for temporary signed storage URLs
 
 ### Private Attachment Delivery
 
@@ -242,27 +243,41 @@ Production images are stored in a private Supabase bucket.
 
 Default public-facing Active Storage routes are disabled in favor of application-controlled attachment endpoints.
 
+Production redirect logs are sanitized using Rails' native redirect filtering configuration. Signed storage URLs, signature parameters, and credential identifiers are excluded from matching redirect log entries without modifying the actual redirect response sent to the browser.
+
+This protection is covered by seven automated regression tests and has been verified against fresh production logs while confirming that authorized image delivery remains functional.
+
 ## Testing and Code Quality
 
 OdinBook includes automated coverage for application functionality, authorization, demonstration account isolation, attachment access, and user interface behavior.
 
 ### Release Verification
 
-The recruiter demo release completed the following local verification:
+The final production security and logging hardening release completed the following local verification:
 
 | Test suite | Tests | Assertions |
 | --- | ---: | ---: |
-| Model and integration tests | 113 | 331 |
+| Model and integration tests | 120 | 342 |
 | Browser system tests | 2 | 6 |
-| **Total** | **115** | **337** |
+| **Total** | **122** | **348** |
 
 Release results:
 
 - 0 test failures
 - 0 test errors
 - 0 skipped tests
-- 126 files inspected by RuboCop with no offenses
+- 127 files inspected by RuboCop with no offenses
+- 0 Brakeman security warnings
+- No known vulnerabilities reported by Bundler Audit
+- No vulnerable packages reported by Importmap Audit
 - All 5 GitHub Actions CI jobs passed
+- All 7 redirect filtering regression tests passed
+- All 15 attachment security tests passed
+- All 44 checks in the final production acceptance round passed
+
+Production verification included authentication, recruiter demo restrictions, account isolation, image delivery, signed URL logging protection, infrastructure stability, and portfolio integration.
+
+**Final production verification:** November 2026.
 
 ### Run the Tests
 
@@ -535,11 +550,25 @@ I implemented a release workflow that combines automated tests, static security 
 
 The demonstration environment was deployed in two stages: security infrastructure first, followed by the fictional dataset. This reduced the risk of exposing demonstration records before isolation protections were active.
 
+### Preventing Sensitive Information from Appearing in Logs
+
+Production verification revealed that temporary signed object storage URLs were appearing in application redirect logs.
+
+I investigated Rails' redirect instrumentation and implemented native redirect URL filtering to prevent signatures and storage credential identifiers from appearing in matching log entries.
+
+I added seven automated regression tests to verify that sensitive redirect locations are filtered, ordinary redirects remain visible, and the original browser response is preserved.
+
+Following deployment, I verified the filtering behavior against fresh production logs while confirming that avatars and post images continued loading correctly.
+
+This reinforced the importance of validating security controls in the live production environment rather than relying exclusively on local automated tests.
+
 ## Current Limitations and Future Improvements
 
-OdinBook is a portfolio application rather than a commercial social networking service.
+OdinBook is a completed portfolio application rather than a commercial social networking service.
 
-Current limitations and potential improvements include:
+The application has successfully completed production deployment, security hardening, automated release testing, and live production acceptance testing.
+
+Potential future improvements include:
 
 - Production email delivery and email-based password recovery
 - Optional third-party OAuth authentication
@@ -547,9 +576,11 @@ Current limitations and potential improvements include:
 - Database query optimization and performance profiling
 - Additional accessibility testing
 - Expanded automated test coverage
-- Production log sanitization for temporary signed storage URLs
+- Ongoing dependency maintenance and security monitoring
 
 In-app notifications remain available in the deployed application.
+
+The current release is considered feature-complete for its intended portfolio and demonstration purposes.
 
 ## Author
 
